@@ -21,7 +21,7 @@
 '''
 
 
-from numpy import array, dot, inf, float64, zeros, asarray
+from numpy import array, dot, cross, inf, float64, zeros, asarray
 #from enthought.traits.api import Tuple,Float
 #from enthought.traits.ui.view import Group,Item
 
@@ -30,7 +30,7 @@ from pyoptools.raytrace.surface.surface cimport Surface
 from pyoptools.raytrace.ray.ray cimport Ray
 
 from pyoptools.misc.definitions  import *
-
+from pyoptools.misc.cmisc.cmisc cimport norm_vect
 cimport numpy as np
 
 import cython
@@ -50,22 +50,22 @@ cdef class Plane(Surface):
 
     def __init__(self,*args, **kwargs):
         Surface.__init__(self,*args, **kwargs)
-    
+
     cpdef topo(self, x, y):
-        return zeros(asarray(x).shape)
-        
+        return None
+
     #~ def __reduce__(self):
-        #~ 
+        #~
         #~ args=(self.reflectivity, self.shape)
         #~ return(type(self),args,self.__getstate__())
- #~ 
- 
-        
+ #~
+
+
     @cython.boundscheck(False)
-    @cython.wraparound(False) 
+    @cython.wraparound(False)
     cpdef _intersection(self,Ray A):
-        """Returns the intersection point between a ray and an the XY plane
-        
+        """Returns the intersection point between a ray and an the plane in global 3D coordinates
+
         """
         #N_=array([0.,0.,1.])
 
@@ -75,7 +75,7 @@ cdef class Plane(Surface):
 
         #if dot(N_,L1) ==0 : return inf_vect
         if L1[2] ==0 : return inf_vect
-        
+
         #print N_,P1,L1
         #print dot(N_,-P1),dot(N_,L1)
         #u=dot(N_,-P1)/dot(N_,L1)
@@ -89,14 +89,26 @@ cdef class Plane(Surface):
         #    print A.dir
         #    print type(A.orig_surf)
         #    exit(0)
-        
+
         return retval
 
 
     cpdef np.ndarray normal(self, ri):
-        """Method that returns the normal to the surface
+        """Method that returns the normal to the surface in global coordinates
         """
-        N_=array((0.,0.,1.)).astype(float64)
+        cdef np.ndarray[np.float64_t, ndim=1] v1=self.shape.coord[0]
+        cdef np.ndarray[np.float64_t, ndim=1] v2=self.shape.coord[1]
+        cdef np.ndarray[np.float64_t, ndim=1] v3=self.shape.coord[2]
+
+        # Take two in-plane vectors
+        p1 = v2-v1
+        p2 = v3-v1
+        # Get the vector perpendicular to the plane p1 and p2 span by cross-product
+        N_ = cross(p1,p2)
+        # normalize
+        N_ = norm_vect(N_)
+
+        N_=array(N_).astype(float64)
         return (N_)
 
     def _repr_(self):
