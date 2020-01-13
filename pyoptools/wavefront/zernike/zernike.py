@@ -8,7 +8,7 @@ import types
 try:
     from scipy import factorial, comb as binomial
 except ImportError:
-    from scipy.misc import factorial, comb as binomial
+    from scipy.special import factorial, comb as binomial
 
 from numpy import mgrid, sqrt, arccos, zeros,transpose, pi, cos, sin, ones, array,\
     where, arange
@@ -19,22 +19,22 @@ from pyoptools.misc.Poly2D import *
 def polar_array(Rmax=1.,DS=0.1, pr=1.):
     """
     Function that generates 2 square matrices one with the rho coordinate,
-    and the other with the theta coordinate, to be able to calculate 
+    and the other with the theta coordinate, to be able to calculate
     functions using polar coordinates.
-    
+
     It is similar to the mgrid function.
 
     **Arguments**
-    
+
     ==== ===================================================
     Rmax Limit the pupil area -Rmax<=X<=Rmax -Rmax<=Y<=Rmax
     DS   Step between pixels
     pr   Pupil radius. Used to normalize the pupil.
     ==== ===================================================
-        
+
     ..  TODO:: This function should be moved to a auxiliary functions module
     """
-    
+
     X,Y= mgrid[-Rmax:Rmax+DS:DS,-Rmax:Rmax+DS:DS]/pr
     r = sqrt(X**2+Y**2)
     th= arccos(transpose(X*1./r))
@@ -45,22 +45,22 @@ def polar_array(Rmax=1.,DS=0.1, pr=1.):
 def rnm(n,m,rho):
     """
     Return an array with the zernike Rnm polynomial calculated at rho points.
-    
-    
+
+
     **ARGUMENTS:**
-    
+
         === ==========================================
         n    n order of the Zernike polynomial
         m    m order of the Zernike polynomial
-        rho  Matrix containing the radial coordinates. 
-        === ==========================================       
-    
+        rho  Matrix containing the radial coordinates.
+        === ==========================================
+
     .. note:: For rho>1 the returned value is 0
-    
+
     .. note:: Values for rho<0 are silently returned as rho=0
-    
+
     """
-    
+
     if(type(n) is not int):
         raise Exception("n must be integer")
     if(type(m) is not int):
@@ -70,7 +70,7 @@ def rnm(n,m,rho):
     if abs(m)>n:
         raise Exception("The following must be true |m|<=n")
     mask=where(rho<=1,False,True)
-    
+
     if(n==0 and m==0):
         return  masked_array(data=ones(rho.shape), mask=mask)
     rho=where(rho<0,0,rho)
@@ -83,44 +83,44 @@ def rnm(n,m,rho):
         p=CR*pow(rho,n-2*s)
         Rnm=Rnm+p
     return masked_array(data=Rnm, mask=mask)
-    
+
 def zernike(n,m,rho,theta):
     """
-    Returns the an array with the Zernike polynomial evaluated in the rho and 
+    Returns the an array with the Zernike polynomial evaluated in the rho and
     theta.
-    
-    **ARGUMENTS:** 
-    
-    ===== ==========================================     
+
+    **ARGUMENTS:**
+
+    ===== ==========================================
     n     n order of the Zernike polynomial
     m     m order of the Zernike polynomial
-    rho   Matrix containing the radial coordinates. 
+    rho   Matrix containing the radial coordinates.
     theta Matrix containing the angular coordinates.
     ===== ==========================================
- 
+
     .. note:: For rho>1 the returned value is 0
-    
+
     .. note:: Values for rho<0 are silently returned as rho=0
     """
-    
-    
+
+
     Rnm=rnm(n,m,rho)
-    
+
     NC=sqrt(2*(n+1))
     S=(n-abs(m))/2
-    
+
     if m>0:
         Zmn=NC*Rnm*cos(m*theta)
     #las funciones cos() y sin() de scipy tienen problemas cuando la grilla
     # tiene dimension cero
-    
+
     elif m<0:
         Zmn=NC*Rnm*sin(m*theta)
     else:
         Zmn=sqrt(0.5)*NC*Rnm
     return Zmn
-    
-##    
+
+##
 ##def Ty_Mon(ypow,xpow,dim=-1):
 ##    n=xpow+ypow
 ##    if dim==-1:
@@ -146,19 +146,19 @@ def zernike(n,m,rho,theta):
 ##            y_pow=j
 ##            PolyVec.append(PolyMat[y_pow,x_pow])
 ##    return N.asarray(PolyVec)
-##    
-##    
+##
+##
 ##
 ##
 def zernike2taylor(n,m):
     """
     Returns the 2D taylor polynomial, that represents the given zernike
     polynomial
-    
+
     **ARGUMENTS**
-    
+
         n,m     n and m orders of the Zernike polynomials
-    
+
     **RETURN VALUE**
         poly2d instance containing the polynomial
     """
@@ -188,7 +188,7 @@ def zernike2taylor(n,m):
                 x_pow=2*(i+k)+p
                 y_pow=n-2*(i+j+k)-p
                 TC[y_pow,x_pow]=TC[y_pow,x_pow]+c
-            
+
     n=TC.shape[0]-1
     cohef=[0.]*ord2i(n)
     for i in range(ord2i(n)):
@@ -199,7 +199,7 @@ def zernike2taylor(n,m):
 def i2nm(i):
     """
     Return the n and m orders of the i'th zernike polynomial
-       
+
     ========= == == == == == == == == == == == == == == == ===
     i          0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 ...
     n-order    0  1  1  2  2  2  3  3  3  3  4  4  4  4  4 ...
@@ -214,50 +214,50 @@ def i2nm(i):
     ni=n*(n+1)/2
     m=-n+2*(i-ni)
     return n, m
-    
+
 class ZernikeXY(object):
     '''
-    Class used to evaluate the zernike polinomial with coheficients 
+    Class used to evaluate the zernike polinomial with coheficients
     given by cohef, in Cartesian coordinates.
-        
-        
+
+
     This class uses an internal Taylor representation of the polynomial
-    for all the calculations. The internal taylor representation, is 
+    for all the calculations. The internal taylor representation, is
     generator from the cohef argument given in the constructor.
     If cohef is changed, the internal taylor representation is built
     again.
-    
+
     **ARGUMENTS**
-    
+
     cohef -- List containing the Zernike polynomial coheficients.
-    
+
     The coheficients given in cohef are enumerated as follows
-    
+
     ========= == == == == == == == == == == == == == == == ===
     index      0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 ...
     n-order    0  1  1  2  2  2  3  3  3  3  4  4  4  4  4 ...
     m-order    0 -1  1 -2  0  2 -3 -1  1  3 -4 -2  0  2  4 ...
     ========= == == == == == == == == == == == == == == == ===
     '''
-    
+
     def __init__(self,cohef=[0]):
-            
+
         self.cohef=cohef
-    
-    
+
+
     def __set_cohef__(self,cohef):
-        
+
         # Save the coheficient list
         self.__cohef__=cohef
-        
+
         #Generate the taylor representation of the zernike polinomial
-        
+
         p=poly2d([0])
-        
+
         for i,c in enumerate(cohef):
             n,m=i2nm(i)
             p=p+c*zernike2taylor(n,m)
-        
+
         self.poly=p
 
     def __get_cohef__(self):
@@ -267,28 +267,28 @@ class ZernikeXY(object):
     def eval(self):
         """Not impremented yet"""
         pass
-        
+
     def evalm(self,x,y,mask=True):
         '''
-        Evaluate the zernike polynomial 
-        
-        Method used to evaluate the zernike polynomial at the coordinates 
+        Evaluate the zernike polynomial
+
+        Method used to evaluate the zernike polynomial at the coordinates
         given by the 2D arrays x,y
-        
+
         **ARGUMENTS**
-        
+
             ==== ==============================================================
-            x    2D array containing the X coordinates where the Zernike 
+            x    2D array containing the X coordinates where the Zernike
                  polynomial is to be evaluated.
-            y    2D array containing the Y coordinates where the Zernike 
+            y    2D array containing the Y coordinates where the Zernike
                  polynomial is to be evaluated.
-            mask Flag indicating if the evaluated values are to be masked. 
-                 If mask is True, the polynomial will only be evaluated at 
+            mask Flag indicating if the evaluated values are to be masked.
+                 If mask is True, the polynomial will only be evaluated at
                  the pupil sqrt(x**2+y**2)<1. , and a masked array is returned.
             ==== ==============================================================
-        
+
         '''
-        
+
         if mask:
             r=x**2+y**2
             m=where(r<1,False,True)
@@ -296,7 +296,7 @@ class ZernikeXY(object):
         else:
             retval=self.poly.meval(x,y)
         return retval
-            
+
     def gpu_eval(self,x,y):
         retval=self.poly.gpu_eval(x,y)
         return retval
@@ -312,14 +312,14 @@ class ZernikeXY(object):
 ##    for i in range(y_pow.shape[0]):
 ##        Result=Result+M[y_pow[i],x_pow[i]]*pow(x,x_pow[i])*pow(y,y_pow[i])
 ##    return Result
-##        
+##
 ##def Eval_Poly_Comb(Ml,C,x,y):
 ##    M=C[0]*Ml[0]
 ##    for j in range(1,C.shape[0]):
 ##        M=M+C[j]*Ml[j]
-##    return Eval_Poly(M,x,y)  
-##    
-##    
+##    return Eval_Poly(M,x,y)
+##
+##
 ##
 ##def test(N,M):
 ##    R,T=Polar_Array(Rmax=1,DS=0.005)
@@ -336,7 +336,3 @@ class ZernikeXY(object):
 ##    P.savefig("zern.png",dpi=300)
 ##    P.show()
 ###test(3,3)
-
-
-
-    

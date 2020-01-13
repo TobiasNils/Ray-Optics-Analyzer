@@ -37,13 +37,13 @@ from numpy import dot,zeros, abs, meshgrid, pi,exp, where,angle, sqrt as npsqrt,
 
 from numpy.fft import fft2,ifft2,fftshift,ifftshift
 from numpy.ma import array as maarray,  getmask,  getmaskarray
-from matplotlib.mlab import griddata
+# from matplotlib.mlab import griddata
 
 from scipy.signal import convolve2d, fftconvolve, resample
 from scipy.integrate import simps
-from scipy.interpolate import interp2d,bisplrep,bisplev
+from scipy.interpolate import interp2d,bisplrep,bisplev, griddata
 from scipy.ndimage import map_coordinates
-from scipy.misc import imread
+from imageio import imread
 
 
 #import pp
@@ -65,7 +65,7 @@ from pyoptools.misc.cmisc.cmisc import unwrap
 def s(u, n):
     #u=u+1.
     rv=(1.-exp(2.j*pi*u))/(1.-exp(2.j*pi*u/n))
-    
+
     #insert the result value there u/n = 1
     rv=where(isnan(rv), n, rv)
     return rv
@@ -79,28 +79,28 @@ def s2d(kx, ky, nx, ny):
     #    print ux.shape, uy.shapefield.py
     sx=s(ux, nx)
     sy=s(uy, ny)
-    
+
     #print sx.shape, sy.shape
     #TODO: Verify if the correct expression is dot(sx.transpose(),sy) or dot(sy.transpose(),sx)
     #retval=dot(sx.transpose(),sy)
     retval=dot(sy.transpose(),sx)
     return retval
-    
-    
+
+
 
 cdef class Field:
     """
     Class that defines an optical field distribution.
 
-    The sampled field uses an regular Cartesian sampling. 
-    
+    The sampled field uses an regular Cartesian sampling.
+
     **ARGUMENTS:**
-        
+
         ====== =====================================================
         data   2D numpy array containing the complex field information.
                The number of samples are given by data's shape.
         psize  Pixel size of the sample field (resolution)
-        amp_im Filename of the image containing the amplitude of the 
+        amp_im Filename of the image containing the amplitude of the
                field
         ph_im  Filename of the image containing the phase of the field
         amp_n  Floating point number used to normalize the amplitud
@@ -108,32 +108,32 @@ cdef class Field:
         ph_n   Floating point number used to normalize the phase.
                2*pi/255 by default.
         ====== =====================================================
-    
-    The field data can be given as a numpy complex array, or as a set of 
-    2 images, one containing the amplitude of the field, and the other 
-    containing the phase of the field. The amp_n, and the ph_n attributes 
-    are used to normalize the field. If the images are color images, they 
+
+    The field data can be given as a numpy complex array, or as a set of
+    2 images, one containing the amplitude of the field, and the other
+    containing the phase of the field. The amp_n, and the ph_n attributes
+    are used to normalize the field. If the images are color images, they
     are flattened to produce a grayscale image. See: scipy.misc.imread
     """
     cdef public object data,psize
     cdef public double l
     def __init__(self,data=None,psize=(10e-3,10e-3), l=442e-6,amp_im=None,ph_im=None, amp_n=1/255., ph_n=2*pi/255.):
-    
-    
+
+
         #Comparing data with None does not work, It seems that cython has a bug
         #when data is a numpy arra and it is compared with none
         assert (not(data is None)) ^ (not(amp_im is None) or not(ph_im is None)),\
             "The initizilation can be a numpy array, or a set of "+\
             "images but not both"
-    
+
         # Array containing the complex field distribution.
-        
+
         if data is None:
             if amp_im!=None:
                 amp=imread(amp_im,True)
             else:
                 amp=1.
-            
+
             if ph_im!=None:
                 ph=imread(ph_im,True)
             else:
@@ -144,14 +144,14 @@ cdef class Field:
         # Size of each pixel (sample). It can be given as a tuple psize=(h,w), or as a
         # floating point number psize=h=w.
         self.psize=psize
-        
+
         # Wave length of the field
         self.l=l
-        
+
     # Evaluate the possibility to use a field representation different to spatial
     # Maybe an angular spectral representation
 
-    
+
     property res:
         '''Returns a tuple (dx,dy) containing the resolution(size of each pixel)
         '''
@@ -162,24 +162,24 @@ cdef class Field:
                 dx=self.psize
                 dy=dx
             return dx,dy
-    
+
     property size:
-        '''Returns a tuple containing the size of the area where the 
+        '''Returns a tuple containing the size of the area where the
         field is sampled
         '''
         def __get__(self):
             dx, dy=self.res
             nx, ny=self.shape
             return array((nx*dx, ny*dy))
-        
+
     property shape:
         '''Returns the shape of the data contained in the field'''
         def __get__(self):
             return self.data.shape
-    
+
     property field_sample_coord:
-        ''' 
-        Returns the 2D arrays X and Y containing the field sampling 
+        '''
+        Returns the 2D arrays X and Y containing the field sampling
         coordinates
         '''
         def __get__(self):
@@ -213,22 +213,22 @@ cdef class Field:
             print "Warning: The phase is not being cached. Need to fix this"
             a=self.angle
             return unwrap(a)
-    
-   
+
+
 
     property angle:
         ''' Returns the wrapped phase of the field (mod 2 pi)'''
         def __get__(self):
             a= maarray(angle(self.data),  mask=getmask(self.data))
             return a
-    
+
     property mask:
-        '''Return the mask of the data. True indicates masked values (invalid), False 
-        indicates valid data. 
+        '''Return the mask of the data. True indicates masked values (invalid), False
+        indicates valid data.
         '''
-        
-        def __get__(self): 
-            return getmaskarray(self.data) 
+
+        def __get__(self):
+            return getmaskarray(self.data)
 
     def abs(self):
         '''Returns an array containing the absolute value of the field
@@ -245,49 +245,49 @@ cdef class Field:
         '''Returns the conjugated field
         '''
         return Field(data=self.data.conj(),psize=self.psize, l=self.l)
-    
-    
+
+
     ## Definition of arithmetic functions for fields
     def __add__(self,a):
         assert isinstance(a,Field), "Error: can not add a Field with a %s"%[type(a)]
         assert self.data.shape==a.data.shape, "Error: both fields must have the same shape"
         assert self.psize==a.psize ,"Error: both fields must have the samepixel size"
         assert self.l==a.l , "Error: Both fields must have the same wavelength"
-        return Field(data=self.data+a.data,psize=self.psize,l=self.l)        
-    
+        return Field(data=self.data+a.data,psize=self.psize,l=self.l)
+
     def __sub__(self,a):
         assert isinstance(a,Field), "Error: can not add a Field with a %s"%[type(a)]
         assert self.data.shape==a.data.shape, "Error: both fields must have the same shape"
         assert self.psize==a.psize ,"Error: both fields must have the samepixel size"
         assert self.l==a.l , "Error: Both fields must have the same wavelength"
-        
-        return Field(data=self.data-a.data,psize=self.psize,l=self.l)      
-        
+
+        return Field(data=self.data-a.data,psize=self.psize,l=self.l)
+
     def __mul__(self, other):
-        
+
         if isinstance(self,Field): #Note, this is different than standard python, here mul==rmul. We need to see what is going on
             f=self
             a=other
         else:
             f=other
             a=self
-            
+
         #If you are multipliying 2 fields (1 field* 1 phase mask)
         if isinstance(a,Field):
             #TODO: Find a good way to do the assertions
             #assert(a.l==f.l),"The field and the mask must be for the same wavelength"
             #assert(a.psize==f.psize),"The pixel size in the field and the mask must be the same"
-            return Field(data=a.data*f.data,psize=f.psize,l=f.l)  
-        
+            return Field(data=a.data*f.data,psize=f.psize,l=f.l)
+
         #If you are multipliying a field by a numpy array or a number
         return Field(data=a*f.data,psize=f.psize,l=f.l)
-        
-        
+
+
     ## End of arithmetic functions
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
-    
+
     def _rs_kernel(self, np.ndarray[np.float64_t, ndim=2]x, np.ndarray[np.float64_t, ndim=2] y, double z, double n):
         """Calculate the Rayleigh Sommerfeld propagation Kernel, for a source point
         at the origin, and a observation point at (x,y,z)
@@ -295,7 +295,7 @@ cdef class Field:
         cdef double k=2.*M_PI*n/self.l
         cdef int nx,ny,i,j
         cdef double xd,yd,R2,R,R3
-        #cdef double complex ikR 
+        #cdef double complex ikR
         cdef np.complex64_t ikR
         nx=x.shape[0]
         ny=x.shape[1]
@@ -309,11 +309,11 @@ cdef class Field:
                 R3=R2*R
                 ikR=I*k*R
                 result[i,j]=((z/(2.*M_PI*R3))*cexp(ikR)*(1.-ikR))
-       
-        return result 
-    
+
+        return result
+
     def propagate_rsc_sc(self,z,scale=(1,1)):
-        """Propagate the field a distance z , scaling the output shape 
+        """Propagate the field a distance z , scaling the output shape
         by the values given in scale. The resolution remains the same.
         """
         cdef int kx,ky,nx,ny,i,j
@@ -324,7 +324,7 @@ cdef class Field:
         dy=self.res[1]
         nx=self.shape[0]
         ny=self.shape[1]
-        
+
         pd=zeros((kx*nx,ky*ny),dtype=complex)
 
         for i in range(kx):
@@ -335,20 +335,20 @@ cdef class Field:
                 pd[i*nx:(i+1)*nx,j*ny:(j+1)*ny]=rfd.data
 
         return Field(data=pd, psize=self.psize, l=self.l)
-        
+
     def propagate_rsc(self,z,n=1.,shape=None):
         """Propagate the field a distance z making the convolution with the
         Rayleigh Sommerfeld kernel.
-        
+
         To avoid noise, the kernel is calculated increasing the size of the matrix.
         """
         if shape==None:
             nx,ny=self.data.shape
         else:
             nx,ny=shape
-            
-        dx,dy=self.res  
-        
+
+        dx,dy=self.res
+
         X,Y=indices((2*nx,2*ny))
         ux=(X-nx)*dx; uy=(Y-ny)*dy
         ##del X
@@ -376,11 +376,11 @@ cdef class Field:
             nx,ny=self.data.shape
         else:
             nx,ny=shape
-            
-        dx,dy=self.res  
-        
+
+        dx,dy=self.res
+
         x,y,z=d
-        
+
         X,Y=indices((2*nx,2*ny))
         ux=(X-nx)*dx+x; uy=(Y-ny)*dy+y
         ##del X
@@ -405,7 +405,7 @@ cdef class Field:
         krs=self._rs_kernel(x,y,z,n)
         #krs=self._rs_kernel(ux+x,uy+y,z,n=n)
         dx,dy=self.res
-        
+
         #TODO: Check if the samplings dx,dy are in the right place
 
 
@@ -418,16 +418,16 @@ cdef class Field:
     def propagate_ae(self, z,n=1,shape=None):
         """
         Propagate the field a distance z using angular spectrum method.
-        
+
         .. warning::
             Check if n is implemented and working
         """
-        
+
         if shape ==None:
             nx,ny=self.data.shape
         else:
             nx,ny=shape
-        
+
         dx,dy=self.res
         sx=dx*nx; sy=dy*ny
         # Phase function calculation
@@ -436,7 +436,7 @@ cdef class Field:
 
         X=ifftshift(X)
         Y=ifftshift(Y)
-        
+
         # Check if the fftshift was OK
         assert(X[0,0]==0)
         assert(Y[0,0]==0)
@@ -445,24 +445,24 @@ cdef class Field:
         #TODO: Check what does this condition mean
         ph=exp(2.*pi*1.j*z*npsqrt(sq))
         ph=where(sq<0,0.,ph)
-        
+
 
         pf=ifft2(fft2(self.data,(nx,ny))*ph)
         return Field(data=pf,psize=self.psize,l=self.l)
-        
-        
+
+
     def propagate_ae_d(self,d,n,shape=None):
         """Propagate the field a distance z using angular spectrum method.
-        The observation plane is shifted by x,y units 
+        The observation plane is shifted by x,y units
         """
-        
+
         if shape ==None:
             nx,ny=self.data.shape
         else:
             nx,ny=shape
-        
+
         (x,y,z)=d
-        
+
         dx,dy=self.res
         sx=dx*nx; sy=dy*ny
         # Phase function calculation
@@ -471,7 +471,7 @@ cdef class Field:
 
         X=ifftshift(X)
         Y=ifftshift(Y)
-        
+
         # Check if the fftshift was OK
         assert(X[0,0]==0)
         assert(Y[0,0]==0)
@@ -510,11 +510,11 @@ cdef class Field:
         {
             int nWidth = get_global_size(0);
             int nHeight = get_global_size(1);
-            
+
             int ox=get_global_id(0); // Toma los indices en X
             int oy=get_global_id(1); // Toma los indices en Y
             int oid= oy*nWidth+ox;
-            
+
             float X=(float)(ox-nWidth/2)*dx;
             float Y=(float)(oy-nHeight/2)*dy;
             float pi=3.14159265358979323846264338327950288;
@@ -525,22 +525,22 @@ cdef class Field:
             {
                 float wi=2.;
                 float wj=2.;
-                
+
                 int ci=i%w;
                 int cj=i/w;
-                
-                //Hay que verificar si los i y los j estan correctos y si los 
+
+                //Hay que verificar si los i y los j estan correctos y si los
                 //coheficientes estan al derecho
                 if ((ci==0)||(ci==(w-1)))wi=1;
                 else if(ci%2!=0) wi=4;
-                
+
                 if ((cj==0)||(cj==(h-1)))wj=1;
                 else if(cj%2!=0) wj=4;
-                
+
                 float ww=wi*wj/9.;
-                 
-                
-                
+
+
+
                 float Xx=X-x[i];
                 float Yy=Y-y[i];
                 float R2=pow(Xx,2.f)+pow(Yy,2.f)+pow(Z,2.f);
@@ -550,7 +550,7 @@ cdef class Field:
                 float coskr=cos(R*K);
                 float piR2=pi*R2;
                 float piR3=pi*R3;
-                
+
                 //real 1/2*k*z*sin(R*k)/(piR2) + 1/2*z*cos(R*k)/(piR3)
                 //imag -1/2*k*z*cos(R*k)/(piR2) + 1/2*z*sin(R*k)/(piR3)
                 float re= K*Z2*sinkr/(piR2) + Z2*coskr/(piR3);
@@ -573,7 +573,7 @@ cdef class Field:
         else:
             ushape=dfield.data.shape
             dx,dy=dfield.res
-        
+
         ox=offset[0]
         oy=offset[1]
         # Get the coordinates from the object field and translate them
@@ -581,24 +581,24 @@ cdef class Field:
         Xo,Yo=self.field_sample_coord
         Xo=(Xo-ox).astype(float32)
         Yo=(Yo-oy).astype(float32)
-        
+
         # Get the info from the object field
         Uor=self.data.real.astype(float32)
         Uoi=self.data.imag.astype(float32)
-        
+
 
         #Create the object field buffers for the GPU
         Xob0 = cl.Buffer(ctx0, mf.READ_ONLY | mf.USE_HOST_PTR, hostbuf=Xo)
         Yob0 = cl.Buffer(ctx0, mf.READ_ONLY | mf.USE_HOST_PTR, hostbuf=Yo)
         Uobr0= cl.Buffer(ctx0, mf.READ_ONLY | mf.USE_HOST_PTR, hostbuf=Uor)
         Uobi0= cl.Buffer(ctx0, mf.READ_ONLY | mf.USE_HOST_PTR, hostbuf=Uoi)
-        
+
         #Create the buffers for the image field
         ifr=empty(ushape,dtype=float32)
         ifi=empty(ushape,dtype=float32)
 
         # Create the image buffers for the GPU
-        
+
         ifbr=cl.Buffer(ctx0, mf.WRITE_ONLY,ifr.nbytes)
         ifbi=cl.Buffer(ctx0, mf.WRITE_ONLY,ifi.nbytes)
 
@@ -612,7 +612,7 @@ cdef class Field:
                     float32(z),
                     float32(2.*pi/self.l),
                     float32(dx),
-                    float32(dy), 
+                    float32(dy),
                     ifbr,
                     ifbi,
                     #local_size=(16,16)
@@ -622,30 +622,30 @@ cdef class Field:
         #print "Puede haber problemas, por que el muestreo no es adecuado."
         #print "Para generar frentes de onda creados por un filtro espacial, tratar de hallar "
         #print "la solución teorica"
-        
+
         cl.enqueue_read_buffer(queue0, ifbr, ifr).wait()
         cl.enqueue_read_buffer(queue0, ifbi, ifi).wait()
-        U=ifr+1.j*ifi      
+        U=ifr+1.j*ifi
         if dfield==None:
             dfield=Field(data=U,psize=(dx,dy), l=self.l)
         dfield.data=U
         return dfield
-        
+
     def propagate_rsi1(self,z,n, dfield=None):
         """Propagate the field a distance z, using the Rayleigh Sommerfeld integral.
         If dest is not given, the returned field has the same size and discretization
-        of the propagated filed, else the Field class instance (dfield) is filled 
-        with propagated values, keeping its size and discretization. The value of 
-        the propagated field is returned. 
+        of the propagated filed, else the Field class instance (dfield) is filled
+        with propagated values, keeping its size and discretization. The value of
+        the propagated field is returned.
         """
         from cfield import _propagate_rsi
         return _propagate_rsi(self,z,n, dfield)
-        
+
         """    from cfield import _ursi
         #cpus=detectCPUs()
-        
+
         #job_server=pp.Server()
-        
+
         #TODO: Need to find a way to not recalculate the _RS_KERNEL
         if dfield==None:
             X,Y=self.field_sample_coord
@@ -654,33 +654,33 @@ cdef class Field:
         U=empty((X.shape[0]*X.shape[1],), complex)
         xf=X.flatten()
         yf=Y.flatten()
-        
+
         cxy=column_stack((xf[:,newaxis],yf[:,newaxis]))
         for i,(xi,yi) in enumerate(cxy):
             #U[i]=self._ursi(xi,yi, z, n=n)
             U[i]=_ursi(self,xi,yi, z, n=n)
-            
-        
+
+
         if dfield==None:
             return Field(data=U.reshape(X.shape),psize=self.psize,l=self.l)
         else:
             dfield.data=U.reshape(X.shape)
             return dfield
         """
-    
+
     def propagate_rsi(self,z,n, dfield=None):
         """Propagate the field a distance z, using the Rayleigh Sommerfeld integral.
         If dest is not given, the returned field has the same size and discretization
-        of the propagated filed, else the Field class instance (dfield) is filled 
-        with propagated values, keeping its size and discretization. The value of 
-        the propagated field is returned. 
+        of the propagated filed, else the Field class instance (dfield) is filled
+        with propagated values, keeping its size and discretization. The value of
+        the propagated field is returned.
         """
-        
+
         #from cfield import _ursi
         #cpus=detectCPUs()
-        
+
         #job_server=pp.Server()
-        
+
         #TODO: Need to find a way to not recalculate the _RS_KERNEL
         if dfield==None:
             X,Y=self.field_sample_coord
@@ -689,19 +689,19 @@ cdef class Field:
         U=empty((X.shape[0]*X.shape[1],), complex)
         xf=X.flatten()
         yf=Y.flatten()
-        
+
         cxy=column_stack((xf[:,newaxis],yf[:,newaxis]))
         for i,(xi,yi) in enumerate(cxy):
             U[i]=self._ursi(xi,yi, z, n=n)
             #U[i]=_ursi(self,xi,yi, z, n=n)
-            
-        
+
+
         if dfield==None:
             return Field(data=U.reshape(X.shape),psize=self.psize,l=self.l)
         else:
             dfield.data=U.reshape(X.shape)
             return dfield
-        
+
     def check_z(self,n=1.,shape=None):
         """Given the field characteristics, return the tipical z's that should
         be used in the different propagation algorithms.
@@ -745,34 +745,34 @@ cdef class Field:
 
 
     #method(This, Trait(None,Float,Array(shape=(3,))))
-    
+
     def propagate_rs(self, z, n=1, shape=None):
         """Method that calculates the free space propagation of an optical field.
 
-        This method calculates the optical propagation of a field, using 
+        This method calculates the optical propagation of a field, using
         the Rayleigh Sommerfeld propagation kernel.
         Depending on the propagation distance, this method  selects between
         the angular spectrum method, and the Rayleigh Sommerfeld convolution method
-        
+
         **ARGUMENTS:**
-        
+
             z     Propagation distance.
             n     Media refraction index (Not implemented yet assume n=1)
-            shape Tuple indicating the shape (number of pixels) of the 
-                  returned field. If shape = None, the field size is 
+            shape Tuple indicating the shape (number of pixels) of the
+                  returned field. If shape = None, the field size is
                   preserved.
-            
+
             The other parameters are kept.
-            
+
         **RETURN VALUE:**
-            
+
             Field instance containing the propagated optical field
         """
         if shape==None:
             nx,ny=self.shape
         else:
             nx,ny=shape
-            
+
         #Get the approximations validity limits
         d=self.check_z(n=n,shape=shape )
         dae=d["ae_max"]
@@ -795,119 +795,119 @@ cdef class Field:
             print nx,nxmin
             if (nxmin-nx)%2!=0:nxmin=nxmin+1
             if (nymin-ny)%2!=0:nymin=nymin+1
-            
+
             f=self.resize((nxmin,nxmin))
             pf=f.propagate_ae(z,n)
             #TODO: Use the next 2 power so the FFT is optimized
             warn("Calculating propagation using a resized field")
 
             return pf.resize((nx,ny))
-    
+
     def propagate_fraunhofer(self,z):
         """
         Propagate the field using the Fraunhofer approximation
-        
+
         **ARGUMENT:**
-            
+
                 =  ====================
                 z  Propagation distance
                 =  ====================
         """
-        
+
         dx,dy=self.res
         nx,ny=self.data.shape
         sx,sy=self.size
         l=self.l
         if z>0:
-            
+
             data=fftshift(fft2(ifftshift(self.data)))
             #data=fftshift(fft2(self.data))
             dxp=l*z/sx
             dyp=l*z/sy
-        
+
         if z<0:
             #~ data=fftshift(ifft2(ifftshift(self.data)))
             data=ifftshift(ifft2(fftshift(self.data)))
             dxp=-l*z/sx
             dyp=-l*z/sy
-            
+
         print "warning: The phase factor is not present. Must be corrected"
         return Field(data=data,psize=(dxp,dyp),l=self.l)
-        
-    
+
+
     def propagate_fresnel(self,z):
         '''
         Calculate the fresnel transform, using the FFT algorithm.
 
         **ARGUMENT:**
-            
+
                 =  ====================
                 z  Propagation distance
                 =  ====================
-        
-            
+
+
         '''
         dx,dy=self.res
         nx,ny=self.data.shape
         sx,sy=self.size
         l=self.l
-        
-        
+
+
         dxp=abs(l*z/sx)
         dyp=abs(l*z/sy)
-            
+
         X,Y=meshgrid(self.xsamples,self.ysamples)
-        
+
         Xp,Yp=dxp*X/dx,dyp*Y/dy
-        
+
         ph=exp(1.j*pi*(X**2+Y**2)/(z*l))
-        
+
         ph1=exp((2.j*pi/l)*z)/(1.j*l*z)
         ph2=exp(1.j*pi*(Xp**2+Yp**2)/(z*l))
-        
+
         if z>0:
             data=ph1*ph2*fftshift(fft2(ifftshift(self.data*ph)))
         elif z<0:
             data=ph1*ph2*ifftshift(ifft2(fftshift(self.data*ph)))
-        
+
         return Field(data=data,psize=(dxp,dyp),l=self.l)
 
-        
+
 
     def propagate(self, r, n=1., method="auto", fix=False):
         """Method that calculates the free space propagation of an optical field.
 
-        
+
         **ARGUMENTS**
-        
+
         ======= ========================================================
-        r       Vector that goes from the source plane origin, to the 
-                destination plane origin. If r is not a vector but a 
-                floating point number, it assumes that the vector is 
+        r       Vector that goes from the source plane origin, to the
+                destination plane origin. If r is not a vector but a
+                floating point number, it assumes that the vector is
                 (0,0,r).
         n       Media refraction index (Not implemented yet assume n=1)
         method  Propagation method:
-        
+
                 "ae"   Angular spectrum propagation method
-                
+
                 "rsc"  Convolution with the Rayleigh Sommerfeld Kernel
-                
-                "rsi"  Propagate the field using the Rayleigh Sommerfeld 
+
+                "rsi"  Propagate the field using the Rayleigh Sommerfeld
                        integral
-                
+
                 "???"
-                
-                "auto" Automatically select the best propagation method 
+
+                "auto" Automatically select the best propagation method
                        given the field conditions.
-                
-                
-        fix     If set to true, the field is re-sampled or resized, so 
-                the sampling conditions for the selected propagation 
+
+
+        fix     If set to true, the field is re-sampled or resized, so
+                the sampling conditions for the selected propagation
                 method are met.
         ======= ========================================================
-        
+
         **RETURN VALUE:**
-        
+
         Field instance containing the propagated optical field
         """
 
@@ -952,10 +952,10 @@ cdef class Field:
                     #must be even.
                     #TODO: This is not OK, if the number of columns is even and rows
                     #is odd (or backwards), this will not work. FIXME
-                    print nxmin                    
+                    print nxmin
                     try:
                         tf=self.resize((nxmin,nxmin))
-                        
+
                     except:
                         tf=self.resize((nxmin+1,nxmin+1))
             retval=tf.propagate_ae(z,n)
@@ -976,7 +976,7 @@ cdef class Field:
                     tf=self.resample((rx,rx))
                 else:
                     tf=self
-                    
+
             if m=="rsc":
                 retval=tf.propagate_rsc(z,n)
             else:
@@ -1050,36 +1050,36 @@ cdef class Field:
         retval=Field(data=data,psize=(sx/nnx, sy/nny),l=self.l)
         return retval
 
-        
+
     def tilt(self,r=(0.,0., 0.)):
-        """Rotate around the origin the field observation plane 
- 
-        Idea Taken from: 
-            Free-space beam propagation between arbitrarily oriented planes based 
+        """Rotate around the origin the field observation plane
+
+        Idea Taken from:
+            Free-space beam propagation between arbitrarily oriented planes based
             on full diffraction theory: a fast Fourier transform approach.
             The interpolation algorithm suggested in the paper, does not work. This
             routine is based on a novel interpolation algorithm.
-        
+
         r
             Tuple (rx,ry,rz) where rx is the rotation around the x axis, ry is
-            the rotation around the y axis and rz is the rotation around the z axis 
+            the rotation around the y axis and rz is the rotation around the z axis
             that must be issued to the object plane, to obtain the image plane.
-        
+
         The rotations are applied first to the z axis, and then to the y axis and finally to
-        the x axis. 
+        the x axis.
         (need to verify this to check if this is consistent with wxRayTrace).
-        
+
         """
-        
+
         #TODO: Put the complete reference
-        
-        dx, dy=self.res 
+
+        dx, dy=self.res
         nx,ny=self.data.shape
         sx=dx*nx; sy=dy*ny
-        
+
         RM=rot_mat(r)
-        
-        
+
+
         #check if there is a need to resample the wavefront
         z_o=0
         e_o=0
@@ -1089,7 +1089,7 @@ cdef class Field:
         z_r, e_r, k_r=dot(RM, [z_o, e_o, k_o])
         kr=z_r*sx
         lr=e_r*sy
-        
+
         fk=2.*abs(kr)/nx
         fl=2.*abs(lr)/ny
         fm=[fk, fl]
@@ -1103,188 +1103,188 @@ cdef class Field:
             dx, dy=nf.res
             sx=dx*nx; sy=dy*ny
 
-       
+
         ix,iy=indices((nx,ny)).astype(float)
         nx2=int(nx/2); ny2=int(ny/2)
         #Calculate the displacement matrix for the original planewave spectrum
         c1=exp(2.j*pi/nx*(nx2*(ix-nx2)))*exp(2.j*pi/ny*(ny2*(iy-ny2)))
-        
-        
+
+
         ix=(ix-int(nx/2)).flatten(); iy=(iy-int(ny/2)).flatten()
-        
+
         #Calculate the K vector components in the original space.
         zeta_o =ix/sx
         eta_o  =iy/sy
-        
+
         sq=(1./nf.l)**2 -(zeta_o)**2-(eta_o)**2
         kappa_o=npsqrt(sq)
-        
+
         #Rotate to obtain the K vectors in the rotated space
-        
+
         #TODO: Find a better way to do this
-        
-        #Obtain the k vectors in the original space 
+
+        #Obtain the k vectors in the original space
         A=fftshift(fft2(nf.data))*c1
         Af=A.flatten()
-        
+
         #Matrix to put the rotated coefficients vectors
         Ar=zeros_like(A)
-        
+
         for i in range(nx*ny):
             if sq[i]>0:
                 # Calculate the rotated k vector and the corresponding indexes
                 z_r, e_r, k_r=dot(RM, [zeta_o[i], eta_o[i], kappa_o[i]])
-                
+
                 kr=z_r*sx+int(nx/2)
                 lr=e_r*sy+int(ny/2)
-                
+
                 #Calculate the displacement matrix for the rotated planewave spectrum
                 c2=exp(-2.j*pi/nx*(nx2*(kr-nx2)))*exp(-2.j*pi/ny*(ny2*(lr-ny2)))
                 Ar=Ar+Af[i]*c2*s2d(kr, lr, nx, ny)
-        
+
         data=ifft2(ifftshift(Ar/(nx*ny)))
         return Field(data=data,psize=nf.psize,l=nf.l)
-        
+
     def rayrep(self, nx, ny, eps=1e-2):
         """
         Method to calculate the ray representation of the wavefront.
-        
+
         nx  Number of samples to use in the x direction
         ny  Number of samples to use in the Y direction
         eps Allowed maximum value for lap a/ a (eikonal condition)
-        
+
         Note: This ray representation has only information about the phase.
-            the intensity, is not yet represented in the ray representation. 
+            the intensity, is not yet represented in the ray representation.
             this needs to be solved.
         """
         #Get field amplitude and unwrapped phase
         a=abs(self.data)
         ph=self.phase
-        
+
         #Get field mask
         fmask=self.mask
-        
+
         #TODO: Check if it is better to calculate the gradient using a polynomial fit
         # might be more accurate
-        
+
         #Calculate using finite differences: f' (x)~(f(x+h)-f(x-h))/(2h)
         #                                   f''(x)~(f(x+h)+f(x-h)-2f(x))/(h^2)
-        
-        
+
+
         #Create displaced matrices and repeat the data at the borders
         fx1=zeros_like(ph)
         fx2=zeros_like(ph)
         fy1=zeros_like(ph)
         fy2=zeros_like(ph)
-        
-        
+
+
         fx1[1: -1, :]=ph[:-2, :]
         fx1[0, :]=fx1[1, :]
         fx1[-1, :]=fx1[-2, :]
-        
+
         fx2[1: -1, :]=ph[ 2:, :]
         fx2[0, :]=fx2[1, :]
         fx2[-1, :]=fx2[-2, :]
-        
+
         fy1[:, 1: -1]=ph[:, :-2]
         fy1[:, 0]=fy1[:, 1]
         fy1[:, -1]=fy1[:, -2]
-        
+
         fy2[:, 1: -1]=ph[:, 2:]
         fy2[:, 0]=fy2[:, 1]
         fy2[:, -1]=fy2[:, -2]
-        
-        
-        rx, ry=self.res 
-        
+
+
+        rx, ry=self.res
+
         #Calculate the partial derivatives respect X and Y and normalize them
         dx=((fx2-fx1)/(2*rx))/(2*pi/self.l)
         dy=((fy2-fy1)/(2*ry))/(2*pi/self.l)
-        
+
         # Check for the eikonal condition
-    
+
         #Calculate the second partial derivatives of a
         #Create displaced matrices and mark invalid data
         mask=zeros_like(a)
-        mask[0, :]=True        
-        mask[-1, :]=True      
+        mask[0, :]=True
+        mask[-1, :]=True
         mask[:, 0]=True
         mask[:, -1]=True
-        
-        
+
+
         ax1=maarray(zeros_like(a), mask=mask)
         ax2=maarray(zeros_like(a), mask=mask)
         ay1=maarray(zeros_like(a), mask=mask)
         ay2=maarray(zeros_like(a), mask=mask)
-        
-        ax1[1: -1, :]=a[:-2, :]        
-        ax2[1: -1, :]=a[ 2:, :]        
+
+        ax1[1: -1, :]=a[:-2, :]
+        ax2[1: -1, :]=a[ 2:, :]
         ay1[:, 1: -1]=a[:, :-2]
         ay2[:, 1: -1]=a[:, 2:]
 
         a2x=(ax1+ax2-2*a)/(rx**2)
         a2y=(ay1+ay2-2*a)/(ry**2)
-       
-        
-        #TODO: Find a better criteria to calculate rz 
+
+
+        #TODO: Find a better criteria to calculate rz
         rz=(rx+ry)/2.
         a0=self.propagate (-rz/10000., n=1., method="ae").abs()
         a1=a
         a2=self.propagate (rz/10000. , n=1., method="ae").abs()
         a2z=(a0+a2-2.*a1)/(rz**2)
-        
+
         lapa=(a2x+a2y+a2z)/a
-        
-        #TODO: Idea. We need to study a better way to justify the criteria. 
+
+        #TODO: Idea. We need to study a better way to justify the criteria.
         #      Also we need to study how big the laplacian can be and what
         #      error it creates.
-        
-        
+
+
         if abs(lapa).max()>eps:
             # TODO: establish a better warning system, and apply it to all warnings
             # in the program
             print "Warning: the conversion from wavefront to rays, does not fulfil"
             print "the eikonal equation max(lap(a)/a)", abs(lapa).max()
-        
+
         #TODO: Check if we need a condition for the continuity of the phase, or
         #if this condition is enough
-        
+
         #Resample to the number of rays
         onx, ony=self.shape
         coord=mgrid[1:onx-2:1.j*nx,1:ony-2:1.j*ny]
-        
+
         coord=tuple(rint(coord).astype("i"))
-        
+
         dx=dx[coord]
         dy=dy[coord]
-        
+
         # Calculate partial derivative respect to Z
         dz2= 1.-dx**2-dy**2
-        
+
         #Check that there are no inconsistencies in the data
         #TODO: Fix the assert
         #assert alltrue(dz2>=0), "There is an inconsistency in the gradient calculation"
         dz=sqrt(dz2)
-       
-        
+
+
         X, Y=self.field_sample_coord
         X=X[coord]
         Y=Y[coord]
         fmask=fmask[coord]
         fmask=fmask.flatten()
-        
+
         ph=ph[coord]
         ph=ph.flatten()
-        
+
         dx=dx.flatten()
         dy=dy.flatten()
         dz=dz.flatten()
         X=X.flatten()
         Y=Y.flatten()
-        
+
         print "Warning: The assignment of the optical path assumes n=1 \n"\
               "This must be corrected."
-        
+
         rl=[]
         dirs=zip(dx, dy, dz, X, Y,  fmask, ph)
         for dx, dy, dz, x, y,  mask,  path in dirs:

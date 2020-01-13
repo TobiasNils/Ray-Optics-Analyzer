@@ -19,7 +19,7 @@ Definition of a CCD like object and helper functions
 '''
 
 #from enthought.traits.api import Float, Instance, HasTraits, Tuple, Int, Bool, Property
-from scipy.misc import toimage
+from PIL.Image import fromarray as toimage
 from scipy.interpolate import interp2d,bisplrep,bisplev
 from numpy import arange, ma, meshgrid, linspace
 
@@ -42,14 +42,14 @@ class CCD(Component):
         Tuple with the phisical size of the CCD chip
     *transparent*
         Boolean to set the detector transparent characteristic. Not implemented
-    
+
     Using the same CCD, images of different resolutions can be simulated. See
     the im_show and spot_diagram methods
     '''
 
     # Geometrical size of the CCD chip
     #size = Tuple(Float(5),Float(5))
-    
+
     # Setting this attribute to *False*, make the CCD detector opaque
     #transparent=Bool(True)
 
@@ -75,54 +75,54 @@ class CCD(Component):
     #~ def __reduce__(self):
         #~ args=() #self.intensity,self.wavelength,self.n ,self.label,self.parent,self.pop,self.orig_surf)
         #~ return(type(self),args,self.__getstate__())
-    #~ 
-    #~ 
-    #~ #TODO: Check if there is a better way to do this, because we are 
+    #~
+    #~
+    #~ #TODO: Check if there is a better way to do this, because we are
     #~ #rewriting the constructor values here
-    #~ 
+    #~
     #~ def __getstate__(self):
-        #~ return self.__d_surf,self.size,self.surflist,self.material 
-        #~ 
+        #~ return self.__d_surf,self.size,self.surflist,self.material
+        #~
     #~ def __setstate__(self,state):
         #~ self.__d_surf,self.size,self.surflist,self.material=state
-    
+
     def get_image(self,size=(256,256)):
         """
         Returns the ccd hit_list as a grayscale PIL image
-        
+
         *Attributes:*
-        
-        *size*    
-                Tuple (dx,dy) containing the image size in pixels. Use this 
+
+        *size*
+                Tuple (dx,dy) containing the image size in pixels. Use this
                 attribute to set the simulated resolution.
         """
         data= self.__d_surf.get_histogram(size)
         return(toimage(data, high=255, low=0,cmin=0,cmax=data.max()))
-    
+
     def get_color_image(self, size=(256,256)):
         """
         Returns the CCD hit_list as a color image, using the rays wavelength.
-        
+
         *Attributes*
-        
-        *size*    
-                Tuple (dx,dy) containing the image size in pixels. Use this 
+
+        *size*
+                Tuple (dx,dy) containing the image size in pixels. Use this
                 attribute to set the simulated resolution.
         """
-        
+
         data= self.__d_surf.get_color_histogram(size)
         return(toimage(data, high=255, low=0))
-        
-        
+
+
     #~ def im_show(self,fig=None, size=(256,256),cmap=cm.gray,title='Image',color=False):
         #~ """Shows a simulated image
-#~ 
+#~
         #~ *Attributes:*
-        #~ 
-        #~ *size*    
-                #~ Tuple (dx,dy) containing the image size in pixels. Use this 
+        #~
+        #~ *size*
+                #~ Tuple (dx,dy) containing the image size in pixels. Use this
                 #~ attribute to set the simulated resolution.
-        #~ *cmap*    
+        #~ *cmap*
                 #~ Color map to use in the image simulation. See the matplotlib.cm
                 #~ module for information about colormaps.
         #~ *fig*
@@ -131,30 +131,30 @@ class CCD(Component):
         #~ """
         #~ if fig == None:
             #~ fig=figure()
-        #~ 
+        #~
         #~ self.__d_surf.im_show(size,cmap,title,color)
-#~ 
-#~ 
+#~
+#~
     #~ def spot_diagram(self,fig=None, style="o",  label=None):
         #~ '''Plot a spot diagram in a pylab figure
-        #~ 
+        #~
         #~ Method that plots a spot diagram of the rays hitting the CCD.
-        #~ 
+        #~
         #~ *Attributes:*
-        #~ 
+        #~
         #~ *fig*
             #~ Pylab figure where the plot will be made. If set to None
             #~ a new figure will be created.
-        #~ 
+        #~
         #~ *style*
-            #~ Symbol to be used to represent the spot. See the pylab plot 
+            #~ Symbol to be used to represent the spot. See the pylab plot
             #~ documentation for more information.
-        #~ 
+        #~
         #~ *label*
             #~ String containing the label to show in the figure for this spot diagram.
             #~ Can be used to identify different spot diagrams on the same figure.
         #~ '''
-        #~ 
+        #~
         #~ if fig == None:
             #~ fig=figure()
         #~ X=[]
@@ -174,35 +174,35 @@ class CCD(Component):
             #~ plot(X, Y, style,label=label,figure=fig)
             #~ legend()
         #~ return fig
-        
+
     def get_optical_path_map(self,size=(20, 20),  mask=None):
         """Return the optical path of the rays hitting the detector.
-        
-        This method uses the optical path of the rays hitting the surface, to 
+
+        This method uses the optical path of the rays hitting the surface, to
         create a optical path map. The returned value is an interpolation of the
         values obtained by the rays.
-        
-        Warning: 
-            If the rays hitting the surface are produced by more than one 
-            optical source, the returned map migth not be valid.  
-        
+
+        Warning:
+            If the rays hitting the surface are produced by more than one
+            optical source, the returned map migth not be valid.
+
         *Attributes*
-        
+
         *size*
             Tuple (nx,ny) containing the number of samples of the returned map.
             The map size will be the same as the CCD
-        
+
         *mask*
-            Shape instance containing the mask of the aperture. If not given, 
+            Shape instance containing the mask of the aperture. If not given,
             the mask will be automatically calculated.
-        
+
         *Return value*
-        
+
         A masked array as defined in the numpy.ma module, containing the optical paths
         """
-        
-        X,Y,Z=self.get_optical_path_data()    
-    
+
+        X,Y,Z=self.get_optical_path_data()
+
         rv=bisplrep(X,Y,Z)
         nx, ny=size
         xs, ys=self.size
@@ -210,11 +210,11 @@ class CCD(Component):
         xf=-xi
         yi=-ys/2.
         yf=-yi
-        
+
         xd=linspace(xi, xf,nx)
         yd=linspace(yi, yf,ny)
         data=bisplev(xd,yd,rv)
-        
+
         if mask!=None:
             assert(isinstance(mask, Shape))
             X, Y=meshgrid(xd, yd)
@@ -227,27 +227,27 @@ class CCD(Component):
 
     def get_optical_path_map_lsq(self,order=10):
         """Return the optical path of the rays hitting the detector.
-        
+
         *Attributes*
-        
+
            """
-        
-        X,Y,Z=self.get_optical_path_data()    
+
+        X,Y,Z=self.get_optical_path_data()
         e,p=polyfit2d(X, Y, Z, order=order)
         return e,p
 
     def get_optical_path_data(self):
         """Return the optical path of the rays hitting the detector.
-        
-        This method returns a tuple X,Y,D, containing the X,Y hit points, and 
+
+        This method returns a tuple X,Y,D, containing the X,Y hit points, and
         D containing tha optical path data
-        
-        Warning: 
-            If the rays hitting the surface are produced by more than one 
-            optical source, the information may not be valid.  
-               
+
+        Warning:
+            If the rays hitting the surface are produced by more than one
+            optical source, the information may not be valid.
+
         """
-        
+
         X=[]
         Y=[]
         Z=[]
@@ -257,5 +257,5 @@ class CCD(Component):
             X.append(x)
             Y.append(y)
             Z.append(d)
-               
+
         return X,Y,Z
