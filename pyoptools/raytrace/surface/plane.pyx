@@ -67,31 +67,25 @@ cdef class Plane(Surface):
         """Returns the intersection point between a ray and an the plane in global 3D coordinates
 
         """
-        #N_=array([0.,0.,1.])
+        # cdef np.ndarray w,retval
+        cdef double epsilon=1e-6
+        # get surface data
+        cdef np.ndarray[np.float64_t, ndim=1] planePoint=self.shape.coord[0]
+        planeNormal=self.normal(A)
 
-        cdef np.ndarray[np.float64_t, ndim=1] P1=A.pos     # Punto que pertenece al rayo "Origen" del rayo
-        cdef np.ndarray[np.float64_t, ndim=1] L1= A.dir #Vector paralelo a la linea
+        # Punto que pertenece al rayo "Origen" del rayo
+        cdef np.ndarray[np.float64_t, ndim=1] rayPoint=A.pos
+        #Vector paralelo a la linea
+        cdef np.ndarray[np.float64_t, ndim=1] rayDirection=A.dir
 
-
-        #if dot(N_,L1) ==0 : return inf_vect
-        if L1[2] ==0 : return inf_vect
-
-        #print N_,P1,L1
-        #print dot(N_,-P1),dot(N_,L1)
-        #u=dot(N_,-P1)/dot(N_,L1)
-        cdef double u=-P1[2]/L1[2]
-        # Si u es muy grande, no hay intersección
-
-        retval=P1+u*L1
-        #from sys import exit
-        #if isnan(retval[0]):
-        #    print P1,u,L1
-        #    print A.dir
-        #    print type(A.orig_surf)
-        #    exit(0)
-
+        #if dot(N_,A.dir) ==0 : return inf_vect
+        cdef double ndotu=dot(planeNormal,rayDirection)
+        if abs(ndotu) < epsilon: return inf_vect # ray parallel or within the plane
+        cdef np.ndarray w=rayPoint-planePoint
+        cdef double si=dot(planeNormal,w)
+        si = -si/ndotu
+        cdef np.ndarray retval=w+si*rayDirection+planePoint
         return retval
-
 
     cpdef np.ndarray normal(self, ri):
         """Method that returns the normal to the surface in global coordinates
