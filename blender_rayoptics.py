@@ -6,7 +6,7 @@ import bpy
 # objects and respective meshes and faces which should be included in the simulation can be accessed through meshes:
 import blf
 import bgl
-from bgl import *
+
 import gpu
 from gpu_extras.batch import batch_for_shader
 from mathutils import Vector
@@ -37,71 +37,16 @@ else:
   single_color_shader = None
   flat_color_shader = None
 
-def tag_redraw_areas():
-    context = bpy.context
-
-    # Py cant access notifers
-    for window in context.window_manager.windows:
-        for area in window.screen.areas:
-            if area.type in ['VIEW_3D', 'PROPERTIES']:
-                area.tag_redraw()
-
-def callback_enable():
-    if callback_handle:
-        return
-
-    # handle_pixel = SpaceView3D.draw_handler_add(draw_callback_px, (), 'WINDOW', 'POST_PIXEL')
-    handle_view = SpaceView3D.draw_handler_add(draw_callback_view, (), 'WINDOW', 'POST_VIEW')
-    callback_handle[:] = [handle_view]
-
-    tag_redraw_areas()
-
-def callback_disable():
-    if not callback_handle:
-        return
-
-    handle_view = callback_handle[0]
-    # SpaceView3D.draw_handler_remove(handle_pixel, 'WINDOW')
-    SpaceView3D.draw_handler_remove(handle_view, 'WINDOW')
-    callback_handle[:] = []
-
-    tag_redraw_areas()
-
-
-# coords = [(1, 1, 1), (-2, 0, 0), (-2, -1, 3), (0, 1, 1)]
-def draw_callback_view():
-    settings = bpy.context.window_manager.MathVisProp
-    scale = settings.bbox_scale
-    with_bounding_box = not settings.bbox_hide
-
-    if settings.in_front:
-        bgl.glDepthFunc(bgl.GL_ALWAYS)
-    else:
-        bgl.glDepthFunc(bgl.GL_LESS)
-
-    # render_rays(Ri)
-    # live_render(Ri)
 
 def draw_ray(coords, colors, type='LINE_STRIP'):
-    # colors = [tuple(COLOR_LINE[:3]+COLOR_LINE[-1]*I) for I in Ii]
-
     batch = batch_for_shader(flat_color_shader, type, {"pos": coords, 'color':colors})
     def draw():
-        # smooth_color_shader.bind()
-        # smooth_color_shader.uniform_float("color", colors)
-        # bgl.glEnable(bgl.GL_BLEND)
+
         bgl.glEnable(bgl.GL_BLEND)
         bgl.glEnable(bgl.GL_DEPTH_TEST)
         batch.draw(flat_color_shader)
 
     bpy.types.SpaceView3D.draw_handler_add(draw, (), 'WINDOW', 'POST_VIEW')
-
-
-
-
-
-
-
 
 
 def ray2list(ray):
@@ -192,7 +137,7 @@ def get_propagated_rays(system):
     return rays
 
 def render_rays(S, rays):
-    """Convencience function combining ray-trcae and drawing of the result"""
+    """Convencience function combining ray-trace and drawing of the result"""
     trace_rays(S, rays)
     for ray in get_propagated_rays(S):
         color = wavelength2RGB(ray.wavelength)

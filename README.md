@@ -20,3 +20,12 @@ The raytracing algorithms implemented here are adaptations of the [pyOpTools](ht
 >This package contains miscellaneous classes and functions used by the other packages, but that can not be classified in any of them.
 
 ---
+
+## Requirements
+(Based on experience on Linux Fedora Workstation 31)
+
+* `pip3 install Cython --user`
+* `sudo dnf install python3-devel` (`python3-dev` in debian)
+* `cd path/to/this/repository/ && python3 setup.py install --user`
+* `pip3 install scipy --user` <- check if really necessary for this implementation
+* `pip3 install chaospy --user`
