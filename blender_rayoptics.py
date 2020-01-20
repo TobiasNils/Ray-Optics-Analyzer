@@ -246,7 +246,7 @@ if __name__=='__main__':
     # set refractive index of "world"
     Sys.n = 1.0
     # define light-source
-    np_rays = lightsource(aperture, invert_direction=True, n_rays=1000, halfangle=45., dist=chaospy.Normal)
+    np_rays = lightsource(aperture, invert_direction=True, n_rays=100, halfangle=45., dist=chaospy.Normal)
 
     render_rays(Sys, np_rays)
 

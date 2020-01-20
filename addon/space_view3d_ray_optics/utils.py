@@ -234,12 +234,19 @@ def lightsource(aperture, dist=None):
 
 
 def trace_rays(system):
-    # for ray in list_of_rays:
-    #     system.ray_add(ray)
+    import time
+    #mark the start time
+    startTime = time.time()
     print('... propagating rays ...')
+
     system.propagate()
     print('Ray tracing finished.')
-
+    #mark the end time
+    endTime = time.time()
+    #calculate the total time it took to complete the work
+    workTime =  endTime - startTime
+    #print results
+    print ("The job took " + str(workTime) + " seconds to complete")
 
 def get_propagated_rays():
     vars = bpy.context.window_manager.RayOpticsVars['items']
