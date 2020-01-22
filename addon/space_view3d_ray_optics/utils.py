@@ -235,11 +235,12 @@ def lightsource(aperture, dist=None):
 
 def trace_rays(system):
     import time
+    settings = bpy.context.window_manager.RayOpticsProp
     #mark the start time
     startTime = time.time()
     print('... propagating rays ...')
 
-    system.propagate()
+    system.propagate(settings.processes)
     print('Ray tracing finished.')
     #mark the end time
     endTime = time.time()

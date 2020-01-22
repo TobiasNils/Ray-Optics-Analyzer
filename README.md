@@ -1,7 +1,7 @@
 # Ray-optics Analyzer
 
 Integration of ray-optics simulations for optical systems design in [Blender](https://www.blender.org/).
-The raytracing algorithms implemented here are adaptations of the [pyOpTools](https://github.com/cihologramas/pyoptools) v0.1.1 code-base, the addon structure and visualization callblacks are based on [Math Vis (Console)](https://wiki.blender.org/wiki/Extensions:2.6/Py/Scripts/3D_interaction/Math_Viz). 
+The raytracing algorithms implemented here are adaptations of the [pyOpTools](https://github.com/cihologramas/pyoptools) v0.1.1 code-base, the addon structure and visualization callblacks are based on [Math Vis (Console)](https://wiki.blender.org/wiki/Extensions:2.6/Py/Scripts/3D_interaction/Math_Viz).
 
 ---
 
@@ -30,6 +30,8 @@ The raytracing algorithms implemented here are adaptations of the [pyOpTools](ht
 * `pip3 install scipy --user` <- check if really necessary for this implementation
 * `pip3 install chaospy --user`
 
+## Issues
+**Lightsources:** Due to triangulation (square face gets divided by two) sources with uneven ray numbers come out short of rays
 
 ## Todo
 

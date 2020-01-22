@@ -285,7 +285,7 @@ cdef class System(Picklable):
             #~ raise Exception,'Not a valid OptCom'
 
 
-    def propagate(self,update_ids=True):
+    def propagate(self, processes, update_ids=True):
         """ Propagates all the rays in the non propagated list.
         """
 
@@ -293,10 +293,39 @@ cdef class System(Picklable):
         #When propagating a sub system this must not be done
         if update_ids: self.update_ids()
 
-        while len(self._np_rays)>0:
-            ri=self._np_rays.pop(0)
-            self.propagate_ray(ri)
-            self._p_rays.append(ri)
+        from multiprocess import Pool, cpu_count
+        # cpus = cpu_count()
+        with Pool(processes) as pool:
+            # pool = Pool(cpus)
+            # set_len = int(len(self._np_rays)/cpus)
+            # ray_sets = []
+            # for i in range(cpus-1):
+            #     set = [self._np_rays.pop(0) for i in range(set_len)]
+            #     ray_sets.append(set)
+            #     # pop(0) not happening
+            # ray_sets.append(self._np_rays)
+            # for n in ray_sets:
+            #     print(len(n))
+            propagating_rays = []
+            for i in range(len(self._np_rays)):
+                ri=self._np_rays.pop(0)
+                propagating_rays.append(ri)
+            result = pool.map(self.doWork, propagating_rays)
+
+        self._p_rays = result
+        del propagating_rays
+        # ray_sets)
+        # while len(self._np_rays)>0:
+        #     ri=self._np_rays.pop(0)
+        #     self.propagate_ray(ri)
+        #     self._p_rays.append(ri)
+
+    def doWork(self, ri):
+    #     # for ri in ray_set:
+        self.propagate_ray(ri)
+        return ri
+
+        #! append not working
 
     def get_surf_paths(self):
         '''Method that returns a list that contains the path for each surface.

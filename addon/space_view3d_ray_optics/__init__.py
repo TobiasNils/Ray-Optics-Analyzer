@@ -92,6 +92,7 @@ class PanelConsoleVars(Panel):
         col.operator("rayoptics.init_light_sources")
         col.prop(bpy.context.window_manager.RayOpticsProp, "invert_direction")
         col.prop(bpy.context.window_manager.RayOpticsProp, "show_sources")
+        col.prop(bpy.context.window_manager.RayOpticsProp, "processes")
         col.operator("rayoptics.trace_rays")
         col.prop(bpy.context.window_manager.RayOpticsProp, "ray_hide")
 
@@ -258,6 +259,12 @@ class RayOptics(PropertyGroup):
         name="rays to trace",
         min = 0, max=10000,default=100,
         description="Total number of rays to propagate through the system",
+        # update=call_console_hook
+    )
+    processes: IntProperty(
+        name="processes to spawn",
+        min = 1, max=250,default=8,
+        description="Total number of processes used in ray-propagation calculation",
         # update=call_console_hook
     )
     halfangle: FloatProperty(
