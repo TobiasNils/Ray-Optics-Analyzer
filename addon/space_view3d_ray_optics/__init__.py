@@ -94,6 +94,7 @@ class PanelConsoleVars(Panel):
         col.prop(bpy.context.window_manager.RayOpticsProp, "show_sources")
         col.prop(bpy.context.window_manager.RayOpticsProp, "processes")
         col.operator("rayoptics.trace_rays")
+        col.prop(bpy.context.window_manager.RayOpticsProp, "render_rays")
         col.prop(bpy.context.window_manager.RayOpticsProp, "ray_hide")
 
 #
@@ -257,14 +258,20 @@ class RayOptics(PropertyGroup):
     )
     n_rays: IntProperty(
         name="rays to trace",
-        min = 0, max=10000,default=100,
+        min = 0, max=100000,default=1000,
         description="Total number of rays to propagate through the system",
         # update=call_console_hook
     )
     processes: IntProperty(
         name="processes to spawn",
-        min = 1, max=250,default=8,
+        min = 1, max=256,default=8,
         description="Total number of processes used in ray-propagation calculation",
+        # update=call_console_hook
+    )
+    render_rays: IntProperty(
+        name="rendered rays",
+        min = 1, max=100000,default=250,
+        description="Number of rays to render in 3DView",
         # update=call_console_hook
     )
     halfangle: FloatProperty(

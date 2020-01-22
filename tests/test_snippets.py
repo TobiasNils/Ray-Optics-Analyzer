@@ -20,6 +20,71 @@ endTime = time.time()
 workTime =  endTime - startTime
 #print results
 print ("The job took " + str(workTime) + " seconds to complete")
+result
+
+liste =[]
+test =[2]
+liste.append(*test)
+liste
+
+
+import copy
+S = {'test':[]}
+class SystemImage():
+    def __init__(self, System):
+        self.S = copy.deepcopy(System)
+    def add(self, arg):
+        self.S['test'].append(arg)
+
+S2 = SystemImage(S)
+S2.add(5)
+
+S2.S['test']
+S['test']
+
+import random
+import chaospy
+random.sample(rays, 3)
+
+
+from multiprocess import Pool, cpu_count
+# cpus = cpu_count()
+with Pool(processes) as pool:
+
+    propagating_rays = []
+    for i in range(len(self._np_rays)):
+        ri=self._np_rays.pop(0)
+        propagating_rays.append(ri)
+    result = pool.map(self.doWork, propagating_rays)
+
+self._p_rays = result
+del propagating_rays
+# ray_sets)
+# while len(self._np_rays)>0:
+#     ri=self._np_rays.pop(0)
+#     self.propagate_ray(ri)
+#     self._p_rays.append(ri)
+
+def doWork(self, ri):
+    # for ri in ray_set:
+    self.propagate_ray(ri)
+    return ri
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # del rays
 # new_rays = np.linspace(1,100, 1000)
 # new_rays

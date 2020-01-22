@@ -22,7 +22,7 @@ import bpy
 import pyoptools.raytrace.ray as rays
 import pyoptools.misc.cmisc as cmisc
 from pyoptools.misc.pmisc import wavelength2RGB
-import chaospy
+import chaospy, random
 
 from . import draw
 
@@ -187,7 +187,7 @@ def lightsource(aperture, dist=None):
         # normalize an in-plane vector
         v0_ = v0/np.sqrt(sum([v0[i]**2 for i in range(len(v0))]))
 
-        phi_dist = np.around(chaospy.Uniform(0., 2*np.pi).sample(n_rays), 10)
+        phi_dist = np.around(chaospy.Uniform(0., 2*np.pi).sample(ni_rays), 10)
         if not dist:
             # type specifies the distribution to use for random polar angle
             # convert half-angle to radians
@@ -196,7 +196,7 @@ def lightsource(aperture, dist=None):
         elif dist==chaospy.Normal:
             # let half-angle coincide with 3sigma
             args=(0., halfangle/360*(2*np.pi)/3)
-        theta_dist = np.around(dist(*args).sample(n_rays), 10)
+        theta_dist = np.around(dist(*args).sample(ni_rays), 10)
 
         for i in range(ni_rays):
             # create random anker point on plane
@@ -276,11 +276,16 @@ def trace_rays(system):
     #print results
     print ("The job took " + str(workTime) + " seconds to complete")
 
-def get_propagated_rays():
+def get_propagated_rays(number):
     vars = bpy.context.window_manager.RayOpticsVars['items']
-    propagated = vars['OpticalSystem']._p_rays
+
     rays=[]
-    for ray in propagated:
+    total_rays = vars['OpticalSystem']._p_rays
+    if len(total_rays)<=number:
+        sample = total_rays
+    else:
+        sample = random.sample(total_rays, number)
+    for ray in sample:
         ray = AttrDict({'wavelength':ray.wavelength,
                         'path':[AttrDict({'vertex':ray.pos,
                                             'intensity':ray.intensity}),

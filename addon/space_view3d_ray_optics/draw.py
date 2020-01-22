@@ -25,6 +25,7 @@ import bgl
 from gpu_extras.batch import batch_for_shader
 from pyoptools.misc.pmisc import wavelength2RGB
 from . import utils
+import random
 # from mathutils import Vector
 
 SpaceView3D = bpy.types.SpaceView3D
@@ -101,7 +102,7 @@ def render_rays():
     if not settings.ray_hide:
         return
 
-    for ray in utils.get_propagated_rays():
+    for ray in utils.get_propagated_rays(settings.render_rays):
         color = wavelength2RGB(ray.wavelength)
         path, colors=[], []
         for segment in ray.path:
@@ -116,7 +117,12 @@ def render_source():
     vars = bpy.context.window_manager.RayOpticsVars['items']
     settings = bpy.context.window_manager.RayOpticsProp
     if settings.show_sources and len(vars['OpticalSystem']._p_rays)==0:
-        for ray in vars['OpticalSystem']._np_rays:
+        total_rays = vars['OpticalSystem']._np_rays
+        if len(total_rays)<=settings.render_rays:
+            sample = total_rays
+        else:
+            sample = random.sample(total_rays, settings.render_rays)
+        for ray in sample:
             color = (*wavelength2RGB(ray.wavelength), .5)
             draw_ray([tuple(ray.pos), tuple(ray.pos+10*ray.dir)],color,
                     type='LINES',shader='single')
