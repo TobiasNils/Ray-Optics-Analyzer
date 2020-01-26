@@ -21,12 +21,15 @@
 '''
 
 
-from numpy import array, dot, cross, inf, float64, zeros, asarray
+from numpy import array, dot, cross, inf, float64, zeros, asarray, arccos, sin, cos,sqrt
+from matplotlib.path import Path
 #from enthought.traits.api import Tuple,Float
 #from enthought.traits.ui.view import Group,Item
 
 #from ray_trace.surface import Surface
 from pyoptools.raytrace.surface.surface cimport Surface
+from pyoptools.raytrace.shape.polygon cimport Polygon
+
 from pyoptools.raytrace.ray.ray cimport Ray
 
 from pyoptools.misc.definitions  import *
@@ -50,6 +53,10 @@ cdef class Plane(Surface):
 
     def __init__(self,*args, **kwargs):
         Surface.__init__(self,*args, **kwargs)
+        self.u, self.v, self.uv_poly = self.inplane_vectors()
+
+        # tuple([[dot(self.uv[0],p),
+        #                     dot(self.uv[1],p)] for p in self.shape.coord])
 
     cpdef topo(self, x, y):
         return None
@@ -58,7 +65,7 @@ cdef class Plane(Surface):
         #~
         #~ args=(self.reflectivity, self.shape)
         #~ return(type(self),args,self.__getstate__())
- #~
+    #~
 
 
     @cython.boundscheck(False)
@@ -104,6 +111,43 @@ cdef class Plane(Surface):
 
         N_=array(N_).astype(float64)
         return (N_)
+
+    cpdef tuple inplane_vectors(self):
+        """Method that returns the normal to the surface in global coordinates
+        """
+        cdef np.ndarray[np.float64_t, ndim=1] v1=self.shape.coord[0]
+        cdef np.ndarray[np.float64_t, ndim=1] v2=self.shape.coord[1]
+        # v1=self.shape.coord[0]
+        # v2=self.shape.coord[1]
+
+        # Take an in-plane vectors and the normal
+        u = v2-v1
+        u = norm_vect(u)
+        N_ = self.normal(1)
+        # Get the already normalized vector perpendicular by cross-product
+        v = cross(u,N_)
+
+        # create empty list to append vertices in uv-coordinates
+        uv_poly = []
+        # add v1 as local (0,0) and skip it in subsequent loop
+        uv_poly.append(array([0.,0.]))
+        # cdef np.ndarray p,retval
+        # cdef double norm_p,theta,u_fac,v_fac
+        for p in self.shape.coord[1:]:
+            norm_p = sqrt(sum([p[i]**2 for i in range(3)]))
+            theta = arccos(dot(p/norm_p, u))
+            u_fac = norm_p*cos(theta)
+            v_fac = norm_p*sin(theta)
+
+            # the plane point can now be expressed as
+            # p = v1 + u_fac*u + v_fac*v
+            # local coordinates are therefore
+            retval = array([u_fac, v_fac])
+            uv_poly.append(retval)
+        assert len(uv_poly)==len(self.shape.coord)
+        u=array(u).astype(float64)
+        v=array(v).astype(float64)
+        return (u, v, tuple(uv_poly))
 
     def _repr_(self):
         '''Return an string with the representation of the optical plane

@@ -2188,3 +2188,913 @@ Installing ipyoptools script to /home/nils/.anaconda3/bin
 Installed /home/nils/.anaconda3/lib/python3.6/site-packages/pyoptools-0.1.1-py3.6-linux-x86_64.egg
 Processing dependencies for pyoptools==0.1.1
 Finished processing dependencies for pyoptools==0.1.1
+pyoptools/raytrace/surface/aspherical.pyx: cannot find cimported module 'pyoptools.misc.Poly2D'
+pyoptools/raytrace/surface/taylor_poly.pyx: cannot find cimported module 'pyoptools.misc.Poly2D'
+pyoptools/raytrace/surface/powell.pyx: cannot find cimported module 'pyoptools.misc.Poly2D'
+Compiling pyoptools/raytrace/shape/polygon.pyx because it changed.
+[1/1] Cythonizing pyoptools/raytrace/shape/polygon.pyx
+running install
+running bdist_egg
+running egg_info
+writing pyoptools.egg-info/PKG-INFO
+writing dependency_links to pyoptools.egg-info/dependency_links.txt
+writing top-level names to pyoptools.egg-info/top_level.txt
+reading manifest file 'pyoptools.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+writing manifest file 'pyoptools.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build/lib.linux-x86_64-3.6
+creating build/lib.linux-x86_64-3.6/pyoptools
+copying pyoptools/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools
+copying pyoptools/all.py -> build/lib.linux-x86_64-3.6/pyoptools
+creating build/lib.linux-x86_64-3.6/pyoptools/gui
+copying pyoptools/gui/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/gui
+copying pyoptools/gui/plotutils.py -> build/lib.linux-x86_64-3.6/pyoptools/gui
+copying pyoptools/gui/ipynbplotutils.py -> build/lib.linux-x86_64-3.6/pyoptools/gui
+copying pyoptools/gui/ipywidgets.py -> build/lib.linux-x86_64-3.6/pyoptools/gui
+copying pyoptools/gui/logutils.py -> build/lib.linux-x86_64-3.6/pyoptools/gui
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace
+copying pyoptools/raytrace/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace
+copying pyoptools/raytrace/comp_lib.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface
+copying pyoptools/raytrace/surface/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface
+copying pyoptools/raytrace/surface/poly_expansion.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/calc
+copying pyoptools/raytrace/calc/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/calc
+copying pyoptools/raytrace/calc/calc.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/calc
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib
+copying pyoptools/raytrace/mat_lib/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib
+copying pyoptools/raytrace/mat_lib/material.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/ray
+copying pyoptools/raytrace/ray/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/ray
+copying pyoptools/raytrace/ray/ray_source.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/ray
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape
+copying pyoptools/raytrace/shape/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/system
+copying pyoptools/raytrace/system/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/system
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/component
+copying pyoptools/raytrace/component/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/component
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/cube.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/prism.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/ideallens.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/cylindrical_lens.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/diffraction.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/spherical_lens.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/stop.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/mirror.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/ccd.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/powell_lens.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+copying pyoptools/raytrace/_comp_lib/compound_lens.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/library
+copying pyoptools/raytrace/library/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/library
+copying pyoptools/raytrace/library/library.py -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/library
+creating build/lib.linux-x86_64-3.6/pyoptools/misc
+copying pyoptools/misc/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc
+creating build/lib.linux-x86_64-3.6/pyoptools/misc/resources
+copying pyoptools/misc/resources/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/resources
+creating build/lib.linux-x86_64-3.6/pyoptools/misc/frft
+copying pyoptools/misc/frft/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/frft
+copying pyoptools/misc/frft/frft.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/frft
+creating build/lib.linux-x86_64-3.6/pyoptools/misc/pmisc
+copying pyoptools/misc/pmisc/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/pmisc
+copying pyoptools/misc/pmisc/misc.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/pmisc
+creating build/lib.linux-x86_64-3.6/pyoptools/misc/GS
+copying pyoptools/misc/GS/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/GS
+copying pyoptools/misc/GS/gs.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/GS
+creating build/lib.linux-x86_64-3.6/pyoptools/misc/Poly2D
+copying pyoptools/misc/Poly2D/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/Poly2D
+creating build/lib.linux-x86_64-3.6/pyoptools/misc/cmisc
+copying pyoptools/misc/cmisc/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/cmisc
+creating build/lib.linux-x86_64-3.6/pyoptools/misc/definitions
+copying pyoptools/misc/definitions/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/definitions
+creating build/lib.linux-x86_64-3.6/pyoptools/misc/plist
+copying pyoptools/misc/plist/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/plist
+creating build/lib.linux-x86_64-3.6/pyoptools/misc/lsq
+copying pyoptools/misc/lsq/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/lsq
+creating build/lib.linux-x86_64-3.6/pyoptools/misc/picklable
+copying pyoptools/misc/picklable/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/misc/picklable
+creating build/lib.linux-x86_64-3.6/pyoptools/wavefront
+copying pyoptools/wavefront/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/wavefront
+creating build/lib.linux-x86_64-3.6/pyoptools/wavefront/cpsurfrep
+copying pyoptools/wavefront/cpsurfrep/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/wavefront/cpsurfrep
+creating build/lib.linux-x86_64-3.6/pyoptools/wavefront/calc
+copying pyoptools/wavefront/calc/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/wavefront/calc
+copying pyoptools/wavefront/calc/gs.py -> build/lib.linux-x86_64-3.6/pyoptools/wavefront/calc
+creating build/lib.linux-x86_64-3.6/pyoptools/wavefront/zernike
+copying pyoptools/wavefront/zernike/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/wavefront/zernike
+copying pyoptools/wavefront/zernike/zernike.py -> build/lib.linux-x86_64-3.6/pyoptools/wavefront/zernike
+creating build/lib.linux-x86_64-3.6/pyoptools/wavefront/psurfrep
+copying pyoptools/wavefront/psurfrep/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/wavefront/psurfrep
+creating build/lib.linux-x86_64-3.6/pyoptools/wavefront/field
+copying pyoptools/wavefront/field/__init__.py -> build/lib.linux-x86_64-3.6/pyoptools/wavefront/field
+creating build/lib.linux-x86_64-3.6/addon
+creating build/lib.linux-x86_64-3.6/addon/space_view3d_ray_optics
+copying addon/space_view3d_ray_optics/__init__.py -> build/lib.linux-x86_64-3.6/addon/space_view3d_ray_optics
+copying addon/space_view3d_ray_optics/draw.py -> build/lib.linux-x86_64-3.6/addon/space_view3d_ray_optics
+copying addon/space_view3d_ray_optics/utils.py -> build/lib.linux-x86_64-3.6/addon/space_view3d_ray_optics
+creating build/lib.linux-x86_64-3.6/tests
+copying tests/__init__.py -> build/lib.linux-x86_64-3.6/tests
+copying tests/test_coding_standards.py -> build/lib.linux-x86_64-3.6/tests
+copying tests/test_misc_frft.py -> build/lib.linux-x86_64-3.6/tests
+copying tests/test_shapes.py -> build/lib.linux-x86_64-3.6/tests
+copying tests/test_snippets.py -> build/lib.linux-x86_64-3.6/tests
+copying tests/test_components.py -> build/lib.linux-x86_64-3.6/tests
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/schott_2000.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/ohara.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/schott.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/sumita.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/obsolete.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/ohara_530.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/corning.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/hoya_old.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/hoya_obs.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/hoya.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/shared.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/schott_2015.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+copying pyoptools/raytrace/mat_lib/data/schott_530.mat -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/Edmund
+copying pyoptools/raytrace/library/Edmund/edmund_spherical.cmp -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/Edmund
+creating build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/Thorlabs
+copying pyoptools/raytrace/library/Thorlabs/thorlabs_spherical.cmp -> build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/Thorlabs
+running build_ext
+building 'pyoptools.raytrace.surface.cylindrical' extension
+creating build/temp.linux-x86_64-3.6
+creating build/temp.linux-x86_64-3.6/pyoptools
+creating build/temp.linux-x86_64-3.6/pyoptools/raytrace
+creating build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/cylindrical.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/cylindrical.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/cylindrical.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/cylindrical.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.spherical' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/spherical.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/spherical.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/spherical.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/spherical.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.aperture' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/aperture.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/aperture.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/aperture.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/aperture.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.surface' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/surface.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/surface.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/surface.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/surface.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.plane' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/plane.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/plane.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/plane.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/plane.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.detector' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/detector.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/detector.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/detector.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/detector.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.idealsurface' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/idealsurface.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/idealsurface.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/idealsurface.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/idealsurface.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.aspherical' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/aspherical.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/aspherical.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/aspherical.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/aspherical.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.idealpplanes' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/idealpplanes.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/idealpplanes.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/idealpplanes.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/idealpplanes.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.taylor_poly' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/taylor_poly.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/taylor_poly.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/taylor_poly.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/taylor_poly.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.cylinder' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/cylinder.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/cylinder.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/cylinder.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/cylinder.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.plane_mask' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/plane_mask.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/plane_mask.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/plane_mask.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/plane_mask.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.surface.powell' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/surface/powell.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/powell.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/surface/powell.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/powell.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.ray.ray' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/raytrace/ray
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/ray/ray.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/ray/ray.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/ray/ray.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/ray/ray.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.shape.shape' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/shape/shape.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape/shape.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape/shape.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/shape.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.shape.polygon' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/shape/polygon.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape/polygon.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape/polygon.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/polygon.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.shape.triangular' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/shape/triangular.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape/triangular.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape/triangular.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/triangular.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.shape.rectangular' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/shape/rectangular.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape/rectangular.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape/rectangular.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/rectangular.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.shape.circular' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/shape/circular.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape/circular.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/shape/circular.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/circular.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.system.idealcomponent' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/raytrace/system
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/system/idealcomponent.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/system/idealcomponent.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/system/idealcomponent.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/system/idealcomponent.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.system.system' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/system/system.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/system/system.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/system/system.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/system/system.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.raytrace.component.component' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/raytrace/component
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/raytrace/component/component.c -o build/temp.linux-x86_64-3.6/pyoptools/raytrace/component/component.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/raytrace/component/component.o -o build/lib.linux-x86_64-3.6/pyoptools/raytrace/component/component.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.misc.resources.resources' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/misc
+creating build/temp.linux-x86_64-3.6/pyoptools/misc/resources
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/misc/resources/resources.c -o build/temp.linux-x86_64-3.6/pyoptools/misc/resources/resources.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/misc/resources/resources.o -o build/lib.linux-x86_64-3.6/pyoptools/misc/resources/resources.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.misc.Poly2D.Poly2D' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/misc/Poly2D
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/misc/Poly2D/Poly2D.c -o build/temp.linux-x86_64-3.6/pyoptools/misc/Poly2D/Poly2D.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/misc/Poly2D/Poly2D.o -o build/lib.linux-x86_64-3.6/pyoptools/misc/Poly2D/Poly2D.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.misc.cmisc.cmisc' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/misc/cmisc
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/misc/cmisc/cmisc.c -o build/temp.linux-x86_64-3.6/pyoptools/misc/cmisc/cmisc.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/misc/cmisc/cmisc.o -o build/lib.linux-x86_64-3.6/pyoptools/misc/cmisc/cmisc.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.misc.definitions.definitions' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/misc/definitions
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/misc/definitions/definitions.c -o build/temp.linux-x86_64-3.6/pyoptools/misc/definitions/definitions.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/misc/definitions/definitions.o -o build/lib.linux-x86_64-3.6/pyoptools/misc/definitions/definitions.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.misc.plist.plist' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/misc/plist
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/misc/plist/plist.c -o build/temp.linux-x86_64-3.6/pyoptools/misc/plist/plist.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/misc/plist/plist.o -o build/lib.linux-x86_64-3.6/pyoptools/misc/plist/plist.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.misc.lsq.lsq' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/misc/lsq
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/misc/lsq/lsq.c -o build/temp.linux-x86_64-3.6/pyoptools/misc/lsq/lsq.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/misc/lsq/lsq.o -o build/lib.linux-x86_64-3.6/pyoptools/misc/lsq/lsq.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.misc.picklable.picklable' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/misc/picklable
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/misc/picklable/picklable.c -o build/temp.linux-x86_64-3.6/pyoptools/misc/picklable/picklable.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/misc/picklable/picklable.o -o build/lib.linux-x86_64-3.6/pyoptools/misc/picklable/picklable.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.wavefront.cpsurfrep.cpsurfrep' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/wavefront
+creating build/temp.linux-x86_64-3.6/pyoptools/wavefront/cpsurfrep
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/wavefront/cpsurfrep/cpsurfrep.c -o build/temp.linux-x86_64-3.6/pyoptools/wavefront/cpsurfrep/cpsurfrep.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/wavefront/cpsurfrep/cpsurfrep.o -o build/lib.linux-x86_64-3.6/pyoptools/wavefront/cpsurfrep/cpsurfrep.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.wavefront.psurfrep.psurfrep' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/wavefront/psurfrep
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/wavefront/psurfrep/psurfrep.c -o build/temp.linux-x86_64-3.6/pyoptools/wavefront/psurfrep/psurfrep.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/wavefront/psurfrep/psurfrep.o -o build/lib.linux-x86_64-3.6/pyoptools/wavefront/psurfrep/psurfrep.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.wavefront.field.field' extension
+creating build/temp.linux-x86_64-3.6/pyoptools/wavefront/field
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/wavefront/field/field.c -o build/temp.linux-x86_64-3.6/pyoptools/wavefront/field/field.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/wavefront/field/field.o -o build/lib.linux-x86_64-3.6/pyoptools/wavefront/field/field.cpython-36m-x86_64-linux-gnu.so
+building 'pyoptools.wavefront.field.fields' extension
+gcc -pthread -B /home/nils/.opt/anaconda3/compiler_compat -Wl,--sysroot=/ -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -I. -I/home/nils/.opt/anaconda3/lib/python3.6/site-packages/numpy/core/include -I/home/nils/.opt/anaconda3/include/python3.6m -c pyoptools/wavefront/field/fields.c -o build/temp.linux-x86_64-3.6/pyoptools/wavefront/field/fields.o -O3 -Wall
+gcc -pthread -shared -B /home/nils/.opt/anaconda3/compiler_compat -L/home/nils/.opt/anaconda3/lib -Wl,-rpath=/home/nils/.opt/anaconda3/lib -Wl,--no-as-needed -Wl,--sysroot=/ build/temp.linux-x86_64-3.6/pyoptools/wavefront/field/fields.o -o build/lib.linux-x86_64-3.6/pyoptools/wavefront/field/fields.cpython-36m-x86_64-linux-gnu.so
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/pyoptools
+copying build/lib.linux-x86_64-3.6/pyoptools/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools
+creating build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/gui/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/gui/plotutils.py -> build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/gui/ipynbplotutils.py -> build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/gui/ipywidgets.py -> build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/gui/logutils.py -> build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/all.py -> build/bdist.linux-x86_64/egg/pyoptools
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/aspherical.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/surface.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/detector.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/cylinder.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/idealsurface.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/idealpplanes.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/plane.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/taylor_poly.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/poly_expansion.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/aperture.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/plane_mask.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/cylindrical.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/spherical.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/powell.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/calc/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/calc/calc.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/schott_2000.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/ohara.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/schott.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/sumita.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/obsolete.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/ohara_530.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/corning.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/hoya_old.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/hoya_obs.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/hoya.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/shared.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/schott_2015.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/schott_530.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/material.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/ray/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/ray/ray.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/ray/ray_source.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/polygon.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/rectangular.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/shape.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/circular.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/triangular.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/system
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/system/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/system
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/system/idealcomponent.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/system
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/system/system.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/system
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/component
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/component/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/component
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/component/component.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/component
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/comp_lib.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/cube.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/prism.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/ideallens.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/cylindrical_lens.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/diffraction.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/spherical_lens.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/stop.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/mirror.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/ccd.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/powell_lens.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/compound_lens.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/library
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/library
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/Thorlabs
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/Thorlabs/thorlabs_spherical.cmp -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/Thorlabs
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/library.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/library
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/Edmund
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/Edmund/edmund_spherical.cmp -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/Edmund
+creating build/bdist.linux-x86_64/egg/pyoptools/misc
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/resources
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/resources/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/resources
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/resources/resources.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/resources
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/frft
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/frft/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/frft
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/frft/frft.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/frft
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/pmisc
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/pmisc/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/pmisc
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/pmisc/misc.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/pmisc
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/GS
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/GS/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/GS
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/GS/gs.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/GS
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/Poly2D
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/Poly2D/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/Poly2D
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/Poly2D/Poly2D.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/Poly2D
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/cmisc
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/cmisc/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/cmisc
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/cmisc/cmisc.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/cmisc
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/definitions
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/definitions/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/definitions
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/definitions/definitions.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/definitions
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/plist
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/plist/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/plist
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/plist/plist.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/plist
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/lsq
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/lsq/lsq.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/lsq
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/lsq/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/lsq
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/picklable
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/picklable/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/picklable
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/picklable/picklable.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/picklable
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront/cpsurfrep
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/cpsurfrep/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/cpsurfrep
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/cpsurfrep/cpsurfrep.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/cpsurfrep
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/calc/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/calc/gs.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront/zernike
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/zernike/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/zernike
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/zernike/zernike.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/zernike
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront/psurfrep
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/psurfrep/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/psurfrep
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/psurfrep/psurfrep.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/psurfrep
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront/field
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/field/fields.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/field
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/field/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/field
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/field/field.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/field
+creating build/bdist.linux-x86_64/egg/addon
+creating build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics
+copying build/lib.linux-x86_64-3.6/addon/space_view3d_ray_optics/__init__.py -> build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics
+copying build/lib.linux-x86_64-3.6/addon/space_view3d_ray_optics/draw.py -> build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics
+copying build/lib.linux-x86_64-3.6/addon/space_view3d_ray_optics/utils.py -> build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics
+creating build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/__init__.py -> build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/test_coding_standards.py -> build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/test_misc_frft.py -> build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/test_shapes.py -> build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/test_snippets.py -> build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/test_components.py -> build/bdist.linux-x86_64/egg/tests
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/gui/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/gui/plotutils.py to plotutils.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/gui/ipynbplotutils.py to ipynbplotutils.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/gui/ipywidgets.py to ipywidgets.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/gui/logutils.py to logutils.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/all.py to all.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/poly_expansion.py to poly_expansion.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/calc/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/calc/calc.py to calc.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/material.py to material.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray/ray_source.py to ray_source.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/system/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/component/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/comp_lib.py to comp_lib.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/cube.py to cube.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/prism.py to prism.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/ideallens.py to ideallens.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/cylindrical_lens.py to cylindrical_lens.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/diffraction.py to diffraction.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/spherical_lens.py to spherical_lens.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/stop.py to stop.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/mirror.py to mirror.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/ccd.py to ccd.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/powell_lens.py to powell_lens.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/compound_lens.py to compound_lens.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/library.py to library.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/resources/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/frft/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/frft/frft.py to frft.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/pmisc/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/pmisc/misc.py to misc.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/GS/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/GS/gs.py to gs.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/Poly2D/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/cmisc/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/definitions/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/plist/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/lsq/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/picklable/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/cpsurfrep/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/calc/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/calc/gs.py to gs.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/zernike/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/zernike/zernike.py to zernike.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/psurfrep/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/field/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics/draw.py to draw.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics/utils.py to utils.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/test_coding_standards.py to test_coding_standards.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/test_misc_frft.py to test_misc_frft.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/test_shapes.py to test_shapes.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/test_snippets.py to test_snippets.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/test_components.py to test_components.cpython-36.pyc
+creating stub loader for pyoptools/raytrace/surface/cylindrical.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/spherical.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/aperture.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/surface.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/plane.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/detector.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/idealsurface.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/aspherical.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/idealpplanes.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/taylor_poly.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/cylinder.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/plane_mask.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/powell.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/ray/ray.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/shape/shape.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/shape/polygon.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/shape/triangular.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/shape/rectangular.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/shape/circular.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/system/idealcomponent.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/system/system.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/component/component.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/resources/resources.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/Poly2D/Poly2D.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/cmisc/cmisc.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/definitions/definitions.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/plist/plist.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/lsq/lsq.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/picklable/picklable.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/wavefront/cpsurfrep/cpsurfrep.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/wavefront/psurfrep/psurfrep.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/wavefront/field/field.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/wavefront/field/fields.cpython-36m-x86_64-linux-gnu.so
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/cylindrical.py to cylindrical.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/spherical.py to spherical.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/aperture.py to aperture.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/surface.py to surface.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/plane.py to plane.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/detector.py to detector.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/idealsurface.py to idealsurface.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/aspherical.py to aspherical.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/idealpplanes.py to idealpplanes.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/taylor_poly.py to taylor_poly.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/cylinder.py to cylinder.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/plane_mask.py to plane_mask.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/powell.py to powell.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray/ray.py to ray.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/shape.py to shape.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/polygon.py to polygon.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/triangular.py to triangular.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/rectangular.py to rectangular.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/circular.py to circular.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/system/idealcomponent.py to idealcomponent.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/system/system.py to system.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/component/component.py to component.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/resources/resources.py to resources.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/Poly2D/Poly2D.py to Poly2D.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/cmisc/cmisc.py to cmisc.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/definitions/definitions.py to definitions.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/plist/plist.py to plist.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/lsq/lsq.py to lsq.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/picklable/picklable.py to picklable.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/cpsurfrep/cpsurfrep.py to cpsurfrep.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/psurfrep/psurfrep.py to psurfrep.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/field/field.py to field.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/field/fields.py to fields.cpython-36.pyc
+installing package data to build/bdist.linux-x86_64/egg
+running install_data
+creating build/bdist.linux-x86_64/egg/share
+creating build/bdist.linux-x86_64/egg/share/doc
+creating build/bdist.linux-x86_64/egg/share/doc/pyoptools
+creating build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples
+creating build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/00-Introducción.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/03-SimpleComponents.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/05-Autocollimator.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/01-IntroPython.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/04-PredefinedComponents.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/06-GeomWF.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/02-Surfaces.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/04-Simple RayTraces.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/07-SimpleEODs.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/scripts-3.6
+copying ipyoptools -> build/scripts-3.6
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.6/ipyoptools -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/ipyoptools to 775
+copying pyoptools.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying pyoptools.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying pyoptools.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying pyoptools.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+writing build/bdist.linux-x86_64/egg/EGG-INFO/native_libs.txt
+creating 'dist/pyoptools-0.1.1-py3.6-linux-x86_64.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing pyoptools-0.1.1-py3.6-linux-x86_64.egg
+creating /home/nils/.opt/anaconda3/lib/python3.6/site-packages/pyoptools-0.1.1-py3.6-linux-x86_64.egg
+Extracting pyoptools-0.1.1-py3.6-linux-x86_64.egg to /home/nils/.opt/anaconda3/lib/python3.6/site-packages
+Adding pyoptools 0.1.1 to easy-install.pth file
+Installing ipyoptools script to /home/nils/.opt/anaconda3/bin
+
+Installed /home/nils/.opt/anaconda3/lib/python3.6/site-packages/pyoptools-0.1.1-py3.6-linux-x86_64.egg
+Processing dependencies for pyoptools==0.1.1
+Finished processing dependencies for pyoptools==0.1.1
+pyoptools/raytrace/surface/aspherical.pyx: cannot find cimported module 'pyoptools.misc.Poly2D'
+pyoptools/raytrace/surface/taylor_poly.pyx: cannot find cimported module 'pyoptools.misc.Poly2D'
+pyoptools/raytrace/surface/powell.pyx: cannot find cimported module 'pyoptools.misc.Poly2D'
+running install
+running bdist_egg
+running egg_info
+writing pyoptools.egg-info/PKG-INFO
+writing dependency_links to pyoptools.egg-info/dependency_links.txt
+writing top-level names to pyoptools.egg-info/top_level.txt
+reading manifest file 'pyoptools.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+writing manifest file 'pyoptools.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+running build_ext
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/pyoptools
+copying build/lib.linux-x86_64-3.6/pyoptools/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools
+creating build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/gui/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/gui/plotutils.py -> build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/gui/ipynbplotutils.py -> build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/gui/ipywidgets.py -> build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/gui/logutils.py -> build/bdist.linux-x86_64/egg/pyoptools/gui
+copying build/lib.linux-x86_64-3.6/pyoptools/all.py -> build/bdist.linux-x86_64/egg/pyoptools
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/aspherical.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/surface.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/detector.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/cylinder.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/idealsurface.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/idealpplanes.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/plane.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/taylor_poly.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/poly_expansion.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/aperture.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/plane_mask.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/cylindrical.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/spherical.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/surface/powell.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/calc/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/calc/calc.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/schott_2000.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/ohara.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/schott.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/sumita.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/obsolete.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/ohara_530.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/corning.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/hoya_old.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/hoya_obs.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/hoya.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/shared.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/schott_2015.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/data/schott_530.mat -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/data
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/mat_lib/material.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/ray/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/ray/ray.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/ray/ray_source.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/polygon.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/rectangular.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/shape.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/circular.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/shape/triangular.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/system
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/system/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/system
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/system/idealcomponent.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/system
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/system/system.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/system
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/component
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/component/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/component
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/component/component.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/component
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/comp_lib.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/cube.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/prism.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/ideallens.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/cylindrical_lens.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/diffraction.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/spherical_lens.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/stop.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/mirror.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/ccd.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/powell_lens.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/_comp_lib/compound_lens.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/library
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/library
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/Thorlabs
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/Thorlabs/thorlabs_spherical.cmp -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/Thorlabs
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/library.py -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/library
+creating build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/Edmund
+copying build/lib.linux-x86_64-3.6/pyoptools/raytrace/library/Edmund/edmund_spherical.cmp -> build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/Edmund
+creating build/bdist.linux-x86_64/egg/pyoptools/misc
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/resources
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/resources/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/resources
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/resources/resources.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/resources
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/frft
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/frft/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/frft
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/frft/frft.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/frft
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/pmisc
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/pmisc/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/pmisc
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/pmisc/misc.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/pmisc
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/GS
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/GS/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/GS
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/GS/gs.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/GS
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/Poly2D
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/Poly2D/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/Poly2D
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/Poly2D/Poly2D.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/Poly2D
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/cmisc
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/cmisc/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/cmisc
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/cmisc/cmisc.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/cmisc
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/definitions
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/definitions/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/definitions
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/definitions/definitions.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/definitions
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/plist
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/plist/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/plist
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/plist/plist.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/plist
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/lsq
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/lsq/lsq.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/lsq
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/lsq/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/lsq
+creating build/bdist.linux-x86_64/egg/pyoptools/misc/picklable
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/picklable/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/misc/picklable
+copying build/lib.linux-x86_64-3.6/pyoptools/misc/picklable/picklable.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/misc/picklable
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront/cpsurfrep
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/cpsurfrep/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/cpsurfrep
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/cpsurfrep/cpsurfrep.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/cpsurfrep
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/calc/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/calc/gs.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/calc
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront/zernike
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/zernike/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/zernike
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/zernike/zernike.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/zernike
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront/psurfrep
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/psurfrep/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/psurfrep
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/psurfrep/psurfrep.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/psurfrep
+creating build/bdist.linux-x86_64/egg/pyoptools/wavefront/field
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/field/fields.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/field
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/field/__init__.py -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/field
+copying build/lib.linux-x86_64-3.6/pyoptools/wavefront/field/field.cpython-36m-x86_64-linux-gnu.so -> build/bdist.linux-x86_64/egg/pyoptools/wavefront/field
+creating build/bdist.linux-x86_64/egg/addon
+creating build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics
+copying build/lib.linux-x86_64-3.6/addon/space_view3d_ray_optics/__init__.py -> build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics
+copying build/lib.linux-x86_64-3.6/addon/space_view3d_ray_optics/draw.py -> build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics
+copying build/lib.linux-x86_64-3.6/addon/space_view3d_ray_optics/utils.py -> build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics
+creating build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/__init__.py -> build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/test_coding_standards.py -> build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/test_misc_frft.py -> build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/test_shapes.py -> build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/test_snippets.py -> build/bdist.linux-x86_64/egg/tests
+copying build/lib.linux-x86_64-3.6/tests/test_components.py -> build/bdist.linux-x86_64/egg/tests
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/gui/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/gui/plotutils.py to plotutils.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/gui/ipynbplotutils.py to ipynbplotutils.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/gui/ipywidgets.py to ipywidgets.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/gui/logutils.py to logutils.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/all.py to all.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/poly_expansion.py to poly_expansion.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/calc/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/calc/calc.py to calc.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/mat_lib/material.py to material.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray/ray_source.py to ray_source.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/system/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/component/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/comp_lib.py to comp_lib.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/cube.py to cube.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/prism.py to prism.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/ideallens.py to ideallens.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/cylindrical_lens.py to cylindrical_lens.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/diffraction.py to diffraction.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/spherical_lens.py to spherical_lens.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/stop.py to stop.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/mirror.py to mirror.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/ccd.py to ccd.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/powell_lens.py to powell_lens.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/_comp_lib/compound_lens.py to compound_lens.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/library/library.py to library.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/resources/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/frft/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/frft/frft.py to frft.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/pmisc/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/pmisc/misc.py to misc.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/GS/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/GS/gs.py to gs.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/Poly2D/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/cmisc/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/definitions/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/plist/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/lsq/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/picklable/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/cpsurfrep/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/calc/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/calc/gs.py to gs.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/zernike/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/zernike/zernike.py to zernike.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/psurfrep/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/field/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics/draw.py to draw.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/addon/space_view3d_ray_optics/utils.py to utils.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/test_coding_standards.py to test_coding_standards.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/test_misc_frft.py to test_misc_frft.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/test_shapes.py to test_shapes.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/test_snippets.py to test_snippets.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/tests/test_components.py to test_components.cpython-36.pyc
+creating stub loader for pyoptools/raytrace/surface/cylindrical.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/spherical.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/aperture.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/surface.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/plane.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/detector.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/idealsurface.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/aspherical.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/idealpplanes.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/taylor_poly.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/cylinder.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/plane_mask.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/surface/powell.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/ray/ray.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/shape/shape.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/shape/polygon.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/shape/triangular.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/shape/rectangular.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/shape/circular.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/system/idealcomponent.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/system/system.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/raytrace/component/component.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/resources/resources.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/Poly2D/Poly2D.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/cmisc/cmisc.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/definitions/definitions.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/plist/plist.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/lsq/lsq.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/misc/picklable/picklable.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/wavefront/cpsurfrep/cpsurfrep.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/wavefront/psurfrep/psurfrep.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/wavefront/field/field.cpython-36m-x86_64-linux-gnu.so
+creating stub loader for pyoptools/wavefront/field/fields.cpython-36m-x86_64-linux-gnu.so
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/cylindrical.py to cylindrical.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/spherical.py to spherical.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/aperture.py to aperture.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/surface.py to surface.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/plane.py to plane.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/detector.py to detector.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/idealsurface.py to idealsurface.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/aspherical.py to aspherical.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/idealpplanes.py to idealpplanes.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/taylor_poly.py to taylor_poly.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/cylinder.py to cylinder.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/plane_mask.py to plane_mask.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/surface/powell.py to powell.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/ray/ray.py to ray.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/shape.py to shape.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/polygon.py to polygon.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/triangular.py to triangular.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/rectangular.py to rectangular.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/shape/circular.py to circular.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/system/idealcomponent.py to idealcomponent.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/system/system.py to system.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/raytrace/component/component.py to component.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/resources/resources.py to resources.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/Poly2D/Poly2D.py to Poly2D.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/cmisc/cmisc.py to cmisc.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/definitions/definitions.py to definitions.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/plist/plist.py to plist.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/lsq/lsq.py to lsq.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/misc/picklable/picklable.py to picklable.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/cpsurfrep/cpsurfrep.py to cpsurfrep.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/psurfrep/psurfrep.py to psurfrep.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/field/field.py to field.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/pyoptools/wavefront/field/fields.py to fields.cpython-36.pyc
+installing package data to build/bdist.linux-x86_64/egg
+running install_data
+creating build/bdist.linux-x86_64/egg/share
+creating build/bdist.linux-x86_64/egg/share/doc
+creating build/bdist.linux-x86_64/egg/share/doc/pyoptools
+creating build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples
+creating build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/00-Introducción.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/03-SimpleComponents.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/05-Autocollimator.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/01-IntroPython.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/04-PredefinedComponents.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/06-GeomWF.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/02-Surfaces.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/04-Simple RayTraces.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+copying examples/basic_course/07-SimpleEODs.ipynb -> build/bdist.linux-x86_64/egg/share/doc/pyoptools/examples/basic_course
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+installing scripts to build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+running install_scripts
+running build_scripts
+creating build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+copying build/scripts-3.6/ipyoptools -> build/bdist.linux-x86_64/egg/EGG-INFO/scripts
+changing mode of build/bdist.linux-x86_64/egg/EGG-INFO/scripts/ipyoptools to 775
+copying pyoptools.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying pyoptools.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying pyoptools.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying pyoptools.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+writing build/bdist.linux-x86_64/egg/EGG-INFO/native_libs.txt
+creating 'dist/pyoptools-0.1.1-py3.6-linux-x86_64.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing pyoptools-0.1.1-py3.6-linux-x86_64.egg
+removing '/home/nils/.opt/anaconda3/lib/python3.6/site-packages/pyoptools-0.1.1-py3.6-linux-x86_64.egg' (and everything under it)
+creating /home/nils/.opt/anaconda3/lib/python3.6/site-packages/pyoptools-0.1.1-py3.6-linux-x86_64.egg
+Extracting pyoptools-0.1.1-py3.6-linux-x86_64.egg to /home/nils/.opt/anaconda3/lib/python3.6/site-packages
+pyoptools 0.1.1 is already the active version in easy-install.pth
+Installing ipyoptools script to /home/nils/.opt/anaconda3/bin
+
+Installed /home/nils/.opt/anaconda3/lib/python3.6/site-packages/pyoptools-0.1.1-py3.6-linux-x86_64.egg
+Processing dependencies for pyoptools==0.1.1
+Finished processing dependencies for pyoptools==0.1.1

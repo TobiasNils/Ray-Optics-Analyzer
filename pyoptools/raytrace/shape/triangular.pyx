@@ -54,7 +54,7 @@ cdef class Triangular(Shape):
         return(type(self),args)
 
 
-    cpdef hit(self, p):
+    cpdef hit(self, p, u,v, uv_poly):
         """Method  that returns True if a p=(x,y,z) point is inside the triangle,
         if not it returns False.
         taken from http://www.blackpawn.com/texts/pointinpoly/default.html

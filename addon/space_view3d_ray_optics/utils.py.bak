@@ -98,6 +98,7 @@ class VarStates:
 
 
 def evaluate_geometry():
+
     # locals = console_namespace()
 
     lightsources = []
@@ -125,14 +126,6 @@ def evaluate_geometry():
                     vertices = tuple([np.array(vertice.to_3d()) for vertice in vertices])
 
                     S = surfaces.Plane(reflectivity=reflectivity, shape=shapes.Polygon(vertices))
-                    # S.shape.uv = S.inplane_vectors()
-                    # if not S.shape.uv==None:
-                    #     print('Init Optical surface', S.shape.uv)
-                    # else:
-                    #     print('No uv vectors created')
-                    # S.shape.uv_poly = tuple([[np.dot(S.shape.uv[0],p),
-                    #                          np.dot(S.shape.uv[1],p)] for p in S.shape.coord])
-                    print(S.uv_poly)
                     S_list.append(S)
                 C = Component(surflist=S_list, material=np.float(obj['n']))
                 components.append(C)
@@ -175,15 +168,9 @@ def lightsource(aperture, dist=None):
     for i,vertice_group in enumerate(aperture):
         S = surfaces.Plane(reflectivity=1,
                     shape=shapes.Polygon(tuple(vertice_group['vertices'])))
-        # S.shape.uv = S.inplane_vectors()
-        # print('Initialising Lightsource', S.shape.uv)
-        # S.shape.uv_poly = tuple([[np.dot(S.shape.uv[0],p),
-        #                          np.dot(S.shape.uv[1],p)] for p in S.shape.coord])
-        #
 
         # calculate bounding box dimensions
-        # print(S.uv_poly)
-        bbox = Path(list(S.uv_poly)).get_extents()
+        bbox = Path(S.shape.uv_poly).get_extents()
         max_dims = [bbox.xmax-bbox.xmin,
                     bbox.ymax-bbox.ymin]
 
@@ -191,8 +178,8 @@ def lightsource(aperture, dist=None):
         if invert_direction:
             N_ = -N_
 
-        u = S.u
-        v = S.v
+        u = S.shape.uv[0]
+        v = S.shape.uv[1]
 
         # adapt ray number to relative area to total source area
         ni_rays = int(n_rays*areas[i]/sum(areas))
@@ -216,7 +203,7 @@ def lightsource(aperture, dist=None):
                 v_fac = np.random.uniform(-max_dims[1]/2, max_dims[1]/2)
                 P = vertice_group['center'] + u_fac*u + v_fac*v
                 # check if it is in the aperture
-                if S.shape.hit(P, S.u, S.v, S.uv_poly):
+                if S.shape.fhit(*P):
                     break
             # create random azimuth angle
             phi = phi_dist[j]
@@ -233,14 +220,14 @@ def lightsource(aperture, dist=None):
 from copy import deepcopy
 from multiprocess import Pool
 
-def trace_rays(system):
-
-    def doWork(ri):
-    # while len(system._np_rays)>0:
-        # ri = system._np_rays.pop(0)
+def doWork(system):
+    while len(system._np_rays)>0:
+        ri = system._np_rays.pop(0)
         system.propagate_ray(ri)
-        # system._p_rays.append(ri)
-        return ri
+        system._p_rays.append(ri)
+    return system
+
+def trace_rays(system):
     import time
     settings = bpy.context.window_manager.RayOpticsProp
 
@@ -254,18 +241,18 @@ def trace_rays(system):
             ri=system._np_rays.pop(0)
             propagating_rays.append(ri)
 
-        # task_list = []
-        # for ri in propagating_rays:
-        #     S = deepcopy(system)
-        #     S.ray_add(ri)
-        #     task_list.append(S)
+        task_list = []
+        for ri in propagating_rays:
+            S = deepcopy(system)
+            S.ray_add(ri)
+            task_list.append(S)
 
-        result = pool.map(doWork, propagating_rays)
         del propagating_rays
+        result = pool.map(doWork, task_list)
 
-        system._p_rays = result
-    # for S in result:
-    #     system.update(S)
+    for S in result:
+        system._p_rays.append(*S._p_rays)
+        system.update(S)
 
     print('Ray tracing finished.')
     #mark the end time

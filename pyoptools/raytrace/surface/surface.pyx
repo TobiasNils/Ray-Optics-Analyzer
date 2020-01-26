@@ -51,7 +51,7 @@ from pyoptools.misc.Poly2D import ord2i
 from pyoptools.raytrace.ray.ray cimport Ray, Rayf
 
 from pyoptools.raytrace.shape.shape cimport Shape
-from pyoptools.raytrace.shape.circular cimport Circular
+from pyoptools.raytrace.shape.polygon import Polygon
 
 from pyoptools.misc.definitions import inf_vect
 from pyoptools.misc.picklable.picklable cimport Picklable
@@ -102,7 +102,7 @@ cdef class Surface(Picklable):
 
     #~ '''
 
-    def __init__(self,reflectivity=0., shape=Circular(radius=10.)):
+    def __init__(self,reflectivity=0., shape=Polygon()):
         self.reflectivity=reflectivity
         self.shape=shape
         self._hit_list=[]
@@ -206,7 +206,9 @@ cdef class Surface(Picklable):
 
         int_p= self._intersection(iray)
 
-        if self.shape.fhit(int_p[0],int_p[1],int_p[2])==False:
+        # if self.shape.fhit(int_p[0],int_p[1],int_p[2])==False:
+        
+        if self.shape.hit(int_p, self.u, self.v, self.uv_poly)==False:
             return inf_vect
 
         return int_p
