@@ -81,17 +81,27 @@ cdef class Plane(Surface):
         planeNormal=self.normal(A)
 
         # Punto que pertenece al rayo "Origen" del rayo
-        cdef np.ndarray[np.float64_t, ndim=1] rayPoint=A.pos
+        cdef np.ndarray[np.float64_t, ndim=1] rayPos=A.pos
         #Vector paralelo a la linea
         cdef np.ndarray[np.float64_t, ndim=1] rayDirection=A.dir
 
         #if dot(N_,A.dir) ==0 : return inf_vect
         cdef double ndotu=dot(planeNormal,rayDirection)
         if abs(ndotu) < epsilon: return inf_vect # ray parallel or within the plane
-        cdef np.ndarray w=rayPoint-planePoint
+        cdef np.ndarray w=rayPos-planePoint
         cdef double si=dot(planeNormal,w)
         si = -si/ndotu
         cdef np.ndarray retval=w+si*rayDirection+planePoint
+        # the following should be true for all 3 coordinates:
+        # retval[0] = rayPos[0] + fac*rayDirection[0]
+        for i in range(3):
+            if abs(rayDirection[i])!=0:
+                fac = (retval[i]-rayPos[i])/rayDirection[i]
+                # print(fac)
+        # if fac negative, the intersection lies behind the ray -> return inf
+        if fac<0: return inf_vect
+        else: return retval
+
         return retval
 
     cpdef np.ndarray normal(self, ri):
