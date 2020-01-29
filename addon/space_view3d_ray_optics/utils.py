@@ -248,15 +248,23 @@ def lightsource(aperture, dist=None):
 
 from copy import deepcopy
 from multiprocess import Pool
+#
+# def doWork(system):
+#     while len(system._np_rays)>0:
+#         ri = system._np_rays.pop(0)
+#         system.propagate_ray(ri)
+#         system._p_rays.append(ri)
+#     return system
 
-def doWork(system):
-    while len(system._np_rays)>0:
-        ri = system._np_rays.pop(0)
-        system.propagate_ray(ri)
-        system._p_rays.append(ri)
-    return system
 
 def trace_rays(system):
+
+    def doWork(ri):
+    # while len(system._np_rays)>0:
+        # ri = system._np_rays.pop(0)
+        system.propagate_ray(ri)
+        # system._p_rays.append(ri)
+        return ri
     import time
     settings = bpy.context.window_manager.RayOpticsProp
 
@@ -270,18 +278,18 @@ def trace_rays(system):
             ri=system._np_rays.pop(0)
             propagating_rays.append(ri)
 
-        task_list = []
-        for ri in propagating_rays:
-            S = deepcopy(system)
-            S.ray_add(ri)
-            task_list.append(S)
+        # task_list = []
+        # for ri in propagating_rays:
+        #     S = deepcopy(system)
+        #     S.ray_add(ri)
+        #     task_list.append(S)
 
+        result = pool.map(doWork, propagating_rays)
         del propagating_rays
-        result = pool.map(doWork, task_list)
 
-    for S in result:
-        system._p_rays.append(*S._p_rays)
-        system.update(S)
+        system._p_rays = result
+        # for S in result:
+        #     system.update(S)
 
     print('Ray tracing finished.')
     #mark the end time
