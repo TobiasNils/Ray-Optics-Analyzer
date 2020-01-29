@@ -71,12 +71,16 @@ def doWork(self, ri):
     return ri
 
 
+def test():
 
+    for i in range(3):
+        if i == 1:
+            return i
+            break
 
-
-
-
-
+t = test()
+t = [1,2,3]
+tuple(t)
 
 
 

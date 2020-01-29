@@ -287,7 +287,7 @@ class RayOptics(PropertyGroup):
     )
     invert_direction: BoolProperty(
         name="Invert source direction",
-        default=True,
+        default=False,
         description="",
         # update=call_console_hook
     )

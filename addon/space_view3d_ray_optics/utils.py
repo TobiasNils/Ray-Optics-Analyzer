@@ -112,20 +112,18 @@ def evaluate_geometry():
                 else:
                     reflectivity = 0
                 mesh = obj.data
-                mesh.calc_loop_triangles()
-                loop_triangles = mesh.loop_triangles
+                # mesh.calc_loop_triangles()
+                # loop_triangles = mesh.loop_triangles
 
                 S_list=[]
-                for tri in loop_triangles:
-                    tri_center = np.array(mw @ tri.center.to_3d())
+                for poly in mesh.polygons:
+                    poly_center = np.array(mw @ poly.center.to_3d())
                     # get global vertice coordinate-vectors from mesh by their index
-                    tri_vertices = [mw @ mesh.vertices[index].co for index in tri.vertices]
+                    poly_vertices = [mw @ mesh.vertices[index].co for index in poly.vertices]
                     # convert to arrays
-                    vertices = [np.array(vertice.to_3d()) for vertice in tri_vertices]
+                    vertices = [np.array(vertice.to_3d()) for vertice in poly_vertices]
 
-                    S = surfaces.Plane(reflectivity=reflectivity, shape=shapes.Triangular((vertices[0],
-                                                             vertices[1],
-                                                             vertices[2])))
+                    S = surfaces.Plane(reflectivity=reflectivity, shape=shapes.Polygon(tuple(vertices)))
                     S_list.append(S)
                 C = Component(surflist=S_list, material=np.float(obj['n']))
                 components.append(C)
@@ -134,13 +132,13 @@ def evaluate_geometry():
         else:
             mw = obj.matrix_world
             mesh = obj.data
-            mesh.calc_loop_triangles()
-            loop_triangles = mesh.loop_triangles
+            # mesh.calc_loop_triangles()
+            # loop_triangles = mesh.loop_triangles
 
-            for tri in loop_triangles:
-                tri_vertices = [mw @ mesh.vertices[index].co for index in tri.vertices]
+            for poly in mesh.polygons:
+                poly_vertices = [mw @ mesh.vertices[index].co for index in poly.vertices]
                 # convert to arrays
-                vertices = [np.array(vertice.to_3d()) for vertice in tri_vertices]
+                vertices = [np.array(vertice.to_3d()) for vertice in poly_vertices]
                 apertures.append(vertices)
     try:
         Sys=System(complist=components, n=bpy.data.worlds['World']['n'])
@@ -164,9 +162,18 @@ def lightsource(aperture, dist=None):
     # aperture = [np.array(point) for point in aperture]
     areas = []
     for vertice_group in aperture:
-        A,B,C = vertice_group
+        A = vertice_group[0]
+        # split polygon in triangles with A as reference point
+        remaining = len(self.coord[1:])
+        hit=False
+        for i in range(remaining-1):
+
+        B=array(self.coord[i])
+        C=array(self.coord[i+1])
+
         v0=C-A
         v1=B-A
+
         v1xv0=np.cross(v1,v0)
         area_i = .5*sum([v1xv0[i]**2 for i in range(len(v1xv0))] )
         areas.append(area_i)
@@ -175,59 +182,67 @@ def lightsource(aperture, dist=None):
         # adapt ray number to relative area of triangle to total source area
         ni_rays = int(n_rays*areas[i]/sum(areas))
 
-        A,B,C = vertice_group
-        v0=C-A
-        v1=B-A
-        N = np.cross(v0,v1)
-        # normalize N
-        N_ = N/np.sqrt(sum([N[i]**2 for i in range(len(N))]))
-        if invert_direction:
-            N_ = -N_
+        A = vertice_group[0]
+        # split polygon in triangles with A as reference point
+        remaining = len(self.coord[1:])
+        hit=False
+        for i in range(remaining-1):
 
-        # normalize an in-plane vector
-        v0_ = v0/np.sqrt(sum([v0[i]**2 for i in range(len(v0))]))
+            B=array(self.coord[i])
+            C=array(self.coord[i+1])
 
-        phi_dist = np.around(chaospy.Uniform(0., 2*np.pi).sample(ni_rays), 10)
-        if not dist:
-            # type specifies the distribution to use for random polar angle
-            # convert half-angle to radians
-            dist = chaospy.Uniform
-            args=(0., halfangle/360*(2*np.pi))
-        elif dist==chaospy.Normal:
-            # let half-angle coincide with 3sigma
-            args=(0., halfangle/360*(2*np.pi)/3)
-        theta_dist = np.around(dist(*args).sample(ni_rays), 10)
+            v0=C-A
+            v1=B-A
+            N = np.cross(v0,v1)
+            # normalize N
+            N_ = N/np.sqrt(sum([N[i]**2 for i in range(len(N))]))
+            if invert_direction:
+                N_ = -N_
 
-        for i in range(ni_rays):
-            # create random anker point on plane
-            while True:
-                # create random point on plane as ray origin
-                P = A+np.random.uniform(0,1)*v0 + np.random.uniform(0,1)*v1
-                # check if it is in the triangle
-                v2=P-A
-                dot00=np.dot(v0,v0)
-                dot01=np.dot(v0,v1)
-                dot02=np.dot(v0,v2)
-                dot11=np.dot(v1,v1)
-                dot12=np.dot(v1,v2)
+            # normalize an in-plane vector
+            v0_ = v0/np.sqrt(sum([v0[i]**2 for i in range(len(v0))]))
 
-                invDenom=1./(dot00 * dot11 - dot01 * dot01)
+            phi_dist = np.around(chaospy.Uniform(0., 2*np.pi).sample(ni_rays), 10)
+            if not dist:
+                # type specifies the distribution to use for random polar angle
+                # convert half-angle to radians
+                dist = chaospy.Uniform
+                args=(0., halfangle/360*(2*np.pi))
+            elif dist==chaospy.Normal:
+                # let half-angle coincide with 3sigma
+                args=(0., halfangle/360*(2*np.pi)/3)
+            theta_dist = np.around(dist(*args).sample(ni_rays), 10)
 
-                u = (dot11 * dot02 - dot01 * dot12) * invDenom
-                v = (dot00 * dot12 - dot01 * dot02) * invDenom
+            for i in range(ni_rays):
+                # create random anker point on plane
+                while True:
+                    # create random point on plane as ray origin
+                    P = A+np.random.uniform(0,1)*v0 + np.random.uniform(0,1)*v1
+                    # check if it is in the triangle
+                    v2=P-A
+                    dot00=np.dot(v0,v0)
+                    dot01=np.dot(v0,v1)
+                    dot02=np.dot(v0,v2)
+                    dot11=np.dot(v1,v1)
+                    dot12=np.dot(v1,v2)
 
-                # repeat until in triangle
-                if (u > 0) and (v > 0) and (u + v < 1):
-                    break
-            # create random azimuth angle
-            phi = phi_dist[i]
-            theta = theta_dist[i]
-            # calculate polar angle transform
-            v  = np.cos(theta)*N_ + np.sin(theta)*v0_
-            # rotate around azimuth angle phi, using Rodrigues' rotation formula
-            v = v*np.cos(phi) + np.cross(N_, v)*np.sin(phi) + N_*np.dot(N_,v)*(1-np.cos(phi))
-            R = rays.Ray(pos=P, dir=v, intensity=1.0*np.cos(theta))
-            list_of_rays.append(R)
+                    invDenom=1./(dot00 * dot11 - dot01 * dot01)
+
+                    u = (dot11 * dot02 - dot01 * dot12) * invDenom
+                    v = (dot00 * dot12 - dot01 * dot02) * invDenom
+
+                    # repeat until in triangle
+                    if (u > 0) and (v > 0) and (u + v < 1):
+                        break
+                # create random azimuth angle
+                phi = phi_dist[i]
+                theta = theta_dist[i]
+                # calculate polar angle transform
+                v  = np.cos(theta)*N_ + np.sin(theta)*v0_
+                # rotate around azimuth angle phi, using Rodrigues' rotation formula
+                v = v*np.cos(phi) + np.cross(N_, v)*np.sin(phi) + N_*np.dot(N_,v)*(1-np.cos(phi))
+                R = rays.Ray(pos=P, dir=v, intensity=1.0*np.cos(theta))
+                list_of_rays.append(R)
 
     return list_of_rays
 
