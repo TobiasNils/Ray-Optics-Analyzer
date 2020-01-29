@@ -164,19 +164,19 @@ def lightsource(aperture, dist=None):
     for vertice_group in aperture:
         A = vertice_group[0]
         # split polygon in triangles with A as reference point
-        remaining = len(self.coord[1:])
+        remaining = len(vertice_group[1:])
         hit=False
         for i in range(remaining-1):
 
-        B=array(self.coord[i])
-        C=array(self.coord[i+1])
+            B=np.array(vertice_group[i+1])
+            C=np.array(vertice_group[i+2])
 
-        v0=C-A
-        v1=B-A
+            v0=C-A
+            v1=B-A
 
-        v1xv0=np.cross(v1,v0)
-        area_i = .5*sum([v1xv0[i]**2 for i in range(len(v1xv0))] )
-        areas.append(area_i)
+            v1xv0=np.cross(v1,v0)
+            area_i = .5*sum([v1xv0[i]**2 for i in range(len(v1xv0))] )
+            areas.append(area_i)
 
     for i,vertice_group in enumerate(aperture):
         # adapt ray number to relative area of triangle to total source area
@@ -184,12 +184,12 @@ def lightsource(aperture, dist=None):
 
         A = vertice_group[0]
         # split polygon in triangles with A as reference point
-        remaining = len(self.coord[1:])
+        remaining = len(vertice_group[1:])
         hit=False
-        for i in range(remaining-1):
+        for j in range(remaining-1):
 
-            B=array(self.coord[i])
-            C=array(self.coord[i+1])
+            B=np.array(vertice_group[j+1])
+            C=np.array(vertice_group[j+2])
 
             v0=C-A
             v1=B-A

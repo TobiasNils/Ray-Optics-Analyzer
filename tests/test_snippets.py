@@ -73,14 +73,14 @@ def doWork(self, ri):
 
 def test():
 
-    for i in range(3):
-        if i == 1:
+    for i in range(1):
+        if i == 0:
             return i
             break
 
 t = test()
 t = [1,2,3]
-tuple(t)
+t
 
 
 

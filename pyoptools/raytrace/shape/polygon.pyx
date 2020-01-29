@@ -68,8 +68,8 @@ cdef class Polygon(Shape):
         hit=False
         for i in range(remaining-1):
 
-            B=array(self.coord[i])
-            C=array(self.coord[i+1])
+            B=array(self.coord[i+1])
+            C=array(self.coord[i+2])
 
             v0=C-A
             v1=B-A
@@ -108,8 +108,8 @@ cdef class Polygon(Shape):
         hit=False
         for i in range(remaining-1):
 
-            B=array(self.coord[i])
-            C=array(self.coord[i+1])
+            B=array(self.coord[i+1])
+            C=array(self.coord[i+2])
 
             v0=C-A
             v1=B-A
