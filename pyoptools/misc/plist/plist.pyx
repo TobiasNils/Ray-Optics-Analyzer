@@ -36,13 +36,13 @@ cdef class plist(Picklable):
         if isinstance(a,(list,tuple)):
             for i in a:
                 try:
-                    if len(i)==1:
-                        self.append(i[0])
-                    else:
-                        O,k=i
-                        self[k]=O
+                    O = i
+                    self.append(O)
+                    
                 except TypeError:
-                    self.append(i)
+                    O,k=i
+                    self[k]=O
+                    # self.append(i)
 
         elif isinstance(a,(dict,plist)):
             for k, v in a.iteritems():

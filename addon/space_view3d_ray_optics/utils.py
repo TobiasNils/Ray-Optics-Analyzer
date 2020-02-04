@@ -96,15 +96,15 @@ def evaluate_geometry():
     import pyoptools.raytrace.surface as surfaces
     import pyoptools.raytrace.shape as shapes
 
-    # locals = console_namespace()
+    locals = console_namespace()
 
     lightsources = []
     components = []
     apertures=[]
     for obj_key in bpy.data.objects.keys():
         obj=bpy.data.objects[obj_key]
-        if not 'source' in obj.data.name:
-            if 'n' in obj.keys():
+        if obj.visible_get():
+            if not 'source' in obj.data.name:
                 # for this to be true, n must be defined as custom property in Blender "Object Properties" <- NOT Mesh Properties
                 mw = obj.matrix_world
                 if 'reflectivity' in obj.keys():
@@ -114,7 +114,6 @@ def evaluate_geometry():
                 mesh = obj.data
                 # mesh.calc_loop_triangles()
                 # loop_triangles = mesh.loop_triangles
-
                 S_list=[]
                 for poly in mesh.polygons:
                     poly_center = np.array(mw @ poly.center.to_3d())
@@ -125,27 +124,36 @@ def evaluate_geometry():
 
                     S = surfaces.Plane(reflectivity=reflectivity, shape=shapes.Polygon(tuple(vertices)))
                     S_list.append(S)
-                C = Component(surflist=S_list, material=np.float(obj['n']))
+
+                if 'CCD' in obj.data.name:
+                    if len(S_list)==1:
+                        C = Component(surflist={'CCD':S_list[0]}, material = bpy.data.worlds['World']['n'])
+                    else:
+                        C = Component(surflist=S_list, material=bpy.data.worlds['World']['n'])
+                    locals[obj.data.name] = C
+                else:
+                    C = Component(surflist=S_list, material=np.float(obj['n']))
                 components.append(C)
             else:
-                print(obj.name, 'not included in ray-trace; no refractive index defined.')
-        else:
-            mw = obj.matrix_world
-            mesh = obj.data
-            # mesh.calc_loop_triangles()
-            # loop_triangles = mesh.loop_triangles
+                mw = obj.matrix_world
+                mesh = obj.data
+                # mesh.calc_loop_triangles()
+                # loop_triangles = mesh.loop_triangles
 
-            for poly in mesh.polygons:
-                poly_vertices = [mw @ mesh.vertices[index].co for index in poly.vertices]
-                # convert to arrays
-                vertices = [np.array(vertice.to_3d()) for vertice in poly_vertices]
-                apertures.append(vertices)
+                for poly in mesh.polygons:
+                    poly_vertices = [mw @ mesh.vertices[index].co for index in poly.vertices]
+                    # convert to arrays
+                    vertices = [np.array(vertice.to_3d()) for vertice in poly_vertices]
+                    apertures.append(vertices)
+        else:
+            print(obj.name, 'invisible -> not included in ray-trace.')
+
     try:
         Sys=System(complist=components, n=bpy.data.worlds['World']['n'])
     except KeyError:
         Sys=System(complist=components, n=1.0)
-
     # pass objects to python console namespace for further processing
+    locals['Sys'] = Sys
 
     return Sys, apertures
 
