@@ -99,8 +99,8 @@ def evaluate_geometry():
     locals = console_namespace()
 
     lightsources = []
-    components = []
     apertures=[]
+    components = {}
     for obj_key in bpy.data.objects.keys():
         obj=bpy.data.objects[obj_key]
         if obj.visible_get():
@@ -114,7 +114,7 @@ def evaluate_geometry():
                 mesh = obj.data
                 # mesh.calc_loop_triangles()
                 # loop_triangles = mesh.loop_triangles
-                S_list=[]
+                S_list={}
                 for poly in mesh.polygons:
                     poly_center = np.array(mw @ poly.center.to_3d())
                     # get global vertice coordinate-vectors from mesh by their index
@@ -123,13 +123,13 @@ def evaluate_geometry():
                     vertices = [np.array(vertice.to_3d()) for vertice in poly_vertices]
 
                     S = surfaces.Plane(reflectivity=reflectivity, shape=shapes.Polygon(tuple(vertices)))
-                    S_list.append(S)
-
+                    S_list[poly.index] = S
                 if len(S_list)==1:
-                    C = Component(surflist=S_list, material = bpy.data.worlds['World']['n'])
+                    C = Component(surflist=S_list,
+                                material = bpy.data.worlds['World']['n'])
                 else:
                     C = Component(surflist=S_list, material=np.float(obj['n']))
-                components.append((C,mesh.name))
+                components[mesh.name]=C
             else:
                 mw = obj.matrix_world
                 mesh = obj.data
@@ -145,7 +145,7 @@ def evaluate_geometry():
             print(obj.name, 'invisible -> not included in ray-trace.')
 
     try:
-        Sys=System(complist={C[1]:C[0] for C in components}, n=bpy.data.worlds['World']['n'])
+        Sys=System(complist=components, n=bpy.data.worlds['World']['n'])
     except KeyError:
         Sys=System(complist=components, n=1.0)
     # pass objects to python console namespace for further processing
