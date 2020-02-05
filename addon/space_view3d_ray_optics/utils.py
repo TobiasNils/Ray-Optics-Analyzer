@@ -125,15 +125,11 @@ def evaluate_geometry():
                     S = surfaces.Plane(reflectivity=reflectivity, shape=shapes.Polygon(tuple(vertices)))
                     S_list.append(S)
 
-                if 'CCD' in obj.data.name:
-                    if len(S_list)==1:
-                        C = Component(surflist={'CCD':S_list[0]}, material = bpy.data.worlds['World']['n'])
-                    else:
-                        C = Component(surflist=S_list, material=bpy.data.worlds['World']['n'])
-                    locals[obj.data.name] = C
+                if len(S_list)==1:
+                    C = Component(surflist=S_list, material = bpy.data.worlds['World']['n'])
                 else:
                     C = Component(surflist=S_list, material=np.float(obj['n']))
-                components.append(C)
+                components.append((C,mesh.name))
             else:
                 mw = obj.matrix_world
                 mesh = obj.data
@@ -149,7 +145,7 @@ def evaluate_geometry():
             print(obj.name, 'invisible -> not included in ray-trace.')
 
     try:
-        Sys=System(complist=components, n=bpy.data.worlds['World']['n'])
+        Sys=System(complist={C[1]:C[0] for C in components}, n=bpy.data.worlds['World']['n'])
     except KeyError:
         Sys=System(complist=components, n=1.0)
     # pass objects to python console namespace for further processing
@@ -272,7 +268,8 @@ def trace_rays(system):
         # ri = system._np_rays.pop(0)
         system.propagate_ray(ri)
         # system._p_rays.append(ri)
-        return ri
+        # return the system too, in order to update hitlists afterwards
+        return ri, system
     import time
     settings = bpy.context.window_manager.RayOpticsProp
 
@@ -295,7 +292,12 @@ def trace_rays(system):
         result = pool.map(doWork, propagating_rays)
         del propagating_rays
 
-        system._p_rays = result
+        # update hitlists and get rays from result
+        p_rays = []
+        for r in result:
+            system.update(r[1])
+            p_rays.append(r[0])
+        system._p_rays = p_rays
         # for S in result:
         #     system.update(S)
 

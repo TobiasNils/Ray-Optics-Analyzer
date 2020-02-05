@@ -87,15 +87,15 @@ class PanelConsoleVars(Panel):
             )
         col = layout.column()
         col.operator("rayoptics.geometry_to_console")
+        col.prop(bpy.context.window_manager.RayOpticsProp, "show_sources")
         col.prop(bpy.context.window_manager.RayOpticsProp, "n_rays")
         col.prop(bpy.context.window_manager.RayOpticsProp, "halfangle")
-        col.operator("rayoptics.init_light_sources")
         col.prop(bpy.context.window_manager.RayOpticsProp, "invert_direction")
-        col.prop(bpy.context.window_manager.RayOpticsProp, "show_sources")
-        col.prop(bpy.context.window_manager.RayOpticsProp, "processes")
         col.operator("rayoptics.trace_rays")
+        col.prop(bpy.context.window_manager.RayOpticsProp, "processes")
         col.prop(bpy.context.window_manager.RayOpticsProp, "render_rays")
         col.prop(bpy.context.window_manager.RayOpticsProp, "ray_hide")
+        col.operator("rayoptics.init_light_sources")
 
 #
 # class DeleteVar(Operator):
@@ -145,7 +145,7 @@ class PanelConsoleVars(Panel):
 
 class Geometry2Console(Operator):
     bl_idname = "rayoptics.geometry_to_console"
-    bl_label = "Inspect Geometry"
+    bl_label = "Init Geometry"
     bl_description = "Inspect Geometry and pass Optical System information to the Console"
     bl_options = {'REGISTER'}
 
@@ -153,8 +153,15 @@ class Geometry2Console(Operator):
         Sys, apertures = utils.evaluate_geometry()
         bpy.context.window_manager.RayOpticsVars['items']['OpticalSystem'] = Sys
         bpy.context.window_manager.RayOpticsVars['items']['apertures'] = apertures
-        # locals['apertures'] = apertures
-        # draw.tag_redraw_areas()
+        
+        import chaospy
+        vars = bpy.context.window_manager.RayOpticsVars['items']
+        _np_rays = utils.lightsource(vars['apertures'],
+        dist=chaospy.Normal)
+        vars['OpticalSystem'].reset()
+        vars['OpticalSystem']._np_rays = _np_rays
+        draw.callback_enable()
+        draw.tag_redraw_areas()
         return {'FINISHED'}
 
 class InitLightSources(Operator):
@@ -164,14 +171,6 @@ class InitLightSources(Operator):
     bl_options = {'REGISTER'}
 
     def execute(self, context):
-        import chaospy
-        vars = bpy.context.window_manager.RayOpticsVars['items']
-        _np_rays = utils.lightsource(vars['apertures'],
-                                    dist=chaospy.Normal)
-        vars['OpticalSystem'].reset()
-        vars['OpticalSystem']._np_rays = _np_rays
-        draw.callback_enable()
-        draw.tag_redraw_areas()
         return {'FINISHED'}
 
 
