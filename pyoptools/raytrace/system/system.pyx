@@ -284,19 +284,43 @@ cdef class System(Picklable):
         #~ else:
             #~ raise Exception,'Not a valid OptCom'
 
+    def doWork(self, ri):
 
-    def propagate(self, update_ids=True):
+        ri, surf_hits = self.propagate_ray(ri)
+        # surf_hits is a list of tuples (optsurf.id, (pi, ri))
+        # optsurf.id yields a list of nested keys: e.g. ['Sphere', 0]
+        # this information needs to be added to the systen "self" according to those keys after the worker pool has finished
+        return ri, surf_hits
+
+    def propagate(self, processes, update_ids=True):
         """ Propagates all the rays in the non propagated list.
         """
-
+        from multiprocess import Pool
         #This is not necessary for all propagations, but is safer to do it
         #When propagating a sub system this must not be done
         if update_ids: self.update_ids()
 
-        while len(self._np_rays)>0:
-            ri=self._np_rays.pop(0)
-            self.propagate_ray(ri)
-            self._p_rays.append(ri)
+        with Pool(processes) as pool:
+            result = pool.map(self.doWork, self._np_rays)
+            # self._np_rays = []
+
+            # every entry in results contains the propagated ray ri and a corresponding list of surface hits. The latter needs to be transferred to the respective optical surfaces
+            for entry in result:
+                # add the propagated ray to the corresponding list
+                self._p_rays.append(entry[0])
+                # cycle through list of surface hits and update corresponding surfaces
+                for hit in entry[1]:
+                    optsurf = self.get_surface(hit[0])
+                    print(optsurf)
+                    optsurf._hit_list.append(hit[1])
+                    print(hit[1])
+            # del propagating_rays
+            # del result
+
+        # while len(self._np_rays)>0:
+        #     ri=self._np_rays.pop(0)
+        #     self.propagate_ray(ri)
+        #     self._p_rays.append(ri)
 
     def get_surf_paths(self):
         '''Method that returns a list that contains the path for each surface.
@@ -417,8 +441,10 @@ cdef class System(Picklable):
 
         cdef np.ndarray P,D,PSR,DSR,PSR0,DSR0,PSR1,DSR1
 
-
-
+        # create a hitlist the function can return in order to avoid shared memory objects which break multiprocessing
+        cdef list surf_hits=[]
+        # for every hit, the tuple of (optsurf.id, pi, ri) will be appended
+        # optsurf.id yields a list of nested keys: e.g. ['Sphere', 0]
         if ri.n== None:
             ri.n=self.n
 
@@ -463,6 +489,8 @@ cdef class System(Picklable):
 
         # Add ray to the hit list
         surf_list[j]._hit_list.append((pi_list[j],ri))
+        # Add hit to list of hit optical surfaces for multiprocessing
+        surf_hits.append((surf_list[j].id, (pi_list[j],ri)))
 
         #TODO: The hitlists of the surfaces inside a subsystem are not accurate
         # because the rays are in the subsystem coordinate system, and not in
@@ -497,6 +525,9 @@ cdef class System(Picklable):
             SR.ray_add(ri)
             #Ids must not be updated when propagating in subsystems
             SR.propagate(update_ids=False)
+
+            # try to update the main system with this info
+            self.update(SR)  
 
             # Change the coordinate system of the propagated ray and its childs
             # RT=R.ch_coord_sys_inv(PSR,DSR,childs=True)
@@ -534,6 +565,9 @@ cdef class System(Picklable):
             SR1=comp_list[j1]
             # Add ray to the hit list
             surf_list[j1]._hit_list.append((pi_list[j1],ri))
+            # Add hit to list of hit optical surfaces for multiprocessing
+            surf_hits.append((surf_list[j1].id, (pi_list[j1],ri)))
+
             n0=SR0.n(ri.wavelength)
             n1=SR1.n(ri.wavelength)
             #print 1
@@ -572,7 +606,7 @@ cdef class System(Picklable):
             else:
                 raise Exception, "Error, a a ray can not be parent and child at the same time"
 
-        return ri
+        return ri, surf_hits
 
     cpdef propagate_ray_ns(self,Ray gr, dpath):
         '''        Method to propagate the ray in the system.

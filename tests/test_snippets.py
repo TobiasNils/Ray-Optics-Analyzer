@@ -1,15 +1,28 @@
 rays=[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-#
+rays[1:]
 # new_rays = [rays.pop(0) for i in range(len(rays)-5)]
-#
+class Obj():
+    values = []
+    def f(self, ri):
+        time.sleep(1)
+        self.values.append(ri)
+        # print(ri)
+        return ri, ri
+
 import time
-def doWork(ri):
-    time.sleep(1)
-    # print(ri)
-    return ri
+O = Obj()
 
 from multiprocess import Pool, cpu_count
+
 p = Pool(14)
+
+result = p.map(O.f, rays)
+result
+O.values = [result[1] for r in result]
+O.values
+
+list(result)
+
 # import numpy as np
 #mark the start time
 startTime = time.time()

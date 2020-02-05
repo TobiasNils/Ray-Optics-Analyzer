@@ -250,7 +250,7 @@ def lightsource(aperture, dist=None):
 
     return list_of_rays
 
-from copy import deepcopy
+from copy import deepcopy, copy
 from multiprocess import Pool
 #
 # def doWork(system):
@@ -266,40 +266,27 @@ def trace_rays(system):
     def doWork(ri):
     # while len(system._np_rays)>0:
         # ri = system._np_rays.pop(0)
+        # S = copy()
         system.propagate_ray(ri)
         # system._p_rays.append(ri)
         # return the system too, in order to update hitlists afterwards
-        return ri, system
+        # return ri, system
+        return ri
     import time
     settings = bpy.context.window_manager.RayOpticsProp
 
     #mark the start time
     startTime = time.time()
     print('... propagating rays ...')
-    with Pool(settings.processes) as pool:
-        # empty list of non-propagated rays and store rays in propagating_rays
-        propagating_rays = []
-        for i in range(len(system._np_rays)):
-            ri=system._np_rays.pop(0)
-            propagating_rays.append(ri)
 
-        # task_list = []
-        # for ri in propagating_rays:
-        #     S = deepcopy(system)
-        #     S.ray_add(ri)
-        #     task_list.append(S)
-
-        result = pool.map(doWork, propagating_rays)
-        del propagating_rays
-
-        # update hitlists and get rays from result
-        p_rays = []
-        for r in result:
-            system.update(r[1])
-            p_rays.append(r[0])
-        system._p_rays = p_rays
-        # for S in result:
-        #     system.update(S)
+    # with Pool(settings.processes) as pool:
+    #     result = pool.map(doWork, system._np_rays)
+    # 
+    # system._p_rays = result
+    # system._np_rays = []
+    # # del propagating_rays
+    # del result
+    system.propagate(settings.processes)
 
     print('Ray tracing finished.')
     #mark the end time

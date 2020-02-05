@@ -310,8 +310,6 @@ cdef class Component(Picklable):
         ri_n=SR.propagate(ri,n,np)
 
 
-
-
         ret_rays=[]
         for i in ri_n:
             # rr=i.ch_coord_sys_inv(PSR,DSR)
