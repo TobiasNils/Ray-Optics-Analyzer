@@ -35,7 +35,7 @@ The raytracing algorithms implemented here are adaptations of the [pyOpTools](ht
 
 ## Todo
 
-- [x] implement and benchmark multiprocessing for System.propagate()
+- [ ] implement and benchmark multiprocessing for System.propagate()
 - [ ] Extend documentation
 - [ ] Clean up repository
 - [ ] Implement use of node-editor for material setup?

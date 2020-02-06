@@ -286,10 +286,12 @@ cdef class System(Picklable):
 
     def doWork(self, ri):
 
-        ri, surf_hits = self.propagate_ray(ri)
+        surf_hits = self.propagate_ray(ri)
         # surf_hits is a list of tuples (optsurf.id, (pi, ri))
         # optsurf.id yields a list of nested keys: e.g. ['Sphere', 0]
         # this information needs to be added to the systen "self" according to those keys after the worker pool has finished
+
+
         return ri, surf_hits
 
     def propagate(self, processes, update_ids=True):
@@ -311,11 +313,10 @@ cdef class System(Picklable):
                 # cycle through list of surface hits and update corresponding surfaces
                 for hit in entry[1]:
                     optsurf = self.get_surface(hit[0])
-                    print(optsurf)
+                    #print(optsurf)
                     optsurf._hit_list.append(hit[1])
-                    print(hit[1])
-            # del propagating_rays
-            # del result
+                    #print(hit[1])
+        del result
 
         # while len(self._np_rays)>0:
         #     ri=self._np_rays.pop(0)
@@ -474,10 +475,10 @@ cdef class System(Picklable):
 
 
         # Check if there are more components in front of the ray
-        # if not, return the original ray
+        # if not, return the rays suface hits so far
 
         if alltrue(npisinf(array(dist_list))):
-            return ri
+            return surf_hits
 
         # Sort the components by distance
         sort_list=asarray(dist_list).argsort()
@@ -527,7 +528,7 @@ cdef class System(Picklable):
             SR.propagate(update_ids=False)
 
             # try to update the main system with this info
-            self.update(SR)  
+            #self.update(SR)
 
             # Change the coordinate system of the propagated ray and its childs
             # RT=R.ch_coord_sys_inv(PSR,DSR,childs=True)
@@ -599,14 +600,15 @@ cdef class System(Picklable):
                 ri.add_child(ri_0)
 
         # Propagate childs
-
         for i in ri.get_final_rays():
             if (i!=ri):
-                if i.intensity>0: self.propagate_ray(i)
+                if i.intensity>0:
+                    surf_hits_i = self.propagate_ray(i)
+                    surf_hits=surf_hits+surf_hits_i
             else:
                 raise Exception, "Error, a a ray can not be parent and child at the same time"
 
-        return ri, surf_hits
+        return surf_hits
 
     cpdef propagate_ray_ns(self,Ray gr, dpath):
         '''        Method to propagate the ray in the system.
