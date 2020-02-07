@@ -4,3 +4,4 @@ cimport numpy as np
 cdef class Plane(Surface):
     cpdef _intersection(self,Ray A)
     cpdef np.ndarray normal(self,ri)
+    cpdef tuple inplane_vectors(self, refPoint)

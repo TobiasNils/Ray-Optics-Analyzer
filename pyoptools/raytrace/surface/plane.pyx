@@ -21,7 +21,8 @@
 '''
 
 
-from numpy import array, dot, cross, inf, float64, zeros, asarray
+from numpy import array, dot, cross, inf, float64, zeros, asarray, arccos, sin, cos,sqrt, pi, unique
+
 #from enthought.traits.api import Tuple,Float
 #from enthought.traits.ui.view import Group,Item
 
@@ -104,6 +105,76 @@ cdef class Plane(Surface):
 
         N_=array(N_).astype(float64)
         return (N_)
+
+    cpdef tuple inplane_vectors(self, refPoint):
+        """Method that returns inplane unitary vectors u,v and polygon vertices in terms of u and v with respect to refPoint (ideally the center of the polygon).
+        """
+        edges=[]
+        for i in range(len(self.shape.coord)):
+            v1=self.shape.coord[i]
+            v2=self.shape.coord[i-1]
+            edges.append(v2-v1)
+        # cdef np.ndarray[np.float64_t, ndim=1] v2=self.shape.coord[1]
+        if len(edges)>3:
+            # get edge vector with maximum z-component
+            maxZ = array([xyz[-1] for xyz in edges]).argmax()
+            # get base point of that vector
+            maxZ_base = self.shape.coord[maxZ]
+            # get edge center point
+            edge_center = maxZ_base + .5*edges[maxZ]
+            # Take an in-plane vector from face-center to edge center as u
+            u = edge_center-refPoint
+
+        else:
+            # compare edge lengths
+            edge_lengths = array([sqrt(sum([p[i]**2 for i in range(3)])) for p in edges])
+            l, count = unique(edge_lengths,
+                                    return_counts=True)
+            # choose the (first) one with minimum count as u
+            min_count = count.argmin()
+            u = edges[min_count]
+        # normalize
+        u = norm_vect(u)
+
+        # Get the already normalized v vector by cross-product with face-normal
+        N_ = self.normal(1)
+        v = cross(u,N_)
+
+        # create empty list to append vertices in uv-coordinates
+        uv_poly = []
+
+        # cdef np.ndarray p,retval
+        # cdef double norm_p,theta,u_fac,v_fac
+        for p in self.shape.coord:
+            # let refPoint be local (0,0). Then, all vertices are expressed in relative coordinates as vertex = coord-refPoint
+            p = p-refPoint
+            # calc length of relative coord
+            norm_p = sqrt(sum([p[i]**2 for i in range(3)]))
+            # get angle theta between p and u
+            theta = arccos(dot(p/norm_p, u))
+            # Problem: dot product is symmetric around pi. -> compare p with v to distinguish angles < pi from those > pi.
+            phi = arccos(dot(p/norm_p, v))
+            if phi <= pi/2:
+                # 0 <= theta  <= pi
+                pass
+            else:
+                # pi < theta < 2pi
+                theta = theta + pi
+            print(theta*360/(2*pi))
+            # project p on u and v using trigonometric relations
+            u_fac = norm_p*cos(theta)
+            v_fac = norm_p*sin(theta)
+
+
+            # the plane point can now be expressed as
+            # p = refPoint + u_fac*u + v_fac*v
+            # local coordinates are therefore
+            retval = array([u_fac, v_fac])
+            uv_poly.append(retval)
+        assert len(uv_poly)==len(self.shape.coord)
+        u=array(u).astype(float64)
+        v=array(v).astype(float64)
+        return (u, v, tuple(uv_poly))
 
     def _repr_(self):
         '''Return an string with the representation of the optical plane
