@@ -1,5 +1,11 @@
-rays=[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-rays[1:]
+import numpy as np
+from scipy.spatial import ConvexHull
+rays=[1,2,3,4,5,6,7,8,20,9,10,11,12,13,14,14,15,15]
+2*1e-3
+
+import matplotlib.pyplot as plt
+help(np.histogram2d)
+
 # new_rays = [rays.pop(0) for i in range(len(rays)-5)]
 class Obj():
     values = []

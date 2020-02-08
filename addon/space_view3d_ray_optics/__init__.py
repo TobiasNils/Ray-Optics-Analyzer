@@ -153,7 +153,7 @@ class Geometry2Console(Operator):
         Sys, apertures = utils.evaluate_geometry()
         bpy.context.window_manager.RayOpticsVars['items']['OpticalSystem'] = Sys
         bpy.context.window_manager.RayOpticsVars['items']['apertures'] = apertures
-        
+
         import chaospy
         vars = bpy.context.window_manager.RayOpticsVars['items']
         _np_rays = utils.lightsource(vars['apertures'],
@@ -164,13 +164,15 @@ class Geometry2Console(Operator):
         draw.tag_redraw_areas()
         return {'FINISHED'}
 
-class InitLightSources(Operator):
-    bl_idname = "rayoptics.init_light_sources"
-    bl_label = "Initialize lightsources"
-    bl_description = 'Create lightsources from any mesh with "source" in its name'
+class IrradianceMap(Operator):
+    bl_idname = "rayoptics.toggleIrrMap"
+    bl_label = "Irradiance Map"
+    bl_description = 'Show Irradiance Map for selected surfaces'
     bl_options = {'REGISTER'}
 
     def execute(self, context):
+        
+
         return {'FINISHED'}
 
 

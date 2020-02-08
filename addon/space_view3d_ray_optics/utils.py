@@ -52,7 +52,8 @@ class VarStates:
         # Then this function preserves the display states of the
         # console variables.
         state_props = bpy.context.window_manager.RayOpticsStatePropList
-        variables = evaluate_geometry()
+        Sys, sources = evaluate_geometry()
+        variables = {'OpticalSystem':Sys, 'LightSources':sources}
         for key in variables.keys():
             if key and key not in state_props:
                 prop = state_props.add()
@@ -281,7 +282,7 @@ def trace_rays(system):
 
     # with Pool(settings.processes) as pool:
     #     result = pool.map(doWork, system._np_rays)
-    # 
+    #
     # system._p_rays = result
     # system._np_rays = []
     # # del propagating_rays
