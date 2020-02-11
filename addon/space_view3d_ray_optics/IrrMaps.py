@@ -68,8 +68,8 @@ if __name__=='__main__':
     import numpy as np
     import matplotlib.pyplot as plt
     import matplotlib.cm as cm
+    import threading
 
-    
     from scipy.ndimage.filters import gaussian_filter
     from mpl_toolkits.mplot3d import Axes3D
     from mpl_toolkits.mplot3d.art3d import Poly3DCollection
@@ -158,7 +158,9 @@ if __name__=='__main__':
             ax.set(aspect=1)
             fig.tight_layout()
 
-            plt.show()
+
+
+    plt.show()
             #print('uv-coords of polygon', uv_poly)
             #print('n hits', len(optsurf.hit_list))
 

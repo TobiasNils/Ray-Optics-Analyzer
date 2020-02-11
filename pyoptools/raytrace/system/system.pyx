@@ -36,6 +36,7 @@ from numpy import asarray, array, float64, alltrue, isinf as npisinf, isnan as n
     pi,absolute, inf
 cimport numpy as np
 
+from multiprocess import Pool
 #from ray_trace.component.component cimport Component
 
 from pyoptools.raytrace.ray.ray cimport Ray
@@ -140,7 +141,7 @@ cdef class System(Picklable):
     #    title="Edicion de Sistema Optico",resizable=True)
 
 
-    def __init__(self,complist=None, n=1., ):
+    def __init__(self,complist=None, n=1., scene=None):
         """Returns an object that describes an optical system
 
         **Arguments**:
@@ -162,7 +163,7 @@ cdef class System(Picklable):
         self.n=n
         self._np_rays=[]
         self._p_rays=[]
-
+        self.scene = scene
         for i in self.complist:
             comp=i
             #Registrar las componentes para que los cambios se propaguen
@@ -173,7 +174,7 @@ cdef class System(Picklable):
                 comp.n=self.n
 
         #Add to the keys to the state key list
-        Picklable.__init__(self,"complist","n","_np_rays","_p_rays")
+        Picklable.__init__(self,"complist","n","_np_rays","_p_rays", 'scene')
 
 
     # Dict type and list type interface to expose complist
@@ -271,38 +272,24 @@ cdef class System(Picklable):
             raise Exception,'Not a valid Ray'
 
 
-    #~ def component_add(self, cmp,pos,dire):
-        #~ """
-        #~ """
-        #~ # TODO: check if this method is needed
-        #~ # TODO: design a method to delete components
-        #~
-        #~ if isinstance(cmp,OptCom):
-            #~ pos_=array(pos).astype(float64)
-            #~ dir_=array(dire).astype(float64)
-            #~ self.complist.append((cmp,pos_,dir_))
-        #~ else:
-            #~ raise Exception,'Not a valid OptCom'
-
     def doWork(self, ri):
 
         surf_hits = self.propagate_ray(ri)
         # surf_hits is a list of tuples (optsurf.id, (pi, ri))
         # optsurf.id yields a list of nested keys: e.g. ['Sphere', 0]
         # this information needs to be added to the systen "self" according to those keys after the worker pool has finished
-
-
         return ri, surf_hits
 
     def propagate(self, processes, update_ids=True):
         """ Propagates all the rays in the non propagated list.
         """
-        from multiprocess import Pool
+
         #This is not necessary for all propagations, but is safer to do it
         #When propagating a sub system this must not be done
         if update_ids: self.update_ids()
 
         with Pool(processes) as pool:
+
             result = pool.map(self.doWork, self._np_rays)
             # self._np_rays = []
 
@@ -456,148 +443,95 @@ cdef class System(Picklable):
         # Calculate the path length followed by the ray until it intersects all
         # the components and subsystems
 
-        for i in self.complist:
-            C = i
-            comp_list.append(C)
-            #Reorientar el rayo, al sistema de coordenadas del elemento
-            #y calcular el recorrido del rayo hasta chocar con la
-            #el elemento
-            # R=ri.ch_coord_sys(P,D)
+        # leverage Blenders scene.ray_cast() to get the next ray section, which
+        # returns (hit_bool, hit_location, hit_surface_normal,
+        # hit_surface_index, hit_object, hit_object_world_matrix)
 
-            Dist=C.distance(ri)
-
-            dist_list.append(Dist[0])
-
-            pi_list.append(Dist[1])
-
-            surf_list.append(Dist[2])
-
-
-
-        # Check if there are more components in front of the ray
+        # Check if there are components in front of the ray
         # if not, return the rays suface hits so far
-
-        if alltrue(npisinf(array(dist_list))):
+        view = self.scene.view_layers['View Layer']
+        hit = self.scene.ray_cast(view, ri.pos, ri.dir)
+        # create dict to pass information down the tree (avoid recalculating)
+        hit = {'bool':hit[0],
+                'location':array(hit[1].to_3d()),
+                'normal':array(hit[2].to_3d()),
+                'surface':hit[3],
+                'object':hit[4].data.name,
+                }
+        if not hit['bool']:
             return surf_hits
 
-        # Sort the components by distance
-        sort_list=asarray(dist_list).argsort()
-
-        # Take the 2 nearest components. If there is only one component assume the 2nd
-        # component at infinitum
-        j=sort_list[0]
-        d0=dist_list[j]
-
-        # Add ray to the hit list
-        surf_list[j]._hit_list.append((pi_list[j],ri))
-        # Add hit to list of hit optical surfaces for multiprocessing
-        surf_hits.append((surf_list[j].id, (pi_list[j],ri)))
-
-        #TODO: The hitlists of the surfaces inside a subsystem are not accurate
-        # because the rays are in the subsystem coordinate system, and not in
-        # world coordinate system.
-        # -> Solved. Using global (world) coordinates from Blender to begin with
-        if len(sort_list)>1:
-            j1=sort_list[1]
-            d1=dist_list[j1]
-        else:
-            d1=inf
-        # Si las compomentes mas cercanas no estan en contacto, calcular la
-        # propagacion a travez de la componente mas cercana
-        # Nota_: La comparacion de punto flotante no esta funcionando. Para
-        # que funcione toca definir un epsilon, en el que se consideran
-        # nulas las diferencias
-
-        # If the closest components are not in contact calculate the propagation
-        # using the closest surface.
-
-        N_EPS=1.e-12 # Used to check the zero
+        # Add ray to the hit list, EDIT: Do that later in System.propagate
+        # surf_list[j]._hit_list.append((pi_list[j],ri))
+        # Instead, add hit to list of hit optical surfaces for multiprocessing
+        surf_hits.append(([hit['object'], hit['surface']],
+                        (array(hit['location'].to_3d()), ri)))
 
         # Check if you are propagating in a subsystem
-
         #if isinstance(self.complist[j][0],System):
-        if isinstance(comp_list[j],System):
-            # Leer el elemento que primero intersecta el rayo, asi como
-            # su posicion y orientacion
-            SR=comp_list[j]
-            #SR.reset()
-            SR.clear_ray_list()
-            # R=ri.ch_coord_sys(PSR,DSR)
-            SR.ray_add(ri)
-            #Ids must not be updated when propagating in subsystems
-            SR.propagate(update_ids=False)
+        # EDIT: Not happending in with the current addon config
 
-            # try to update the main system with this info
-            #self.update(SR)
+        # Check next hit on component basis
+        C = self.complist[hit['object']]
+        ri_n = C.propagate(ri, self.n, hit)
 
-            # Change the coordinate system of the propagated ray and its childs
-            # RT=R.ch_coord_sys_inv(PSR,DSR,childs=True)
-
-            #Link the subsystem rays to the original ray
-            for i in ri.childs:
-                ri.add_child(i)
-
-        #Verificar si no hay componentes en contacto
-        elif absolute(d0-d1)>N_EPS:
-
-            # Get the nearest element to the ray origin, as well as its
-            # position and orientation
-            SR=comp_list[j]
-
-            # Change the ray to the coordinate system of the element
-            # R=ri.ch_coord_sys(array(PSR,dtype=float64),array(DSR,dtype=float64))
-            # as there are no components in contact the refraction index outside the
-            # is the media's
-
-            ri_n=SR.propagate(ri,self.n)
-
-            # Change the coordinate system of the propagated rays to the
-            # system coordinate system
-            for i in ri_n:
-                # ri_=i.ch_coord_sys_inv(PSR,DSR)
-                # put the rays in the childs list
-                ri.add_child(i)
-        else:
-
-            # There are 2 objects in contactt
-            # Object 1
-            SR0=comp_list[j]
-            # Object 2
-            SR1=comp_list[j1]
-            # Add ray to the hit list
-            surf_list[j1]._hit_list.append((pi_list[j1],ri))
-            # Add hit to list of hit optical surfaces for multiprocessing
-            surf_hits.append((surf_list[j1].id, (pi_list[j1],ri)))
-
-            n0=SR0.n(ri.wavelength)
-            n1=SR1.n(ri.wavelength)
-            #print 1
-            # Calculate the refraction for both components
-            # R0=ri.ch_coord_sys(PSR0,DSR0)
-            ri_n0=SR0.propagate(ri,n1)
-
-            # R1=ri.ch_coord_sys(PSR1,DSR1)
-            ri_n1=SR1.propagate(ri,n0)
-
-            #TODO: Need to find a solution when the two surfaces return more than one ray.
-            if (len(ri_n0)>1)and(len(ri_n1)>1):
-                raise Exception,"The two surfaces in contact, can not produce "\
-                "both more than one propagated ray"
-            elif len(ri_n0)>1:
-                for i in ri_n0:
-                    # ri_=i.ch_coord_sys_inv(PSR0,DSR0)
-                    # put the rays in the childs list
-                    ri.add_child(i)
-            elif len(ri_n1)>1:
-                for i in ri_n1:
-                    # ri_=i.ch_coord_sys_inv(PSR1,DSR1)
-                    # put the rays in the childs list
-                    ri.add_child(i)
-            else:
-                ri_0=ri_n0[0]
-                ri_1=ri_n1[0]
-                #TODO: ri_0 and ri_1 must be equal. Needs to be checked
-                ri.add_child(ri_0)
+        for i in ri_n:
+            # ri_=i.ch_coord_sys_inv(PSR,DSR)
+            # put the rays in the childs list
+            ri.add_child(i)
+        # if absolute(d0-d1)>N_EPS:
+        #
+        #     # Get the nearest element to the ray origin, as well as its
+        #     # position and orientation
+        #     SR=comp_list[j]
+        #
+        #     # as there are no components in contact the refraction index outside the
+        #     # is the media's
+        #
+        #
+        #     # Change the coordinate system of the propagated rays to the
+        #     # system coordinate system
+        # else:
+        #
+        #     # There are 2 objects in contactt
+        #     # Object 1
+        #     SR0=comp_list[j]
+        #     # Object 2
+        #     SR1=comp_list[j1]
+        #     # Add ray to the hit list
+        #     surf_list[j1]._hit_list.append((pi_list[j1],ri))
+        #     # Add hit to list of hit optical surfaces for multiprocessing
+        #     surf_hits.append((surf_list[j1].id, (pi_list[j1],ri)))
+        #
+        #     n0=SR0.n(ri.wavelength)
+        #     n1=SR1.n(ri.wavelength)
+        #     #print 1
+        #     # Calculate the refraction for both components
+        #     # R0=ri.ch_coord_sys(PSR0,DSR0)
+        #     ri_n0=SR0.propagate(ri,n1)
+        #
+        #     # R1=ri.ch_coord_sys(PSR1,DSR1)
+        #     ri_n1=SR1.propagate(ri,n0)
+        #
+        #     #TODO: Need to find a solution when the two surfaces return more than one ray.
+        #     if (len(ri_n0)>1)and(len(ri_n1)>1):
+        #         raise Exception,"The two surfaces in contact, can not produce "\
+        #         "both more than one propagated ray"
+        #     elif len(ri_n0)>1:
+        #         for i in ri_n0:
+        #             # ri_=i.ch_coord_sys_inv(PSR0,DSR0)
+        #             # put the rays in the childs list
+        #             ri.add_child(i)
+        #     elif len(ri_n1)>1:
+        #         for i in ri_n1:
+        #             # ri_=i.ch_coord_sys_inv(PSR1,DSR1)
+        #             # put the rays in the childs list
+        #             ri.add_child(i)
+        #     else:
+        #         ri_0=ri_n0[0]
+        #         ri_1=ri_n1[0]
+        #         #TODO: ri_0 and ri_1 must be equal. Needs to be checked
+        #         ri.add_child(ri_0)
 
         # Propagate childs
         for i in ri.get_final_rays():

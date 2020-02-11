@@ -264,7 +264,7 @@ cdef class Component(Picklable):
             S= comp
             S.reset()
 
-    def propagate(self,Ray ri,n_m):
+    def propagate(self,Ray ri,n_m, hit):
         """Returns the next ray in the propagation
 
         Taking into account the interaction (refraction, reflection, ...)
@@ -284,30 +284,33 @@ cdef class Component(Picklable):
             n=n_m
             np=my_n
 
-        cnt=0
-        dist_list=[0]
 
-        # Search for the next surface to be hit
-        dist_list=[]
-        surf_list=[]
-        for i in self.surflist:
-            S = i
-            surf_list.append(i)
-            # Change the coordinate system of the ray, From the Component
-            # coordinate system to the surface component system, and calculate
-            # the distance to the next surface.
+        # cnt=0
+        # dist_list=[0]
+        #
+        # # Search for the next surface to be hit
+        # dist_list=[]
+        # surf_list=[]
+        # for i in self.surflist:
+        #     S = i
+        #     surf_list.append(i)
+        #     # Change the coordinate system of the ray, From the Component
+        #     # coordinate system to the surface component system, and calculate
+        #     # the distance to the next surface.
+        #
+        #     # R=ri.ch_coord_sys(P,D)
+        #     Dist=S.distance(ri)[0]
+        #     dist_list.append(Dist)
+        #
+        # # Find the closest surface, and change the ray to its coordinate system
+        # # and calculate the refraction
+        # j=asarray(dist_list).argmin()
 
-            # R=ri.ch_coord_sys(P,D)
-            Dist=S.distance(ri)[0]
-            dist_list.append(Dist)
+        # SR=surf_list[j]
 
-        # Find the closest surface, and change the ray to its coordinate system
-        # and calculate the refraction
-        j=asarray(dist_list).argmin()
-
-        SR=surf_list[j]
         # R=ri.ch_coord_sys(PSR,DSR)
-        ri_n=SR.propagate(ri,n,np)
+        S = self.surflist[hit['surface']]
+        ri_n = S.propagate(ri,n,np, hit)
 
 
         ret_rays=[]

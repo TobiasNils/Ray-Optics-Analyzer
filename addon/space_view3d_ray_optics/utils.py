@@ -125,11 +125,11 @@ def evaluate_geometry():
 
                     S = surfaces.Plane(reflectivity=reflectivity, shape=shapes.Polygon(tuple(vertices)))
                     S_list[poly.index] = S
-                if len(S_list)==1:
+                try:
+                    C = Component(surflist=S_list, material=np.float(obj['n']))
+                except KeyError:
                     C = Component(surflist=S_list,
                                 material = bpy.data.worlds['World']['n'])
-                else:
-                    C = Component(surflist=S_list, material=np.float(obj['n']))
                 components[mesh.name]=C
             else:
                 mw = obj.matrix_world
@@ -146,11 +146,12 @@ def evaluate_geometry():
             print(obj.name, 'invisible -> not included in ray-trace.')
 
     try:
-        Sys=System(complist=components, n=bpy.data.worlds['World']['n'])
+        Sys=System(complist=components, n=bpy.data.worlds['World']['n'],
+                    scene=bpy.context.scene)
     except KeyError:
-        Sys=System(complist=components, n=1.0)
+        Sys=System(complist=components, n=1.0, scene=bpy.context.scene)
     # pass objects to python console namespace for further processing
-    locals['Sys'] = Sys
+    locals['Sys'] = Sys # <- not working
 
     return Sys, apertures
 
@@ -246,14 +247,14 @@ def lightsource(aperture, dist=None):
                 v  = np.cos(theta)*N_ + np.sin(theta)*v0_
                 # rotate around azimuth angle phi, using Rodrigues' rotation formula
                 v = v*np.cos(phi) + np.cross(N_, v)*np.sin(phi) + N_*np.dot(N_,v)*(1-np.cos(phi))
-                R = rays.Ray(pos=P, dir=v, intensity=1.0*np.cos(theta))
+                R = rays.Ray(pos=P+1e-7*v, dir=v, intensity=1.0*np.cos(theta))
                 list_of_rays.append(R)
 
     return list_of_rays
 
 from copy import deepcopy, copy
 from multiprocess import Pool
-#
+
 # def doWork(system):
 #     while len(system._np_rays)>0:
 #         ri = system._np_rays.pop(0)
@@ -263,31 +264,79 @@ from multiprocess import Pool
 
 
 def trace_rays(system):
+    import time
+    import numpy as np
+    def propagate_ray(ri):
+        # create a hitlist the function can return in order to avoid shared memory objects which break multiprocessing
+        surf_hits=[]
+        # for every hit, the tuple of (optsurf.id, pi, ri) will be appended
+        # optsurf.id yields a list of nested keys: e.g. ['Sphere', 0]
+        if ri.n== None:
+            ri.n=system.n
+
+        hit = scene.ray_cast(view, ri.pos, ri.dir)
+        if not hit[0]:
+            return surf_hits
+        # create dict to pass information down the tree (avoid recalculating)
+        hit = {'bool':hit[0],
+                'location':np.array(hit[1].to_3d()),
+                'normal':np.array(hit[2].to_3d()),
+                'surface':hit[3],
+                'object':hit[4].data.name,
+                }
+        # add hit to list of hit optical surfaces for multiprocessing
+        surf_hits.append(([hit['object'], hit['surface']],
+                        (hit['location'], ri)))
+        # Check next rays on component basis
+        C = system.complist[hit['object']]
+        ri_n = C.propagate(ri, system.n, hit)
+        for i in ri_n:
+            # put the rays in the childs list
+            ri.add_child(i)
+        # Propagate childs
+        for i in ri.get_final_rays():
+            if (i!=ri):
+                if i.intensity>0:
+                    surf_hits_i = propagate_ray(i)
+                    surf_hits=surf_hits+surf_hits_i
+            else:
+                raise Exception("Error, a ray can not be parent and child at the same time")
+
+        return surf_hits
 
     def doWork(ri):
-    # while len(system._np_rays)>0:
-        # ri = system._np_rays.pop(0)
-        # S = copy()
-        system.propagate_ray(ri)
-        # system._p_rays.append(ri)
-        # return the system too, in order to update hitlists afterwards
-        # return ri, system
-        return ri
-    import time
-    settings = bpy.context.window_manager.RayOpticsProp
+        surf_hits = propagate_ray(ri)
+        return ri, surf_hits
 
+
+    settings = bpy.context.window_manager.RayOpticsProp
+    scene = bpy.context.scene
+    view = scene.view_layers['View Layer']
+
+    system.update_ids()
     #mark the start time
     startTime = time.time()
     print('... propagating rays ...')
 
+    result=[]
+    while len(system._np_rays)>0:
+        ri = system._np_rays.pop(0)
+        entry = doWork(ri)
+        result.append(entry)
     # with Pool(settings.processes) as pool:
     #     result = pool.map(doWork, system._np_rays)
-    #
-    # system._p_rays = result
-    # system._np_rays = []
-    # # del propagating_rays
-    # del result
-    system.propagate(settings.processes)
+        # every entry in results contains the propagated ray ri and a corresponding list of surface hits. The latter needs to be transferred to the respective optical surfaces
+    for entry in result:
+        # add the propagated ray to the corresponding list
+        system._p_rays.append(entry[0])
+        # cycle through list of surface hits and update corresponding surfaces
+        for hit in entry[1]:
+            optsurf = system.get_surface(hit[0])
+            #print(optsurf)
+            optsurf._hit_list.append(hit[1])
+            #print(hit[1])
+    del result
+    # system.propagate(settings.processes)
 
     print('Ray tracing finished.')
     #mark the end time

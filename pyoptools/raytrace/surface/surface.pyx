@@ -326,7 +326,7 @@ cdef class Surface(Picklable):
 
     @cython.boundscheck(False)
     @cython.wraparound(False)
-    cpdef propagate(self,Ray ri,double ni,double nr):
+    cpdef propagate(self,Ray ri,double ni,double nr, dict hit):
         '''Method to calculate the ray refracted on a surface.
 
         This method calculates the ray refracted (or rays refracted and
@@ -341,7 +341,6 @@ cdef class Surface(Picklable):
 
              nr -- refraction index in the refracted media
 
-        ri must be in the coordinate system of the surface
         '''
         cdef double I,IA,gamma,gamma1,R
         cdef np.ndarray S1,PI,P,S2,A,A1,S3
@@ -359,8 +358,10 @@ cdef class Surface(Picklable):
         # The int_nor method should be overridden by each Surface subclasses
 
         #PI,P=self.int_nor(ri)
-        PI= self.intersection(ri)
-        P=  self.normal(PI)
+        # PI= self.intersection(ri)
+        # P=  self.normal(PI)
+        PI = hit['location']
+        P = hit['normal']
 
         PIp = <np.float64_t *>np.PyArray_DATA(PI)
         Pp = <np.float64_t *>np.PyArray_DATA(P)
@@ -393,11 +394,6 @@ cdef class Surface(Picklable):
             Pp[2]=-Pp[2]
             ddot=dot(S1,P)
             I=(acos(ddot/ni))
-
-
-
-
-
 
         gamma= nr*sqrt((ni/nr*cos(I))**2 -(ni/nr)**2+1.)- ni*cos(I)
 
@@ -441,6 +437,7 @@ cdef class Surface(Picklable):
         norm_vect(S2) #S2/sqrt(dot(S2,S2))
 
 
+
         #This will allow to define dichroic reflectors this is
         try:
             reflect=self.reflectivity(ri.wavelength)
@@ -450,12 +447,16 @@ cdef class Surface(Picklable):
         if reflect>1 or reflect <0:
             raise ValueError
 
+        # define threshhold for boundary crossing of rays
+        # without pushing rays a bit beyond surface, ray_cast will be stuck at the surface forever
+        cdef double N_EPS=1e-6
+
         if(ni/nr)<0:
             # This case should never happen
             # For a mirror use reflectivity=1
 
             warn("For a mirror use reflectivity=1, not n<0")
-            return [Ray(pos=PI,dir=-S2,intensity=ri.intensity,
+            return [Ray(pos=PI-S2*N_EPS,dir=-S2,intensity=ri.intensity,
                         wavelength=ri.wavelength,n=absolute(ni),
                         label=ri.label, orig_surf=self.id)]
 
@@ -465,7 +466,7 @@ cdef class Surface(Picklable):
             #return [Ray(pos=PI,dir=S2,intensity=ri.intensity,
             #           wavelength=ri.wavelength,n=nr,
             #           label=ri.label, orig_surf=self.id)]
-            return [Rayf(PI,S2,ri.intensity, ri.wavelength, nr, ri.label, None ,0,self.id,0)]
+            return [Rayf(PI+S2*N_EPS,S2,ri.intensity, ri.wavelength, nr, ri.label, None ,0,self.id,0)]
         elif sometrue(npisnan(S2)):
             # Total internal refraction case
             gamma1= -2.*ni*cos(I)
@@ -492,7 +493,7 @@ cdef class Surface(Picklable):
             #            intensity=ri.intensity,
             #            wavelength=ri.wavelength,n=ni,
             #            label=ri.label, orig_surf=self.id)]
-            return [Rayf(PI,S3,ri.intensity, ri.wavelength, ni, ri.label, None ,0,self.id,0)]
+            return [Rayf(PI+N_EPS*S3,S3,ri.intensity, ri.wavelength, ni, ri.label, None ,0,self.id,0)]
 
         else:
             # BeamSplitter case
@@ -516,17 +517,17 @@ cdef class Surface(Picklable):
                 return [#Ray(pos=PI,dir=S2,
                         #    intensity=ri.intensity*(1.-self.reflectivity),
                         #    wavelength=ri.wavelength,n=nr, label=ri.label, orig_surf=self.id),
-                        Rayf(PI,S2,ri.intensity*(1.-reflect), ri.wavelength, nr, ri.label, None ,0,self.id,0),
+                        Rayf(PI+N_EPS*S2,S2,ri.intensity*(1.-reflect), ri.wavelength, nr, ri.label, None ,0,self.id,0),
                         #Ray(pos=PI,dir=S3,
                         #    intensity=ri.intensity*self.reflectivity,
                         #    wavelength=ri.wavelength,n=ni,label=ri.label, orig_surf=self.id)
-                        Rayf(PI,S3,ri.intensity*reflect, ri.wavelength, ni, ri.label, None ,0,self.id,0)
+                        Rayf(PI+N_EPS*S3,S3,ri.intensity*reflect, ri.wavelength, ni, ri.label, None ,0,self.id,0)
                         ]
             else:
                 #return [Ray(pos=PI,dir=S3,
                 #            intensity=ri.intensity*self.reflectivity,
                 #            wavelength=ri.wavelength,n=ni,label=ri.label, orig_surf=self.id)]
-                return [Rayf(PI,S3,ri.intensity, ri.wavelength, ni, ri.label, None ,0,self.id,0)]
+                return [Rayf(PI+N_EPS*S3,S3,ri.intensity, ri.wavelength, ni, ri.label, None ,0,self.id,0)]
 
     cpdef pw_propagate1(self, Ray ri,ni,nr, rsamples, isamples, knots):
         '''Method to calculate wavefront emerging from the surface
@@ -747,185 +748,185 @@ cdef class Surface(Picklable):
         #d1=griddata(xi,  yi,  zi,  xx, yy)
         return I, d, er
 
-    cpdef pw_propagate_list(self, Ray ri,ni,nr, rsamples,z):
-        '''Method to calculate wavefront emerging from the surface
+    # cpdef pw_propagate_list(self, Ray ri,ni,nr, rsamples,z):
+    #     '''Method to calculate wavefront emerging from the surface
+    #
+    #     This method calculates samples of the  wavefront emerging from
+    #     the optical surface when illuminated by an unity amplitude plane
+    #     wave.
+    #     The k vector of the incoming PW is given by the direction of ri.
+    #     The wavelength of the PW is given by the wavelength of ri.
+    #     The origin of ri is not used at all.
+    #
+    #     The returned value is a list containing the x,y coordinates of the ray list
+    #     in the output surface, and the optical path at such point.
+    #
+    #     To create an output matrix, this values must be interpolated.
+    #
+    #
+    #
+    #     Arguments:
+    #
+    #
+    #          ri -- incident ray
+    #
+    #          ni -- refraction index in the incident media n.
+    #
+    #          nr -- refraction index in the refracted media
+    #
+    #          rsamples -- number of rays used to sample the surface (Tuple)
+    #
+    #          z -- Z position of the input and output plane. The origin is the surface vertex
+    #
+    #     ri must be in the coordinate system of the surface
+    #     Note: The ray comes from the negative side. Need to change this
+    #     '''
+    #     from pyoptools.raytrace.surface import Plane
+    #
+    #     #plane where the aperture is located
+    #     Za=z
+    #
+    #     # Create an array of rays to simulate the plane wave
+    #     dir=ri.dir
+    #     xmin,xmax,ymin,ymax=self.shape.limits()
+    #
+    #     # Calculate the position maximum and minimum z values for the surface
+    #     #X, Y, H=self.shape.mesh(ndat=rsamples)
+    #     #X, Y, H=self.shape.mesh(ndat=rsamples)
+    #
+    #
+    #     #X;Y;Z coordinates of the points the rays are aiming to  in the
+    #     # aperture plane. The 20% increase in size, is to assure that
+    #     # all the surface is sampled even if the rays are tilted
+    #     dx=float(xmax-xmin)*.1
+    #     dy=float(ymax-ymin)*.1
+    #
+    #     Xa=linspace(xmin-dx, xmax+dx,int(rsamples[0]*1.2))
+    #     Ya=linspace(ymin-dy, ymax+dy,int(rsamples[1]*1.2))
+    #     #print Xa,Ya
+    #     Xa,Ya=meshgrid(Xa,Ya)
+    #
+    #     #
+    #     Xa=Xa.flatten()
+    #     Ya=Ya.flatten()
+    #
+    #     # The ecuation where the rays are shooted from is
+    #     # X*dx+Y*dy+Z*dz=0, where dx,dy,dx are the plane normal.
+    #     Z=-(Xa*dir[0]+Ya*dir[1])/dir[2]+Za
+    #     #H=H.flatten()
+    #
+    #     #li=H.nonzero()[0]
+    #     pl=Plane()
+    #     xi=[]
+    #     yi=[]
+    #     zi=[]
+    #     for i in range(len(Xa)):
+    #
+    #         P0=array((Xa[i],Ya[i],Z[i]))
+    #
+    #         ri=Ray(pos=P0,dir=dir,wavelength=ri.wavelength)
+    #         #if the ray do not intersect the surface, break current iteration
+    #         if sometrue(npisinf(self.intersection(ri))): continue
+    #
+    #         #print self.intersection(ri)
+    #         rd=self.propagate(ri,ni,nr)
+    #
+    #         #take only the transmitted ray
+    #         rd=rd[0]
+    #
+    #         #Translate rd, to put it in the aperture reference plane
+    #         rd.pos[2]=rd.pos[2]-Za
+    #         di=self.distance_s(ri)[0]
+    #         dr=pl.distance_s(rd)[0]
+    #
+    #         PI=pl._intersection(rd)
+    #
+    #         # Calculate optical path
+    #         d=di*ni+dr*nr
+    #         #print d,di,dr,PI
+    #         if d!=inf:
+    #             x, y, z=PI
+    #             xi.append(x)
+    #             yi.append(y)
+    #             zi.append(d)
+    #     xi=array(xi)
+    #     yi=array(yi)
+    #     zi=array(zi)
+    #
+    #     return xi,yi,zi
 
-        This method calculates samples of the  wavefront emerging from
-        the optical surface when illuminated by an unity amplitude plane
-        wave.
-        The k vector of the incoming PW is given by the direction of ri.
-        The wavelength of the PW is given by the wavelength of ri.
-        The origin of ri is not used at all.
-
-        The returned value is a list containing the x,y coordinates of the ray list
-        in the output surface, and the optical path at such point.
-
-        To create an output matrix, this values must be interpolated.
-
-
-
-        Arguments:
-
-
-             ri -- incident ray
-
-             ni -- refraction index in the incident media n.
-
-             nr -- refraction index in the refracted media
-
-             rsamples -- number of rays used to sample the surface (Tuple)
-
-             z -- Z position of the input and output plane. The origin is the surface vertex
-
-        ri must be in the coordinate system of the surface
-        Note: The ray comes from the negative side. Need to change this
-        '''
-        from pyoptools.raytrace.surface import Plane
-
-        #plane where the aperture is located
-        Za=z
-
-        # Create an array of rays to simulate the plane wave
-        dir=ri.dir
-        xmin,xmax,ymin,ymax=self.shape.limits()
-
-        # Calculate the position maximum and minimum z values for the surface
-        #X, Y, H=self.shape.mesh(ndat=rsamples)
-        #X, Y, H=self.shape.mesh(ndat=rsamples)
-
-
-        #X;Y;Z coordinates of the points the rays are aiming to  in the
-        # aperture plane. The 20% increase in size, is to assure that
-        # all the surface is sampled even if the rays are tilted
-        dx=float(xmax-xmin)*.1
-        dy=float(ymax-ymin)*.1
-
-        Xa=linspace(xmin-dx, xmax+dx,int(rsamples[0]*1.2))
-        Ya=linspace(ymin-dy, ymax+dy,int(rsamples[1]*1.2))
-        #print Xa,Ya
-        Xa,Ya=meshgrid(Xa,Ya)
-
-        #
-        Xa=Xa.flatten()
-        Ya=Ya.flatten()
-
-        # The ecuation where the rays are shooted from is
-        # X*dx+Y*dy+Z*dz=0, where dx,dy,dx are the plane normal.
-        Z=-(Xa*dir[0]+Ya*dir[1])/dir[2]+Za
-        #H=H.flatten()
-
-        #li=H.nonzero()[0]
-        pl=Plane()
-        xi=[]
-        yi=[]
-        zi=[]
-        for i in range(len(Xa)):
-
-            P0=array((Xa[i],Ya[i],Z[i]))
-
-            ri=Ray(pos=P0,dir=dir,wavelength=ri.wavelength)
-            #if the ray do not intersect the surface, break current iteration
-            if sometrue(npisinf(self.intersection(ri))): continue
-
-            #print self.intersection(ri)
-            rd=self.propagate(ri,ni,nr)
-
-            #take only the transmitted ray
-            rd=rd[0]
-
-            #Translate rd, to put it in the aperture reference plane
-            rd.pos[2]=rd.pos[2]-Za
-            di=self.distance_s(ri)[0]
-            dr=pl.distance_s(rd)[0]
-
-            PI=pl._intersection(rd)
-
-            # Calculate optical path
-            d=di*ni+dr*nr
-            #print d,di,dr,PI
-            if d!=inf:
-                x, y, z=PI
-                xi.append(x)
-                yi.append(y)
-                zi.append(d)
-        xi=array(xi)
-        yi=array(yi)
-        zi=array(zi)
-
-        return xi,yi,zi
-
-
-
-    cpdef wf_propagate(self, wf,ni,nr, samples,shape, knots):
-        '''Method to calculate wavefront emerging from the surface
-
-
-        This method calculates the wavefront emerging from the optical surface
-        when illuminated by an arbitrary wavefront.
-
-        The input and output planes are located at z=0 in the surface coordinated
-        system.
-
-        Arguments:
-
-             wf -- Field instance containing the incoming wavefront
-
-             ni -- refraction index in the incident media n.
-
-             nr -- refraction index in the refracted media.
-
-             samples -- Tuple containing the number of rays used to sample the field.
-
-             shape -- Tuple containing the shape of the output field
-        '''
-        from ray_trace.surface import Plane
-        # Get the wavefront ray representation
-        # TODO: This representation only takes into account the phase, but not the intensity.
-        #       This has to be fixed, because in practice this is not OK
-        rays=wf.rayrep(samples[0],samples[1])
-
-        #TODO: check which rays pass inside the aperture
-
-        #rin=Ray( dir=L1, wavelength=wavelength)
-
-        #Intersection point and optical path for the incident rays
-
-        xi=[]
-        yi=[]
-        zi=[]
-
-        pl=Plane()
-        for ri in rays:
-            #Calculate the intersection point
-            rd=self.propagate(ri,ni,nr)
-            #Take only de transmitted ray
-            rd=rd[0]
-
-            # Incident ray propagation distance until the optical surface
-            di=self.distance(ri)[0]
-
-
-
-            # Refracted ray propagation until the output surface (plane Z=0)
-            # The distance method is not used, because it eliminates the negative
-            # propagation values
-
-            PI=pl._intersection(rd)
-            dr=dot(PI-rd.pos,rd.dir)
-
-            d=di*ni+dr*nr+ri.optical_path_parent()
-
-            if d!=inf:
-                x, y, z=PI
-                xi.append(x)
-                yi.append(y)
-                zi.append(d)
-            else:
-                print ri
-
-        d=interpolate_g(xi,yi,zi,samples=shape,knots=knots, error=False,mask=None)
-
-        return d
+    #
+    #
+    # cpdef wf_propagate(self, wf,ni,nr, samples,shape, knots):
+    #     '''Method to calculate wavefront emerging from the surface
+    #
+    #
+    #     This method calculates the wavefront emerging from the optical surface
+    #     when illuminated by an arbitrary wavefront.
+    #
+    #     The input and output planes are located at z=0 in the surface coordinated
+    #     system.
+    #
+    #     Arguments:
+    #
+    #          wf -- Field instance containing the incoming wavefront
+    #
+    #          ni -- refraction index in the incident media n.
+    #
+    #          nr -- refraction index in the refracted media.
+    #
+    #          samples -- Tuple containing the number of rays used to sample the field.
+    #
+    #          shape -- Tuple containing the shape of the output field
+    #     '''
+    #     from ray_trace.surface import Plane
+    #     # Get the wavefront ray representation
+    #     # TODO: This representation only takes into account the phase, but not the intensity.
+    #     #       This has to be fixed, because in practice this is not OK
+    #     rays=wf.rayrep(samples[0],samples[1])
+    #
+    #     #TODO: check which rays pass inside the aperture
+    #
+    #     #rin=Ray( dir=L1, wavelength=wavelength)
+    #
+    #     #Intersection point and optical path for the incident rays
+    #
+    #     xi=[]
+    #     yi=[]
+    #     zi=[]
+    #
+    #     pl=Plane()
+    #     for ri in rays:
+    #         #Calculate the intersection point
+    #         rd=self.propagate(ri,ni,nr)
+    #         #Take only de transmitted ray
+    #         rd=rd[0]
+    #
+    #         # Incident ray propagation distance until the optical surface
+    #         di=self.distance(ri)[0]
+    #
+    #
+    #
+    #         # Refracted ray propagation until the output surface (plane Z=0)
+    #         # The distance method is not used, because it eliminates the negative
+    #         # propagation values
+    #
+    #         PI=pl._intersection(rd)
+    #         dr=dot(PI-rd.pos,rd.dir)
+    #
+    #         d=di*ni+dr*nr+ri.optical_path_parent()
+    #
+    #         if d!=inf:
+    #             x, y, z=PI
+    #             xi.append(x)
+    #             yi.append(y)
+    #             zi.append(d)
+    #         else:
+    #             print ri
+    #
+    #     d=interpolate_g(xi,yi,zi,samples=shape,knots=knots, error=False,mask=None)
+    #
+    #     return d
 
     def __repr__(self):
         #~ '''Return an string with the representation of the optical surface
