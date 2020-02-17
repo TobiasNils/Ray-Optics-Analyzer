@@ -371,30 +371,23 @@ cdef class Surface(Picklable):
         # Add the information to the hitlist
         # self._hit_list.append((PI, ri))
 
+
         S1=ri._dir*ni #Use the numpy array instead the property. it is faster.
         S1p = <np.float64_t *>np.PyArray_DATA(S1)
-
-
 
         # Calculate the incident angle
         cdef double ddot=dot(S1,P)
         I=(acos(ddot/ni))
-
-
         #some times because rounding errors |ri.dir|>1. In this cases
         #I=nan
         if isnan(I): I=0.
-        #IA=I
-        # Take the correct normal
-        #PA=P
-        if I>pi/2:
-            #P=-P
-            Pp[0]=-Pp[0]
-            Pp[1]=-Pp[1]
-            Pp[2]=-Pp[2]
-            ddot=dot(S1,P)
-            I=(acos(ddot/ni))
 
+        # Take the correct normal.EDIT: The hit parameter from cast_ray()
+        # already gives the normal pointing out of the object. So, the Incident
+        # can be used to determine if the ray is propagating on the inside
+        # if I>pi/2:
+
+        # Fresnel?
         gamma= nr*sqrt((ni/nr*cos(I))**2 -(ni/nr)**2+1.)- ni*cos(I)
 
 
@@ -448,7 +441,8 @@ cdef class Surface(Picklable):
             raise ValueError
 
         # define threshhold for boundary crossing of rays
-        # without pushing rays a bit beyond surface, ray_cast will be stuck at the surface forever
+        # without pushing rays a bit beyond surface, ray_cast will be stuck at
+        # the surface forever
         cdef double N_EPS=1e-6
 
         if(ni/nr)<0:
