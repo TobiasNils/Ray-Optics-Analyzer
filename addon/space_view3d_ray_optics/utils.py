@@ -155,7 +155,7 @@ def evaluate_geometry():
 
     return Sys, apertures
 
-def lightsource(aperture, system, dist=None):
+def lightsource(aperture, dist=None):
     """aperture is a defined by a mesh or part of a mesh from Blender.
        Half-angle has to be entered in degrees"""
     import chaospy, numpy as np
@@ -163,14 +163,11 @@ def lightsource(aperture, system, dist=None):
     halfangle = settings.halfangle
     n_rays = settings.n_rays
     invert_direction = settings.invert_direction
-    scene = bpy.context.scene
-    view = scene.view_layers['View Layer']
 
     list_of_rays = []
     # aperture = [np.array(point) for point in aperture]
     areas = []
     for vertice_group in aperture:
-
         A = vertice_group[0]
         # split polygon in triangles with A as reference point
         remaining = len(vertice_group[1:])
@@ -222,19 +219,7 @@ def lightsource(aperture, system, dist=None):
                 args=(0., halfangle/360*(2*np.pi)/3)
             theta_dist = np.around(dist(*args).sample(ni_rays), 10)
 
-            # It seems the only option to determine whether a ray is inside an
-            # object is to evaluate the angle between face-normal and ray-direction.
-            # Check using the source normal N_ as direction and assume for all
-            secondary_hit = scene.ray_cast(view, A+N_*1e-6, N_)
-            ddot=np.dot(N_,np.array(secondary_hit[2].to_3d()))
-            I=(np.arccos(ddot))
-            #some times because rounding errors |ri.dir|>1. In this cases
-            #I=nan
-            if np.isnan(I): I=0.
-
             for i in range(ni_rays):
-                # set wavelength (# TODO: Make adjustable lateron!!)
-                wavelength = .6
                 # create random anker point on plane
                 while True:
                     # create random point on plane as ray origin
@@ -257,25 +242,12 @@ def lightsource(aperture, system, dist=None):
                         break
                 # create random azimuth angle
                 phi = phi_dist[i]
-                # calculate polar angle transform
                 theta = theta_dist[i]
+                # calculate polar angle transform
                 v  = np.cos(theta)*N_ + np.sin(theta)*v0_
                 # rotate around azimuth angle phi, using Rodrigues' rotation formula
                 v = v*np.cos(phi) + np.cross(N_, v)*np.sin(phi) + N_*np.dot(N_,v)*(1-np.cos(phi))
-
-                if I>=np.pi/2:
-                    # ray propagating inside->out of secondary object
-                    # print(secondary_hit[4].data.name)
-                    try:
-                        n_medium = system.complist[secondary_hit[4].data.name].n(wavelength)
-                    except KeyError:
-                        print('hit source')
-                else:
-                    # ray hitting next object from outside -> free-space between objects
-                    n_medium = system.n
-
-                R = rays.Ray(pos=P+1e-6*v, dir=v, n=n_medium,
-                            intensity=1.0*np.cos(theta))
+                R = rays.Ray(pos=P+1e-7*v, dir=v, intensity=1.0*np.cos(theta))
                 list_of_rays.append(R)
 
     return list_of_rays
@@ -302,8 +274,6 @@ def trace_rays(system):
         if ri.n== None:
             ri.n=system.n
 
-        # call cast_ray() to find next  surface intersection
-        # use numpy array _dir instead of property dir for speed
         hit = scene.ray_cast(view, ri.pos, ri.dir)
         if not hit[0]:
             return surf_hits
@@ -317,41 +287,9 @@ def trace_rays(system):
         # add hit to list of hit optical surfaces for multiprocessing
         surf_hits.append(([hit['object'], hit['surface']],
                         (hit['location'], ri)))
-        # It seems the only option to determine whether a ray is inside an
-        # object is to evaluate the angle between face-normal and ray-direction.
-        # If angle>pi/2: ray indide, else: ray coming from outside
-        # let angle=pi/2 count as inside for now.
-
-        secondary_hit = scene.ray_cast(view, hit['location']+ri.dir*1e-6,
-                                            ri.dir)
-        if not secondary_hit[0]:
-            n_medium = system.n
-        else:
-            ddot=np.dot(ri.dir,np.array(secondary_hit[2].to_3d()))
-            I=(np.arccos(ddot))
-            #some times because rounding errors |ri.dir|>1. In this cases
-            #I=nan
-            if np.isnan(I): I=0.
-            if I>=np.pi/2:
-                # ray propagating inside->out of secondary object
-
-                n_medium = system.complist[secondary_hit[4].data.name].n(ri.wavelength)
-            else:
-                # ray hitting next object from outside -> free-space between objects
-                n_medium = system.n
-        # This secondary ray-cast is ignoring the interactions at the surface
-        # to get the refractive index of the adjacent medium needed for
-        # the correct calculation of the interface interactions. As we are only
-        # interested in the hit object and the inside/outside parameter, this
-        # should hold in most of the cases although I is not correct here.
-
-
-        # what if an interface of 2 adjacent objects is located accross the
-        # first hit-point ?
-
-        # Get secondary ray(s) after surface interaction on component basis
+        # Check next rays on component basis
         C = system.complist[hit['object']]
-        ri_n = C.propagate(ri, n_medium, hit)
+        ri_n = C.propagate(ri, system.n, hit)
         for i in ri_n:
             # put the rays in the childs list
             ri.add_child(i)

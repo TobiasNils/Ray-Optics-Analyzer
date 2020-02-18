@@ -166,7 +166,7 @@ class InitLightSources(Operator):
     def execute(self, context):
         import chaospy
         vars = bpy.context.window_manager.RayOpticsVars['items']
-        _np_rays = utils.lightsource(vars['apertures'],vars['OpticalSystem'],
+        _np_rays = utils.lightsource(vars['apertures'],
                                     dist=chaospy.Normal)
         vars['OpticalSystem'].reset()
         vars['OpticalSystem']._np_rays = _np_rays
