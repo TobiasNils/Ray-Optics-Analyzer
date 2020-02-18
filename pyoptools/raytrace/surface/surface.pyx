@@ -383,13 +383,10 @@ cdef class Surface(Picklable):
         if isnan(I): I=0.
 
         # Take the correct normal.EDIT: The hit parameter from cast_ray()
-        # already gives the normal pointing out of the object. But, for the
-        # calculation of the new angle we need the normal on the side of
-        # incidence
-        if I>pi/2:
-            Pp[0]=-Pp[0]
-            Pp[1]=-Pp[1]
-            Pp[2]=-Pp[2]
+        # already gives the normal pointing out of the object. So, the Incident
+        # can be used to determine if the ray is propagating on the inside
+        # if I>pi/2:
+
         # Fresnel?
         gamma= nr*sqrt((ni/nr*cos(I))**2 -(ni/nr)**2+1.)- ni*cos(I)
 

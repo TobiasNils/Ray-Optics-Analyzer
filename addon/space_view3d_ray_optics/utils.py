@@ -222,6 +222,15 @@ def lightsource(aperture, system, dist=None):
                 args=(0., halfangle/360*(2*np.pi)/3)
             theta_dist = np.around(dist(*args).sample(ni_rays), 10)
 
+            # It seems the only option to determine whether a ray is inside an
+            # object is to evaluate the angle between face-normal and ray-direction.
+            # Check using the source normal N_ as direction and assume for all
+            secondary_hit = scene.ray_cast(view, A+N_*1e-6, N_)
+            ddot=np.dot(N_,np.array(secondary_hit[2].to_3d()))
+            I=(np.arccos(ddot))
+            #some times because rounding errors |ri.dir|>1. In this cases
+            #I=nan
+            if np.isnan(I): I=0.
 
             for i in range(ni_rays):
                 # set wavelength (# TODO: Make adjustable lateron!!)
@@ -254,27 +263,15 @@ def lightsource(aperture, system, dist=None):
                 # rotate around azimuth angle phi, using Rodrigues' rotation formula
                 v = v*np.cos(phi) + np.cross(N_, v)*np.sin(phi) + N_*np.dot(N_,v)*(1-np.cos(phi))
 
-                # It seems the only option to determine whether a ray is inside an
-                # object is to evaluate the angle between face-normal and ray-direction.
-                # Check using the source normal N_ as direction and assume for all
-                secondary_hit = scene.ray_cast(view, P+v*1e-6, v)
-                if secondary_hit[0]:
-                    ddot=np.dot(N_,np.array(secondary_hit[2].to_3d()))
-                    I=(np.arccos(ddot))
-                    #some times because rounding errors |ri.dir|>1. In this cases
-                    #I=nan
-                    if np.isnan(I): I=0.
-                    if I>=np.pi/2:
-                        # ray propagating inside->out of secondary object
-                        # print(secondary_hit[4].data.name)
-                        try:
-                            n_medium = system.complist[secondary_hit[4].data.name].n(wavelength)
-                        except KeyError:
-                            print('hit source')
-
+                if I>=np.pi/2:
+                    # ray propagating inside->out of secondary object
+                    # print(secondary_hit[4].data.name)
+                    try:
+                        n_medium = system.complist[secondary_hit[4].data.name].n(wavelength)
+                    except KeyError:
+                        print('hit source')
                 else:
-                    # ray hitting next object from outside or not hitting anything
-                     # -> free-space between objects
+                    # ray hitting next object from outside -> free-space between objects
                     n_medium = system.n
 
                 R = rays.Ray(pos=P+1e-6*v, dir=v, n=n_medium,
