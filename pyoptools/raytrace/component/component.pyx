@@ -275,14 +275,14 @@ cdef class Component(Picklable):
         # If ri.n is equal to the component refraction index, the ray is coming out
         # from the componnent, if not, it is goint in to the component.
 
-        my_n=self.n(ri.wavelength)
+        # my_n=self.n(ri.wavelength)
 
-        if ri.n==my_n:
-            np=n_m
-            n=my_n
-        else:
-            n=n_m
-            np=my_n
+        # if ri.n==my_n:
+        #     np=n_m
+        #     n=my_n
+        # else:
+        #     n=n_m
+        #     np=my_n
 
 
         # cnt=0
@@ -310,7 +310,7 @@ cdef class Component(Picklable):
 
         # R=ri.ch_coord_sys(PSR,DSR)
         S = self.surflist[hit['surface']]
-        ri_n = S.propagate(ri,n,np, hit)
+        ri_n = S.propagate(ri,ri.n,n_m, hit)
 
 
         ret_rays=[]

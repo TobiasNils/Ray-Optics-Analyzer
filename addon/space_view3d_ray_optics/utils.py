@@ -284,12 +284,37 @@ def trace_rays(system):
                 'surface':hit[3],
                 'object':hit[4].data.name,
                 }
+
+        # Check if ray is inside of an object (if yes, adjust n)
+        # get angle between surface normal (facing outside of object) and ray
+        angle = np.arccos(np.dot(ri.dir,hit['normal']))
+        if angle<=np.pi/2:
+            # ray is inside
+            ri.n = system.complist[hit['object']].n(ri.wavelength)
+        else:
+            ri.n = system.n
         # add hit to list of hit optical surfaces for multiprocessing
         surf_hits.append(([hit['object'], hit['surface']],
                         (hit['location'], ri)))
-        # Check next rays on component basis
+
+        # check medium after interface
+        potential_next_hit = scene.ray_cast(view,
+                                            hit['location']+ri.dir*1e-6, ri.dir)
+        if potential_next_hit[0]:
+            angle = np.arccos(np.dot(ri.dir,
+                                    np.array(potential_next_hit[2].to_3d())))
+            if angle<=np.pi/2:
+                # ray is inside another object
+                n_medium = system.complist[
+                            potential_next_hit[4].data.name].n(ri.wavelength)
+            else:
+                n_medium = system.n
+        else:
+            n_medium = system.n
+
+        # Check surface effects on ray on component basis
         C = system.complist[hit['object']]
-        ri_n = C.propagate(ri, system.n, hit)
+        ri_n = C.propagate(ri, n_medium, hit)
         for i in ri_n:
             # put the rays in the childs list
             ri.add_child(i)
