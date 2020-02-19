@@ -322,8 +322,13 @@ def trace_rays(system):
         for i in ri.get_final_rays():
             if (i!=ri):
                 if i.intensity>0:
-                    surf_hits_i = propagate_ray(i)
-                    surf_hits=surf_hits+surf_hits_i
+                    try:
+                        surf_hits_i = propagate_ray(i)
+                        surf_hits=surf_hits+surf_hits_i
+                    except RecursionError:
+                        print('Stuck at interface on object %s, surface %s'%(
+                                hit['object'],hit['surface']))
+                        print('Check that objects are well positioned.')
             else:
                 raise Exception("Error, a ray can not be parent and child at the same time")
 
