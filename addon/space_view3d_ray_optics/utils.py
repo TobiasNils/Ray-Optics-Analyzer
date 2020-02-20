@@ -141,7 +141,7 @@ def evaluate_geometry():
                     poly_vertices = [mw @ mesh.vertices[index].co for index in poly.vertices]
                     # convert to arrays
                     vertices = [np.array(vertice.to_3d()) for vertice in poly_vertices]
-                    apertures.append(vertices)
+                    apertures.append((poly.name, vertices))
         else:
             print(obj.name, 'invisible -> not included in ray-trace.')
 
@@ -155,10 +155,11 @@ def evaluate_geometry():
 
     return Sys, apertures
 
-def lightsource(aperture, dist=None):
+def lightsource(apertures, dist=None):
     """aperture is a defined by a mesh or part of a mesh from Blender.
        Half-angle has to be entered in degrees"""
     import chaospy, numpy as np
+    objects = bpy.data.objects
     settings = bpy.context.window_manager.RayOpticsProp
     halfangle = settings.halfangle
     n_rays = settings.n_rays
@@ -166,8 +167,14 @@ def lightsource(aperture, dist=None):
 
     list_of_rays = []
     # aperture = [np.array(point) for point in aperture]
+
+
+
     areas = []
-    for vertice_group in aperture:
+    for aperture in apertures:
+
+        # get relative areas of apertures
+        vertice_group=aperture[1]
         A = vertice_group[0]
         # split polygon in triangles with A as reference point
         remaining = len(vertice_group[1:])
@@ -184,7 +191,15 @@ def lightsource(aperture, dist=None):
             area_i = .5*sum([v1xv0[i]**2 for i in range(len(v1xv0))] )
             areas.append(area_i)
 
-    for i,vertice_group in enumerate(aperture):
+    for i,aperture in enumerate(apertures):
+        # define spectral Properties
+        self = objects[aperture[0]]
+        mu, sigma = self['mu'], self['sigma']
+        spectral_dist=np.around(chaospy.Uniform(0.,2*np.pi).sample(ni_rays),
+        10)
+
+
+        vertice_group=aperture[1]
         # adapt ray number to relative area of triangle to total source area
         ni_rays = int(n_rays*areas[i]/sum(areas))
 
@@ -220,6 +235,8 @@ def lightsource(aperture, dist=None):
             theta_dist = np.around(dist(*args).sample(ni_rays), 10)
 
             for i in range(ni_rays):
+                # draw wavelength sample from spectral distribution
+
                 # create random anker point on plane
                 while True:
                     # create random point on plane as ray origin
