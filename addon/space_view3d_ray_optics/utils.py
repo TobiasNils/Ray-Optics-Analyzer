@@ -105,33 +105,33 @@ def evaluate_geometry():
     for obj_key in bpy.data.objects.keys():
         obj=bpy.data.objects[obj_key]
         if obj.visible_get():
-            if not 'source' in obj.data.name:
-                # for this to be true, n must be defined as custom property in Blender "Object Properties" <- NOT Mesh Properties
-                mw = obj.matrix_world
-                if 'reflectivity' in obj.keys():
-                    reflectivity = obj['reflectivity']
-                else:
-                    reflectivity = 0
-                mesh = obj.data
-                # mesh.calc_loop_triangles()
-                # loop_triangles = mesh.loop_triangles
-                S_list={}
-                for poly in mesh.polygons:
-                    poly_center = np.array(mw @ poly.center.to_3d())
-                    # get global vertice coordinate-vectors from mesh by their index
-                    poly_vertices = [mw @ mesh.vertices[index].co for index in poly.vertices]
-                    # convert to arrays
-                    vertices = [np.array(vertice.to_3d()) for vertice in poly_vertices]
 
-                    S = surfaces.Plane(reflectivity=reflectivity, shape=shapes.Polygon(tuple(vertices)))
-                    S_list[poly.index] = S
-                try:
-                    C = Component(surflist=S_list, material=np.float(obj['n']))
-                except KeyError:
-                    C = Component(surflist=S_list,
-                                material = bpy.data.worlds['World']['n'])
-                components[mesh.name]=C
+            # for this to be true, n must be defined as custom property in Blender "Object Properties" <- NOT Mesh Properties
+            mw = obj.matrix_world
+            if 'reflectivity' in obj.keys():
+                reflectivity = obj['reflectivity']
             else:
+                reflectivity = 0
+            mesh = obj.data
+            # mesh.calc_loop_triangles()
+            # loop_triangles = mesh.loop_triangles
+            S_list={}
+            for poly in mesh.polygons:
+                poly_center = np.array(mw @ poly.center.to_3d())
+                # get global vertice coordinate-vectors from mesh by their index
+                poly_vertices = [mw @ mesh.vertices[index].co for index in poly.vertices]
+                # convert to arrays
+                vertices = [np.array(vertice.to_3d()) for vertice in poly_vertices]
+
+                S = surfaces.Plane(reflectivity=reflectivity, shape=shapes.Polygon(tuple(vertices)))
+                S_list[poly.index] = S
+            try:
+                C = Component(surflist=S_list, material=np.float(obj['n']))
+            except KeyError:
+                C = Component(surflist=S_list,
+                            material = bpy.data.worlds['World']['n'])
+            components[mesh.name]=C
+            if 'source' in obj.data.name:
                 mw = obj.matrix_world
                 mesh = obj.data
                 # mesh.calc_loop_triangles()
@@ -141,7 +141,7 @@ def evaluate_geometry():
                     poly_vertices = [mw @ mesh.vertices[index].co for index in poly.vertices]
                     # convert to arrays
                     vertices = [np.array(vertice.to_3d()) for vertice in poly_vertices]
-                    apertures.append((poly.name, vertices))
+                    apertures.append((obj.name, vertices))
         else:
             print(obj.name, 'invisible -> not included in ray-trace.')
 
@@ -194,14 +194,15 @@ def lightsource(apertures, dist=None):
     for i,aperture in enumerate(apertures):
         # define spectral Properties
         self = objects[aperture[0]]
-        mu, sigma = self['mu'], self['sigma']
-        spectral_dist=np.around(chaospy.Uniform(0.,2*np.pi).sample(ni_rays),
-        10)
 
 
         vertice_group=aperture[1]
         # adapt ray number to relative area of triangle to total source area
         ni_rays = int(n_rays*areas[i]/sum(areas))
+
+        mu, sigma = self['mu'], self['sigma']
+        spectral_dist=np.around(chaospy.Uniform(0.,2*np.pi).sample(ni_rays),
+        10)
 
         A = vertice_group[0]
         # split polygon in triangles with A as reference point

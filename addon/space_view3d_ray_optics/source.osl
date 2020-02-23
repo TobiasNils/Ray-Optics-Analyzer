@@ -1,0 +1,1 @@
+shader Source (float wl = 0.525, float fwhm = 0.025, float skew = 0.0, output dict source = {}){source={'wavelength [µm]':wl, 'FWHM':fwhm, 'skew':skew};}

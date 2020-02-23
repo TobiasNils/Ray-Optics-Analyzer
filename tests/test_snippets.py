@@ -124,11 +124,11 @@ import matplotlib.pyplot as plt
 import random
 #Plot histogram to check skewness
 
+dist=chaospy.Cauchy
 
 ni_rays=10000
-dist=chaospy.Cauchy
 mu = .5
-linewidth=.5
+linewidth=.05
 skew=2
 
 sigma=linewidth/2
@@ -138,7 +138,7 @@ spectral_vals = np.around(dist(*args).sample(ni_rays), 3)
 # cauchy.rvs(loc=mu, scale=linewidth, size=1000)
 random.choices(spectral_vals,k=10)
 
-def truncated_cauchy_rvs(loc=0, scale=1, a=0, b=1, size=None):
+def truncated_cauchy_rvs(loc=0, scale=1, a=0, b=1, skew=.02, size=None):
     """
     Generate random samples from a truncated Cauchy distribution.
 
@@ -155,11 +155,13 @@ def truncated_cauchy_rvs(loc=0, scale=1, a=0, b=1, size=None):
     rvs =  loc + scale * np.tan(np.pi*(U - 0.5))
     return rvs
 
-x = truncated_cauchy_rvs(loc=0.5, scale=.025, size=200000)
+x = truncated_cauchy_rvs(loc=0.5, scale=linewidth/2, size=ni_rays)
 ignore = plt.hist(x, bins=100, density=True, color='green', alpha=0.25)
-y = truncated_cauchy_rvs(loc=0.6, scale=.025, size=200000)
+y = truncated_cauchy_rvs(loc=0.65, scale=linewidth/2, size=ni_rays)
 ignore = plt.hist(y, bins=100, density=True, color='red', alpha=0.25)
 plt.grid(alpha=0.5)
+
+
 random.choice(x)
 # del rays
 # new_rays = np.linspace(1,100, 1000)
