@@ -36,7 +36,7 @@ from numpy import asarray, array, float64, alltrue, isinf as npisinf, isnan as n
     pi,absolute, inf
 cimport numpy as np
 
-from multiprocess import Pool
+# from multiprocess import Pool
 #from ray_trace.component.component cimport Component
 
 from pyoptools.raytrace.ray.ray cimport Ray
@@ -272,38 +272,38 @@ cdef class System(Picklable):
             raise Exception,'Not a valid Ray'
 
 
-    def doWork(self, ri):
+    # def doWork(self, ri):
+    #
+    #     surf_hits = self.propagate_ray(ri)
+    #     # surf_hits is a list of tuples (optsurf.id, (pi, ri))
+    #     # optsurf.id yields a list of nested keys: e.g. ['Sphere', 0]
+    #     # this information needs to be added to the systen "self" according to those keys after the worker pool has finished
+    #     return ri, surf_hits
 
-        surf_hits = self.propagate_ray(ri)
-        # surf_hits is a list of tuples (optsurf.id, (pi, ri))
-        # optsurf.id yields a list of nested keys: e.g. ['Sphere', 0]
-        # this information needs to be added to the systen "self" according to those keys after the worker pool has finished
-        return ri, surf_hits
-
-    def propagate(self, processes, update_ids=True):
-        """ Propagates all the rays in the non propagated list.
-        """
-
-        #This is not necessary for all propagations, but is safer to do it
-        #When propagating a sub system this must not be done
-        if update_ids: self.update_ids()
-
-        with Pool(processes) as pool:
-
-            result = pool.map(self.doWork, self._np_rays)
-            # self._np_rays = []
-
-            # every entry in results contains the propagated ray ri and a corresponding list of surface hits. The latter needs to be transferred to the respective optical surfaces
-            for entry in result:
-                # add the propagated ray to the corresponding list
-                self._p_rays.append(entry[0])
-                # cycle through list of surface hits and update corresponding surfaces
-                for hit in entry[1]:
-                    optsurf = self.get_surface(hit[0])
-                    #print(optsurf)
-                    optsurf._hit_list.append(hit[1])
-                    #print(hit[1])
-        del result
+    # def propagate(self, processes, update_ids=True):
+    #     """ Propagates all the rays in the non propagated list.
+    #     """
+    #
+    #     #This is not necessary for all propagations, but is safer to do it
+    #     #When propagating a sub system this must not be done
+    #     if update_ids: self.update_ids()
+    #
+    #     with Pool(processes) as pool:
+    #
+    #         result = pool.map(self.doWork, self._np_rays)
+    #         # self._np_rays = []
+    #
+    #         # every entry in results contains the propagated ray ri and a corresponding list of surface hits. The latter needs to be transferred to the respective optical surfaces
+    #         for entry in result:
+    #             # add the propagated ray to the corresponding list
+    #             self._p_rays.append(entry[0])
+    #             # cycle through list of surface hits and update corresponding surfaces
+    #             for hit in entry[1]:
+    #                 optsurf = self.get_surface(hit[0])
+    #                 #print(optsurf)
+    #                 optsurf._hit_list.append(hit[1])
+    #                 #print(hit[1])
+    #     del result
 
         # while len(self._np_rays)>0:
         #     ri=self._np_rays.pop(0)

@@ -46,8 +46,8 @@ from inspect import getmembers, isroutine
 
 from pyoptools.misc.pmisc import hitlist2int_list,hitlist2int, interpolate_g
 from pyoptools.misc.cmisc.cmisc cimport norm_vect, empty_vec, vector_length
-from pyoptools.misc.lsq import polyfit2d
-from pyoptools.misc.Poly2D import ord2i
+# from pyoptools.misc.lsq import polyfit2d
+# from pyoptools.misc.Poly2D import ord2i
 from pyoptools.raytrace.ray.ray cimport Ray, Rayf
 
 from pyoptools.raytrace.shape.shape cimport Shape
@@ -56,7 +56,7 @@ from pyoptools.raytrace.shape.circular cimport Circular
 from pyoptools.misc.definitions import inf_vect
 from pyoptools.misc.picklable.picklable cimport Picklable
 
-from matplotlib.tri import Triangulation
+# from matplotlib.tri import Triangulation
 
 cimport numpy as np
 np.import_array()
@@ -529,224 +529,224 @@ cdef class Surface(Picklable):
                 #            wavelength=ri.wavelength,n=ni,label=ri.label, orig_surf=self.id)]
                 return [Rayf(PI+N_EPS*S3,S3,ri.intensity, ri.wavelength, ni, ri.label, None ,0,self.id,0)]
 
-    cpdef pw_propagate1(self, Ray ri,ni,nr, rsamples, isamples, knots):
-        '''Method to calculate wavefront emerging from the surface
-
-        .. Note::
-            This method needs to be checked, because the incoming plane
-            wave has not a constant intensity. The ray distribution is
-            affected by the surface topography. it is better to use the
-            slow version pw_propagate.
-
-        This method calculates the wavefront emerging from the optical surface
-        when illuminated by an unity amplitude plane wave.
-        The k vector of the incoming PW is given by the direction of ri.
-        The wavelength of the PW is given by the wavelength of ri.
-        The origin of ri is not used at all.
-
-        The input and output planes are located at z=0 in the surface coordinated
-        system.
-
-        Note: this method needs to be checked, because the incoming plane wave
-        has not a constant intensity. The ray distribution is affected by the
-        surface topography. it is better to use the slow version pw_propagate1.
-
-        Note: The ray comes from the negative side. Need to change this
-
-        Arguments:
-
-
-             ri -- isurface.pyncident ray
-
-             ni -- refraction index in the incident media n.
-
-             nr -- refraction index in the refracted media
-
-        ri must be in the coordinate system of the surface
-        '''
-
-        # Calculate the position maximum and minimum z values for the surface
-        X, Y, Z=self.shape.mesh(topo=self.topo)
-
-        #Calculate a mesh where the test rays will be shot from
-        X, Y, H=self.shape.mesh(ndat=rsamples)#,  size=(xmin, xmax, ymin, ymax))
-        X, Y, Z=self.shape.mesh(ndat=rsamples,  topo=self.topo)
-
-
-
-        # The ecuation where the rays are shooted to is Z=0
-        N_=array((0, 0, 1))
-
-        # The ecuation where the rays are shooted from is
-        # X*dx+Y*dy+Z*dz=0, where dx,dy,dx are the plane normal.
-        N_p=ri.dir
-
-        ix, iy=indices(X.shape)
-
-        # Create a list of indexes to be able to select the points that are going
-        # to be used as spline generators, and as control points
-        idx=where((ix+iy) %2 ==0, False, True)
-
-        X=X.flatten()
-        Y=Y.flatten()
-        Z=Z.flatten()
-        H=H.flatten()
-        idx=idx.flatten()
-        # Get the rays that hit the surface
-        li=H.nonzero()[0]
-        #rin=Ray( dir=L1, wavelength=wavelength)
-        dir=ri.dir
-        S1=dir*ni
-        #Intersection point and optical path for the incident rays
-        xi=[]
-        yi=[]
-        zi=[]
-        ii=[]
-
-        for i in li:
-            #Destination of the ray
-            P1=array((X[i], Y[i], Z[i]))
-
-            #Normal to the destination point
-            Np=self.normal(P1)
-
-            # Calculate incident and refracted angle. To optimize the routine,
-            # only normal diffracted ray is taken into account
-
-            # Calculate the incident angle
-            I=(arccos(dot(S1,Np)/ni))
-
-            # Take the correct normal
-            if I>pi/2:
-                Np=-Np
-                I=(arccos(dot(S1,Np)/ni))
-            # Calculate the diffracted direction
-
-            gamma= nr*sqrt(power(ni/nr*cos(I),2)-power(ni/nr,2)+1.)- ni*cos(I)
-            A=gamma*Np
-            S2=nr*(S1+A)
-            L2=(S2/sqrt(dot(S2,S2)))
-            ###
-
-            # Calculate the distance between P1 ant the plane X*dx+Y*dy+Z*dz=0,
-            # along the N_p direction
-            din=-dot(N_p,-P1)
-
-            # Calculate the distance between P1 Z=0 along the L2 line
-            ddi=-P1[2]/L2[2]
-
-            #Calculate the intersection point
-            PIR=P1+ddi*L2
-
-
-            # Calculate optical path
-            d=din*ni+ddi*nr
-            if d!=inf:
-                x, y, z=PIR
-                xi.append(x)
-                yi.append(y)
-                zi.append(d)
-                ii.append(idx[i])
-        xi=array(xi)
-        yi=array(yi)
-        zi=array(zi)
-        ii=array(ii)
-
-        xmax=xi.max()#=abs(array(xi+yi)).max()
-        ymax=xmax
-        xmin=xi.min()#-ymax
-        ymin=xmin#-xmax
-
-        xx=linspace(xmin, xmax, isamples[0])
-        yy=linspace(ymin, ymax, isamples[1])
-
-        # Use only half of the samples to create the Spline,
-        isp=argwhere(ii==True)
-        ich=argwhere(ii==False)
-
-        xsp=xi[isp]
-        ysp=yi[isp]
-        zsp=zi[isp]
-
-        xch=xi[ich]
-        ych=yi[ich]
-        zch=zi[ich]
-
-        #Distribute homogeneously the knots
-        xk=linspace(xsp.min(), xsp.max(),knots)
-        yk=linspace(ysp.min(), ysp.max(),knots)
-
-        # LSQBivariateSpline using some knots gives smaller error than
-        # SmoothBivariateSpline
-        di=interpolate.LSQBivariateSpline(xsp, ysp, zsp, xk[1:-1],  yk[1:-1])
-        #di=interpolate.SmoothBivariateSpline(xsp, ysp, zsp)
-
-        # Evaluate error
-        zch1=di.ev(xch, ych)
-        er=(zch.flatten()-zch1).std()
-
-        #I, xe, ye=histogram2d(yi, xi, (xx, yy))
-        I=hitlist2int(xi, yi, xi,  xx, yy)
-        d=ma_array(di(xx,yy).transpose(), mask=I.mask)
-
-        #XD, YD=meshgrid(xx, yy)
-
-        #d1=griddata(xi,  yi,  zi,  xx, yy)
-        return I, d, er
-
-
-
-    cpdef pw_propagate(self, Ray ri,ni,nr, rsamples, shape, order,z):
-        '''Method to calculate wavefront emerging from the surface
-
-
-        This method calculates the wavefront emerging from the optical surface
-        when illuminated by an unity amplitude plane wave.
-        The k vector of the incoming PW is given by the direction of ri.
-        The wavelength of the PW is given by the wavelength of ri.
-        The origin of ri is not used at all.
-
-        Arguments:
-
-
-             ri -- surface incident ray
-
-             ni -- refraction index in the incident media n.
-
-             nr -- refraction index in the refracted media
-
-             rsamples -- number of rays used to sample the surface
-
-             shape -- shape of the output wavefront
-
-             order -- order of the polynomial fit
-
-             z -- Z position of the input and output plane. The origin is the surface vertex
-
-        ri must be in the coordinate system of the surface
-        Note: The ray comes from the negative side. Need to change this
-        '''
-        from ray_trace.surface import Plane
-
-        xi,yi,zi=self.pw_propagate_list(ri,ni,nr,rsamples,z)
-
-        xmin,xmax,ymin,ymax=self.shape.limits()
-        xx=linspace(xmin, xmax, shape[0])
-        yy=linspace(ymin, ymax, shape[1])
-
-        #I, xe, ye=histogram2d(yi, xi, (xx, yy))
-        I=hitlist2int(xi, yi, xi,  xx, yy)
-
-
-        p,er=polyfit2d(xi, yi, zi,order=order)
-
-        d=ma_array(p.evalvv(xx,yy),mask=I.mask)
-        #d,er=interpolate_g(xi,yi,zi,xx,yy,knots=knots, error=True,mask=I.mask)
-
-        #XD, YD=meshgrid(xx, yy)
-
-        #d1=griddata(xi,  yi,  zi,  xx, yy)
-        return I, d, er
+    # cpdef pw_propagate1(self, Ray ri,ni,nr, rsamples, isamples, knots):
+    #     '''Method to calculate wavefront emerging from the surface
+    #
+    #     .. Note::
+    #         This method needs to be checked, because the incoming plane
+    #         wave has not a constant intensity. The ray distribution is
+    #         affected by the surface topography. it is better to use the
+    #         slow version pw_propagate.
+    #
+    #     This method calculates the wavefront emerging from the optical surface
+    #     when illuminated by an unity amplitude plane wave.
+    #     The k vector of the incoming PW is given by the direction of ri.
+    #     The wavelength of the PW is given by the wavelength of ri.
+    #     The origin of ri is not used at all.
+    #
+    #     The input and output planes are located at z=0 in the surface coordinated
+    #     system.
+    #
+    #     Note: this method needs to be checked, because the incoming plane wave
+    #     has not a constant intensity. The ray distribution is affected by the
+    #     surface topography. it is better to use the slow version pw_propagate1.
+    #
+    #     Note: The ray comes from the negative side. Need to change this
+    #
+    #     Arguments:
+    #
+    #
+    #          ri -- isurface.pyncident ray
+    #
+    #          ni -- refraction index in the incident media n.
+    #
+    #          nr -- refraction index in the refracted media
+    #
+    #     ri must be in the coordinate system of the surface
+    #     '''
+    #
+    #     # Calculate the position maximum and minimum z values for the surface
+    #     X, Y, Z=self.shape.mesh(topo=self.topo)
+    #
+    #     #Calculate a mesh where the test rays will be shot from
+    #     X, Y, H=self.shape.mesh(ndat=rsamples)#,  size=(xmin, xmax, ymin, ymax))
+    #     X, Y, Z=self.shape.mesh(ndat=rsamples,  topo=self.topo)
+    #
+    #
+    #
+    #     # The ecuation where the rays are shooted to is Z=0
+    #     N_=array((0, 0, 1))
+    #
+    #     # The ecuation where the rays are shooted from is
+    #     # X*dx+Y*dy+Z*dz=0, where dx,dy,dx are the plane normal.
+    #     N_p=ri.dir
+    #
+    #     ix, iy=indices(X.shape)
+    #
+    #     # Create a list of indexes to be able to select the points that are going
+    #     # to be used as spline generators, and as control points
+    #     idx=where((ix+iy) %2 ==0, False, True)
+    #
+    #     X=X.flatten()
+    #     Y=Y.flatten()
+    #     Z=Z.flatten()
+    #     H=H.flatten()
+    #     idx=idx.flatten()
+    #     # Get the rays that hit the surface
+    #     li=H.nonzero()[0]
+    #     #rin=Ray( dir=L1, wavelength=wavelength)
+    #     dir=ri.dir
+    #     S1=dir*ni
+    #     #Intersection point and optical path for the incident rays
+    #     xi=[]
+    #     yi=[]
+    #     zi=[]
+    #     ii=[]
+    #
+    #     for i in li:
+    #         #Destination of the ray
+    #         P1=array((X[i], Y[i], Z[i]))
+    #
+    #         #Normal to the destination point
+    #         Np=self.normal(P1)
+    #
+    #         # Calculate incident and refracted angle. To optimize the routine,
+    #         # only normal diffracted ray is taken into account
+    #
+    #         # Calculate the incident angle
+    #         I=(arccos(dot(S1,Np)/ni))
+    #
+    #         # Take the correct normal
+    #         if I>pi/2:
+    #             Np=-Np
+    #             I=(arccos(dot(S1,Np)/ni))
+    #         # Calculate the diffracted direction
+    #
+    #         gamma= nr*sqrt(power(ni/nr*cos(I),2)-power(ni/nr,2)+1.)- ni*cos(I)
+    #         A=gamma*Np
+    #         S2=nr*(S1+A)
+    #         L2=(S2/sqrt(dot(S2,S2)))
+    #         ###
+    #
+    #         # Calculate the distance between P1 ant the plane X*dx+Y*dy+Z*dz=0,
+    #         # along the N_p direction
+    #         din=-dot(N_p,-P1)
+    #
+    #         # Calculate the distance between P1 Z=0 along the L2 line
+    #         ddi=-P1[2]/L2[2]
+    #
+    #         #Calculate the intersection point
+    #         PIR=P1+ddi*L2
+    #
+    #
+    #         # Calculate optical path
+    #         d=din*ni+ddi*nr
+    #         if d!=inf:
+    #             x, y, z=PIR
+    #             xi.append(x)
+    #             yi.append(y)
+    #             zi.append(d)
+    #             ii.append(idx[i])
+    #     xi=array(xi)
+    #     yi=array(yi)
+    #     zi=array(zi)
+    #     ii=array(ii)
+    #
+    #     xmax=xi.max()#=abs(array(xi+yi)).max()
+    #     ymax=xmax
+    #     xmin=xi.min()#-ymax
+    #     ymin=xmin#-xmax
+    #
+    #     xx=linspace(xmin, xmax, isamples[0])
+    #     yy=linspace(ymin, ymax, isamples[1])
+    #
+    #     # Use only half of the samples to create the Spline,
+    #     isp=argwhere(ii==True)
+    #     ich=argwhere(ii==False)
+    #
+    #     xsp=xi[isp]
+    #     ysp=yi[isp]
+    #     zsp=zi[isp]
+    #
+    #     xch=xi[ich]
+    #     ych=yi[ich]
+    #     zch=zi[ich]
+    #
+    #     #Distribute homogeneously the knots
+    #     xk=linspace(xsp.min(), xsp.max(),knots)
+    #     yk=linspace(ysp.min(), ysp.max(),knots)
+    #
+    #     # LSQBivariateSpline using some knots gives smaller error than
+    #     # SmoothBivariateSpline
+    #     di=interpolate.LSQBivariateSpline(xsp, ysp, zsp, xk[1:-1],  yk[1:-1])
+    #     #di=interpolate.SmoothBivariateSpline(xsp, ysp, zsp)
+    #
+    #     # Evaluate error
+    #     zch1=di.ev(xch, ych)
+    #     er=(zch.flatten()-zch1).std()
+    #
+    #     #I, xe, ye=histogram2d(yi, xi, (xx, yy))
+    #     I=hitlist2int(xi, yi, xi,  xx, yy)
+    #     d=ma_array(di(xx,yy).transpose(), mask=I.mask)
+    #
+    #     #XD, YD=meshgrid(xx, yy)
+    #
+    #     #d1=griddata(xi,  yi,  zi,  xx, yy)
+    #     return I, d, er
+    #
+    #
+
+    # cpdef pw_propagate(self, Ray ri,ni,nr, rsamples, shape, order,z):
+    #     '''Method to calculate wavefront emerging from the surface
+    #
+    #
+    #     This method calculates the wavefront emerging from the optical surface
+    #     when illuminated by an unity amplitude plane wave.
+    #     The k vector of the incoming PW is given by the direction of ri.
+    #     The wavelength of the PW is given by the wavelength of ri.
+    #     The origin of ri is not used at all.
+    #
+    #     Arguments:
+    #
+    #
+    #          ri -- surface incident ray
+    #
+    #          ni -- refraction index in the incident media n.
+    #
+    #          nr -- refraction index in the refracted media
+    #
+    #          rsamples -- number of rays used to sample the surface
+    #
+    #          shape -- shape of the output wavefront
+    #
+    #          order -- order of the polynomial fit
+    #
+    #          z -- Z position of the input and output plane. The origin is the surface vertex
+    #
+    #     ri must be in the coordinate system of the surface
+    #     Note: The ray comes from the negative side. Need to change this
+    #     '''
+    #     from ray_trace.surface import Plane
+    #
+    #     xi,yi,zi=self.pw_propagate_list(ri,ni,nr,rsamples,z)
+    #
+    #     xmin,xmax,ymin,ymax=self.shape.limits()
+    #     xx=linspace(xmin, xmax, shape[0])
+    #     yy=linspace(ymin, ymax, shape[1])
+    #
+    #     #I, xe, ye=histogram2d(yi, xi, (xx, yy))
+    #     I=hitlist2int(xi, yi, xi,  xx, yy)
+    #
+    #
+    #     p,er=polyfit2d(xi, yi, zi,order=order)
+    #
+    #     d=ma_array(p.evalvv(xx,yy),mask=I.mask)
+    #     #d,er=interpolate_g(xi,yi,zi,xx,yy,knots=knots, error=True,mask=I.mask)
+    #
+    #     #XD, YD=meshgrid(xx, yy)
+    #
+    #     #d1=griddata(xi,  yi,  zi,  xx, yy)
+    #     return I, d, er
 
     # cpdef pw_propagate_list(self, Ray ri,ni,nr, rsamples,z):
     #     '''Method to calculate wavefront emerging from the surface
@@ -930,7 +930,7 @@ cdef class Surface(Picklable):
 
     def __repr__(self):
         #~ '''Return an string with the representation of the optical surface
-#~
+        #~
         #~ It must be overloaded in all subclasses
         #~ '''
 
@@ -944,113 +944,113 @@ cdef class Surface(Picklable):
         '''
         self._hit_list=[]
 
+    #
+    # cpdef pw_cohef(self,ni,nr,ilimit, slimit, step, order, rsamples,zb):
+    #     '''Method to generate the taylor polinomial coheficients that can be
+    #     used to obtain the phase and intensity for different plane wave
+    #     inclinations.
+    #
+    #     Notes:
+    #            - The pupil is normalized to the radius of the lens
+    #            - This method asumes a circular shaped pupil
+    #            - The phase is returned as an optical path
+    #            - The intensity is normalized to 1
+    #
+    #     Arguments:
+    #
+    #     =========  ======================================================
+    #     ni,nr      Refraction index from the incident and refracted sides
+    #     ilimit     Inferior limit for incidence angle of the plane wave
+    #                in radians
+    #     slimit     Superior limit for incidence angle of the plane wave
+    #                in radians
+    #     step       Step to be used to generate the interpolation data
+    #     order      Order of the Taylor interpolation used
+    #     rsamples   Tuple containing the number of ray samples to be used
+    #                in each direction
+    #     zb         Z position of the plane where the measurementas are
+    #                made. The origin is the vertex of the surface. If
+    #                None, an estimate position is taken.
+    #     =========  ======================================================
+    #
+    #     '''
+    #     xm=self.shape.limits()[1]
+    #     #print xm
+    #     #Get the z position of the border of the surface
+    #
+    #     if zb == None:
+    #         zm=self.topo(xm,0)
+    #     else: zm=zb
+    #
+    #     # Optical path coheficient list
+    #     opcl=[]
+    #
+    #     # Intensity coheficient list
+    #     icl=[]
+    #
+    #     xd=[]
+    #     for i in arange(ilimit,slimit,step):
+    #         xd.append(i)
+    #
+    #         x,y,d =self.pw_propagate_list(Ray(dir=(tan(i), 0, 1)),ni,nr, rsamples=rsamples,z=zm)
+    #
+    #         #Normalize the pupil
+    #         x=x/xm; y=y/xm
+    #
+    #         # Get the optical path polynomial coheficients
+    #         pf,ef=polyfit2d(x, y, d,order=order)
+    #
+    #         #get the intensity data
+    #         xi,yi,I= hitlist2int_list(x, y)
+    #
+    #         # Get the intensity polynomial coheficients
+    #         pi,ei=polyfit2d(xi, yi, I,order=order)
+    #
+    #         #TODO: Print something if error is too big
+    #         #if ei>0.001: print ""
+    #         #if ef>1e-6: print ""
+    #
+    #         opcl.append(pf.cohef.flatten())
+    #
+    #         icl.append(pi.cohef.flatten())
+    #
+    #     dph=array(opcl)
+    #     di=array(icl)
+    #
+    #     # Lista de los coheficientes de los polinomios para generar los coheficientes
+    #     phcohef=[]
+    #
+    #     #get the number of coheficients the polinomial expansion has
+    #     ncohef=ord2i(order)
+    #
+    #     for i in range(ncohef):
+    #         #figure()
+    #         #plot(xd,d[:,i])
+    #         pof=polyfit(xd,dph[:,i],15)
+    #         phcohef.append(pof)
+    #
+    #     icohef=[]
+    #
+    #     for i in range(ncohef):
+    #         #figure()
+    #         #plot(xd,d[:,i])
+    #         pof=polyfit(xd,di[:,i],15)
+    #         icohef.append(pof)
+    #
+    #     return phcohef, icohef, zm
 
-    cpdef pw_cohef(self,ni,nr,ilimit, slimit, step, order, rsamples,zb):
-        '''Method to generate the taylor polinomial coheficients that can be
-        used to obtain the phase and intensity for different plane wave
-        inclinations.
 
-        Notes:
-               - The pupil is normalized to the radius of the lens
-               - This method asumes a circular shaped pupil
-               - The phase is returned as an optical path
-               - The intensity is normalized to 1
-
-        Arguments:
-
-        =========  ======================================================
-        ni,nr      Refraction index from the incident and refracted sides
-        ilimit     Inferior limit for incidence angle of the plane wave
-                   in radians
-        slimit     Superior limit for incidence angle of the plane wave
-                   in radians
-        step       Step to be used to generate the interpolation data
-        order      Order of the Taylor interpolation used
-        rsamples   Tuple containing the number of ray samples to be used
-                   in each direction
-        zb         Z position of the plane where the measurementas are
-                   made. The origin is the vertex of the surface. If
-                   None, an estimate position is taken.
-        =========  ======================================================
-
-        '''
-        xm=self.shape.limits()[1]
-        #print xm
-        #Get the z position of the border of the surface
-
-        if zb == None:
-            zm=self.topo(xm,0)
-        else: zm=zb
-
-        # Optical path coheficient list
-        opcl=[]
-
-        # Intensity coheficient list
-        icl=[]
-
-        xd=[]
-        for i in arange(ilimit,slimit,step):
-            xd.append(i)
-
-            x,y,d =self.pw_propagate_list(Ray(dir=(tan(i), 0, 1)),ni,nr, rsamples=rsamples,z=zm)
-
-            #Normalize the pupil
-            x=x/xm; y=y/xm
-
-            # Get the optical path polynomial coheficients
-            pf,ef=polyfit2d(x, y, d,order=order)
-
-            #get the intensity data
-            xi,yi,I= hitlist2int_list(x, y)
-
-            # Get the intensity polynomial coheficients
-            pi,ei=polyfit2d(xi, yi, I,order=order)
-
-            #TODO: Print something if error is too big
-            #if ei>0.001: print ""
-            #if ef>1e-6: print ""
-
-            opcl.append(pf.cohef.flatten())
-
-            icl.append(pi.cohef.flatten())
-
-        dph=array(opcl)
-        di=array(icl)
-
-        # Lista de los coheficientes de los polinomios para generar los coheficientes
-        phcohef=[]
-
-        #get the number of coheficients the polinomial expansion has
-        ncohef=ord2i(order)
-
-        for i in range(ncohef):
-            #figure()
-            #plot(xd,d[:,i])
-            pof=polyfit(xd,dph[:,i],15)
-            phcohef.append(pof)
-
-        icohef=[]
-
-        for i in range(ncohef):
-            #figure()
-            #plot(xd,d[:,i])
-            pof=polyfit(xd,di[:,i],15)
-            icohef.append(pof)
-
-        return phcohef, icohef, zm
-
-
-    def polylist(self):
-
-        points=[]
-
-        X,Y=self.shape.pointlist()
-        Z=self.topo(X,Y)
-
-        for i in range(len(X)):
-            points.append((X[i],Y[i],Z[i]))
-
-        #Need to find a beter way to do this not using delaunay# or maybe to generate all using triangulations????
-        tri=Triangulation(X,Y)
-        trip=tri.triangles
-        return points, trip
+    # def polylist(self):
+    #
+    #     points=[]
+    #
+    #     X,Y=self.shape.pointlist()
+    #     Z=self.topo(X,Y)
+    #
+    #     for i in range(len(X)):
+    #         points.append((X[i],Y[i],Z[i]))
+    #
+    #     #Need to find a beter way to do this not using delaunay# or maybe to generate all using triangulations????
+    #     tri=Triangulation(X,Y)
+    #     trip=tri.triangles
+    #     return points, trip

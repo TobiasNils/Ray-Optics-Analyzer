@@ -114,7 +114,7 @@ extensions = [makeExtension(name) for name in extNames]
 setup(name="pyoptools",
       version="0.1.1",
       packages=findpackages("./"),
-      scripts=['ipyoptools'],
+      # scripts=['ipyoptools'],
       # The names from pipy are used, not the deb package names
       requires=['numpy',
                 'cython',

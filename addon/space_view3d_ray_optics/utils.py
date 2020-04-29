@@ -252,8 +252,8 @@ def lightsource(aperture, dist=None):
 
     return list_of_rays
 
-from copy import deepcopy, copy
-from multiprocess import Pool
+# from copy import deepcopy, copy
+# from multiprocess import Pool
 
 # def doWork(system):
 #     while len(system._np_rays)>0:
