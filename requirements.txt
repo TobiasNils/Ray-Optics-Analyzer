@@ -1,6 +1,6 @@
 PyOpenGL
 tornado
-Pillow>=4.1.1,<4.2.0
+Pillow
 jupyter
 ipython
 six
